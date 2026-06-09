@@ -20,6 +20,9 @@
   max-width: 480px;
   margin: 0 auto;
   box-sizing: border-box;
+  /* muted color tokens for secondary text */
+  --muted: #9aa6b2; /* lighter muted for page text */
+  --muted-2: #9ca3af; /* keep card muted tone as-is */
 }
 
 .page-header{ display:flex; align-items:center; gap:12px; padding:8px 0 6px 0; }
@@ -31,11 +34,11 @@
 .badge{ position:absolute; left:12px; top:12px; background:#06b6d4; color:#fff; padding:6px 8px; border-radius:8px; font-size:12px; }
 
 .title{ font-size:18px; margin:12px 0 6px 0; font-weight:700; }
-.description{ color:#64748b; font-size:14px; line-height:1.4; margin:0 0 12px 0; }
+.description{ color:var(--muted); font-size:14px; line-height:1.4; margin:0 0 12px 0; }
 
 .section{ margin-top:12px; padding-top:12px; border-top:1px solid #e6e6e6; }
 .section h3{ margin:0 0 8px 0; font-size:14px; }
-.section ul{ margin:0; padding-left:18px; color:#374151; font-size:13px; }
+.section ul{ margin:0; padding-left:18px; color:var(--muted); font-size:13px; }
 .read-more{ display:inline-block; margin-top:8px; color:#0ea5e9; font-size:13px; text-decoration:none; background:none; border:none; padding:0; cursor:pointer; }
 
 .related-header{

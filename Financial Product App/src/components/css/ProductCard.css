@@ -28,13 +28,13 @@
   margin: 0 0 6px 0;
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
+  color: #0f172a;
   text-align: left;
 }
 
 .product-card__price {
   margin: 0;
   font-size: 12px;
-  color: #6b7280;
+  color: var(--muted-2, #6b7280);
   text-align: left;
 }
