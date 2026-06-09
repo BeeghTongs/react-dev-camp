@@ -1,4 +1,4 @@
-import './ProductCard.css';
+import './css/ProductCard.css';
 
 function ProductCard({imageUrl,title,price}) {
   return (

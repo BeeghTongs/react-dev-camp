@@ -50,7 +50,6 @@
 }
 .product-footer .price{ display:flex; flex-direction:column; }
 .product-footer .amount{ font-weight:700; }
-.add-button{ background:#06b6d4; color:#fff; padding:10px 16px; border-radius:8px; border:none; }
 
 @media(min-width:600px){
   .hero img{ height:260px; }

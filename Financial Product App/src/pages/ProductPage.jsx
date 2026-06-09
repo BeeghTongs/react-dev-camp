@@ -1,6 +1,7 @@
-import './ProductPage.css';
+import './css/ProductPage.css';
 import { useState } from 'react';
 import ProductCard from '../components/ProductCard';
+import AddToCart from '../components/AddToCart';
 import headphone from '../assets/headphone.png';
 import watch from '../assets/watch.png';
 
@@ -108,7 +109,7 @@ function ProductPage() {
           <div className="amount">R 350.00</div>
           <div className="per">per month</div>
         </div>
-        <button className="add-button">Add to cart</button>
+        <AddToCart />
       </div>
     </div>
   );
