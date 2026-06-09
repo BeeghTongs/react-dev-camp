@@ -6,7 +6,7 @@ function ProductCard({imageUrl,title,price}) {
       <img src={imageUrl} alt={title} className="product-card__image" />
       <div className="product-card__body">
         <h3 className="product-card__title">{title}</h3>
-        <p className="product-card__price">from {price} p/m</p>
+        <p className="product-card__price">from {price}</p>
       </div>
     </div>
   );
