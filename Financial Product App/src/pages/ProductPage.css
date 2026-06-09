@@ -1,0 +1,14 @@
+.recommended-products {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  padding: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+.recommended-products > * {
+  scroll-snap-align: start;
+}
