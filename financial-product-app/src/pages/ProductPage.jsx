@@ -1,11 +1,14 @@
 import './css/ProductPage.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
 import headphone from '../assets/headphone.png';
 import watch from '../assets/watch.png';
 
 function ProductPage() {
+  const [expanded, setExpanded] = useState(false);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
   const products = [
     {
       id: 1,
@@ -27,15 +30,43 @@ function ProductPage() {
     },
   ];
 
-  const fullDesc = `Our comprehensive coverage ensures that your devices are protected against a wide range of mishaps. This plan includes accidental damage, theft, loss and extended hardware protection so you can focus on what matters.`;
+  useEffect(() => {
+    async function fetchProduct() {
+      try{
+        const response = await fetch(`client/v1/products/1`);
+        const data = await response.json();
+        setProduct(data);
+      }
+      catch(error){
+        console.error('Failed to load product:', error);
+      }
+      finally{
+        setLoading(false);
+    }
+  }
 
-  const [expanded, setExpanded] = useState(false);
+    fetchProduct();
+  }, []);
+
+  if (loading) {
+    return <div className="product-page">Loading...</div>;
+  }
+
+  if (!product) {
+    return <div className="product-page">Product not found</div>;
+  }
+
+  const fullDesc =
+    product.description ||
+    'No description available for this product.';
+
+
 
   return (
     <div className="product-page">
       <div className="page-header">
         <button className="back">←</button>
-        <div className="page-title">Islamic Investment Product</div>
+        <div className="page-title">{product.name}</div>
       </div>
 
       <div className="hero">
@@ -43,9 +74,9 @@ function ProductPage() {
         <div className="badge">25% OFF</div>
       </div>
 
-      <h1 className="title">Islamic Investment Product</h1>
+      <h1 className="title">{product.name}</h1>
       {/* Description with expand/collapse */}
-      <p className="description">{expanded ? fullDesc : `${fullDesc.slice(0,120)}...`}</p>
+      <p className="description">{expanded ? fullDesc : `${product.description?.slice(0,120) || 'No description available.'}...`}</p>
 
       {/* When collapsed show Read more under the description */}
       {!expanded && (
@@ -106,7 +137,7 @@ function ProductPage() {
 
       <div className="product-footer">
         <div className="price">
-          <div className="amount">R 350.00</div>
+          <div className="amount">R {product.price}</div>
           <div className="per">per month</div>
         </div>
         <AddToCart />
