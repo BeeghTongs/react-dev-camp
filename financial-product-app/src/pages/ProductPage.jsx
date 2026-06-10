@@ -1,11 +1,13 @@
 import './css/ProductPage.css';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
 import headphone from '../assets/headphone.png';
 import watch from '../assets/watch.png';
 
 function ProductPage() {
+  const { id } = useParams();
   const [expanded, setExpanded] = useState(false);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -33,7 +35,12 @@ function ProductPage() {
   useEffect(() => {
     async function fetchProduct() {
       try{
-        const response = await fetch(`client/v1/products/1`);
+        const response = await fetch(`/client/v1/products/${id}`);
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
         const data = await response.json();
         setProduct(data);
       }
@@ -46,7 +53,7 @@ function ProductPage() {
   }
 
     fetchProduct();
-  }, []);
+  }, [id]);
 
   if (loading) {
     return <div className="product-page">Loading...</div>;
