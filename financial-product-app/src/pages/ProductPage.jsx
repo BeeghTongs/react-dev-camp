@@ -3,30 +3,28 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
-import headphone from '../assets/headphone.png';
-import watch from '../assets/watch.png';
+import { getProductImage } from '../services/ImageService';
 
 function ProductPage() {
   const { id } = useParams();
   const [expanded, setExpanded] = useState(false);
   const [product, setProduct] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [relatedImages, setRelatedImages] = useState({});
   const [loading, setLoading] = useState(true);
   const products = [
     {
       id: 1,
-      imageUrl: headphone,
       title: 'Wireless Headphones',
       price: 'R350 p/m',
     },
     {
       id: 2,
-      imageUrl: headphone,
       title: 'Gaming Mouse',
       price: 'R120 p/m',
     },
     {
       id: 3,
-      imageUrl: headphone,
       title: 'Mechanical Keyboard',
       price: 'R250 p/m',
     },
@@ -55,6 +53,34 @@ function ProductPage() {
     fetchProduct();
   }, [id]);
 
+  useEffect(() => {
+    let active = true;
+
+    async function fetchProductImages() {
+      const [heroImage, related1, related2, related3] = await Promise.all([
+        getProductImage(id),
+        getProductImage(1),
+        getProductImage(2),
+        getProductImage(3),
+      ]);
+
+      if (active) {
+        setImageUrl(heroImage);
+        setRelatedImages({
+          1: related1,
+          2: related2,
+          3: related3,
+        });
+      }
+    }
+
+    fetchProductImages();
+
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
   if (loading) {
     return <div className="product-page">Loading...</div>;
   }
@@ -77,7 +103,7 @@ function ProductPage() {
       </div>
 
       <div className="hero">
-        <img src={watch} alt="Product main" />
+        <img src={imageUrl || ''} alt="Product main" />
         <div className="badge">25% OFF</div>
       </div>
 
@@ -135,7 +161,7 @@ function ProductPage() {
         {products.map((product) => (
           <ProductCard
             key={product.id}
-            imageUrl={product.imageUrl}
+            imageUrl={relatedImages[product.id] || ''}
             title={product.title}
             price={product.price}
           />
