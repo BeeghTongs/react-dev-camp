@@ -30,7 +30,25 @@
 .page-header .page-title{ font-weight:600; }
 
 .hero{ position:relative; }
-.hero img{ width:100%; height:220px; object-fit:cover; border-radius:12px; display:block; }
+.hero img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  border-radius:12px;
+  display:block;
+  border:1px solid #d6dde6;
+  background:#f8fafc;
+  padding:6px;
+  box-sizing:border-box;
+}
+.hero-placeholder{
+  width:100%;
+  height:220px;
+  border-radius:12px;
+  border:1px solid #d6dde6;
+  background:linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+  box-sizing:border-box;
+}
 .badge{ position:absolute; left:12px; top:12px; background:#06b6d4; color:#fff; padding:6px 8px; border-radius:8px; font-size:12px; }
 
 .title{ font-size:18px; margin:12px 0 6px 0; font-weight:700; }

@@ -103,7 +103,7 @@ function ProductPage() {
       </div>
 
       <div className="hero">
-        <img src={imageUrl || ''} alt="Product main" />
+        {imageUrl ? <img src={imageUrl} alt="Product main" /> : <div className="hero-placeholder" aria-hidden="true" />}
         <div className="badge">25% OFF</div>
       </div>
 
@@ -161,7 +161,7 @@ function ProductPage() {
         {products.map((product) => (
           <ProductCard
             key={product.id}
-            imageUrl={relatedImages[product.id] || ''}
+            imageUrl={relatedImages[product.id] || null}
             title={product.title}
             price={product.price}
           />
