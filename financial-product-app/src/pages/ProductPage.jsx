@@ -1,5 +1,6 @@
 import './css/ProductPage.css';
 import { useEffect, useState } from 'react';
+import { MdArrowBack } from "react-icons/md";
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
@@ -99,7 +100,9 @@ function ProductPage() {
   return (
     <div className="product-page">
       <div className="page-header">
-        <button className="back">←</button>
+      <button className="back-btn">
+        <MdArrowBack />
+      </button>
         <div className="page-title">{product.name}</div>
       </div>
 
