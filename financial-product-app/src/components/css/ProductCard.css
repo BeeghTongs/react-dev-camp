@@ -17,6 +17,14 @@
   object-fit: cover;
   display: block;
   border-radius: 8px; /* inner rounding so image sits nicely inside padded card */
+  border: 1px solid #d6dde6;
+  background: #f8fafc;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+.product-card__image--placeholder {
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
 }
 
 .product-card__body {

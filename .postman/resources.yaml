@@ -1,0 +1,17 @@
+# Use this workspace to collaborate
+workspace:
+  id: 94e29ee6-3b2a-431f-8bae-fd699bdbc8c9
+
+localResources:
+  collections:
+    - ..\devcamp-starter-distribution\Combined DevCamp
+      Service.postman_collection.json
+    - ..\devcamp-starter-distribution\DevCamp Client
+      Service.postman_collection.json
+  specs:
+    - ..\devcamp-starter-distribution\specs\auth.yaml
+    - ..\devcamp-starter-distribution\specs\client.yaml
+    - ..\devcamp-starter-distribution\specs\customer-information.yaml
+    - ..\devcamp-starter-distribution\specs\dha.yaml
+    - ..\devcamp-starter-distribution\specs\kyc.yaml
+    - ..\devcamp-starter-distribution\specs\product.yaml
