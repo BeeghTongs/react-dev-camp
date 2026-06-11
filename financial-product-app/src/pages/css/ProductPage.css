@@ -50,26 +50,48 @@
   box-sizing:border-box;
 }
 
-.title{ font-size:18px; margin:12px 0 6px 0; font-weight:700; }
-.description{ color:var(--muted); font-size:14px; line-height:1.4; margin:0 0 12px 0; }
+.title {
+  font-size: 27px;
+  font-weight: 700; 
+  line-height: 24px;
+  color: #1C1C1C;
+  margin: 12px 0 6px 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.description{ color:var(--muted); font-size:16px; line-height:1.4; margin:0 0 12px 0; }
 
 .section{ margin-top:12px; padding-top:12px; border-top:1px solid #e6e6e6; }
-.section h3{ margin:0 0 8px 0; font-size:14px; }
-.section ul{ margin:0; padding-left:18px; color:var(--muted); font-size:13px; }
-.read-more{ display:inline-block; margin-top:8px; color:#0ea5e9; font-size:13px; text-decoration:none; background:none; border:none; padding:0; cursor:pointer; }
+.section h3{ margin:0 0 8px 0; font-size:20px; }
+.section ul{ margin:0; padding-left:18px; color:var(--muted); font-size:16px; }
+.read-more{ display:inline-block; margin-top:8px; color:#0ea5e9; font-size:18px; text-decoration:none; background:none; border:none; padding:0; cursor:pointer; }
 
 .related-header{
   margin-top:16px;
   font-weight:600;
   border-top:1px solid #e6e6e6; /* subtle gray separator */
   padding-top:12px;
+  font-size:20px;
 }
 
 .product-footer{
-  position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid #e6e6e6; display:flex; justify-content:space-between; align-items:center; padding:12px; box-shadow:0 -3px 12px rgba(0,0,0,0.06);
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid #C7C7CC;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 16px;
+  box-shadow:0 -3px 12px rgba(0,0,0,0.06);
 }
-.product-footer .price{ display:flex; flex-direction:column; }
-.product-footer .amount{ font-weight:700; }
+.product-footer .price{ display:flex; flex-direction:column; gap:2px; padding-left:6px; }
+.product-footer .amount{ font-weight:700; font-size:20px; color:#000000; }
+.product-footer .per{ color:#8E8E93; font-size:13px; }
 
 @media(min-width:600px){
   .hero img{ height:260px; }

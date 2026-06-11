@@ -128,14 +128,14 @@ function ProductPage() {
       {/* Sections that are shown only when expanded; Read less appears under Requirement */}
       {expanded && (
         <>
-          <div className="section">
+          {/* <div className="section">
             <h3>Benefits</h3>
             <ul>
               <li>Theft and loss recovery</li>
               <li>Comprehensive coverage</li>
               <li>Hardware malfunction coverage</li>
             </ul>
-          </div>
+          </div> */}
 
           <div className="section">
             <h3>Requirement</h3>
@@ -157,7 +157,7 @@ function ProductPage() {
         </>
       )}
 
-      <div className="related-header">Related product</div>
+      <div className="related-header">Related products</div>
       <div className="recommended-products">
         {products.map((product) => (
           <ProductCard
@@ -169,13 +169,22 @@ function ProductPage() {
         ))}
       </div>
 
-      <div className="product-footer">
-        <div className="price">
-          <div className="amount">R {product.price}</div>
-          <div className="per">per month</div>
-        </div>
-        <AddToCart />
-      </div>
+          <div className="product-footer">
+            <div className="price">
+              {
+                (() => {
+                  // eslint-disable-next-line no-useless-assignment
+                  let displayPrice = '';
+                  if (typeof product.price === 'number') displayPrice = `R ${product.price.toFixed(2)}`;
+                  else if (typeof product.price === 'string' && product.price.trim().startsWith('R')) displayPrice = product.price;
+                  else displayPrice = `R ${product.price}`;
+                  return <div className="amount">{displayPrice}</div>;
+                })()
+              }
+              <div className="per">per month</div>
+            </div>
+            <AddToCart />
+          </div>
     </div>
   );
 }

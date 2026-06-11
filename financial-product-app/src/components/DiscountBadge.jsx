@@ -6,7 +6,7 @@ function DiscountBadge({ percentage, className = '' }) {
 			<span>{percentage}%</span> 
             <span>OFF</span>
 		</div>
-	);
+	); 
 }
 
 export default DiscountBadge;
