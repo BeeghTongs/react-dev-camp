@@ -3,20 +3,19 @@ import './App.css'
 
 import ProductListPage from './pages/ProductListPage'
 import ProductPage from './pages/ProductPage'
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<ProductListPage />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
-        <Route
-          path="/products/:id"
-          element={<ProductPage />}
-        />
+        <Route path="/products/:id" element={<ProductPage />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
 export default App

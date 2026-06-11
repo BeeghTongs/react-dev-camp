@@ -6,6 +6,7 @@ import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
 import DiscountBadge from '../components/DiscountBadge';
 import { getProductImage } from '../services/ImageService';
+import { useNavigate } from 'react-router-dom';
 
 function ProductPage() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ function ProductPage() {
   const [imageUrl, setImageUrl] = useState(null);
   const [relatedImages, setRelatedImages] = useState({});
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const products = [
     {
       id: 1,
@@ -100,7 +102,7 @@ function ProductPage() {
   return (
     <div className="product-page">
       <div className="page-header">
-      <button className="back-btn">
+      <button className="back-btn" onClick={() => navigate(`/`)}>
         <MdArrowBack />
       </button>
         <div className="page-title">{product.name}</div>
