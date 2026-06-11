@@ -7,6 +7,7 @@ import AddToCart from '../components/AddToCart';
 import DiscountBadge from '../components/DiscountBadge';
 import { getProductImage } from '../services/ImageService';
 import { useNavigate } from 'react-router-dom';
+import productCatalogue from '../assets/Products.json';
 
 function ProductPage() {
   const { id } = useParams();
@@ -16,6 +17,23 @@ function ProductPage() {
   const [relatedImages, setRelatedImages] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const fulfilmentRequirements = {
+    A: ['KYC check completed'],
+    B: [
+      'KYC check completed',
+      'Fraud Check',
+      'Living Status Check',
+      'Duplicate ID Check',
+    ],
+    C: [
+      'KYC check completed',
+      'Fraud Check',
+      'Living Status Check',
+      'Duplicate ID Check',
+      'Marital Status Check',
+      'Credit Check',
+    ],
+  };
   const products = [
     {
       id: 1,
@@ -96,6 +114,8 @@ function ProductPage() {
   const fullDesc =
     product.description ||
     'No description available for this product.';
+  const matchedProduct = productCatalogue.find((item) => item.name.toLowerCase() === product.name.toLowerCase());
+  const requirementItems = fulfilmentRequirements[matchedProduct?.fulfilmentType] || [];
 
 
 
@@ -145,9 +165,9 @@ function ProductPage() {
           <div className="section">
             <h3>Requirement</h3>
             <ul>
-              <li>Minimum age of 18 years old</li>
-              <li>South African resident</li>
-              <li>Have an account with us in good standing</li>
+              {requirementItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
             <div>
               <button
