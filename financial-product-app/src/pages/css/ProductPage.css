@@ -29,10 +29,10 @@
 .page-header .back{ background:none; border:none; font-size:18px; }
 .page-header .page-title{ font-weight:600; }
 
-.hero{ position:relative; }
-.hero img{
+.product{ position:relative; }
+.product img{
   width:100%;
-  height:220px;
+  height:289px;
   object-fit:cover;
   border-radius:12px;
   display:block;
@@ -49,7 +49,6 @@
   background:linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
   box-sizing:border-box;
 }
-.badge{ position:absolute; left:12px; top:12px; background:#06b6d4; color:#fff; padding:6px 8px; border-radius:8px; font-size:12px; }
 
 .title{ font-size:18px; margin:12px 0 6px 0; font-weight:700; }
 .description{ color:var(--muted); font-size:14px; line-height:1.4; margin:0 0 12px 0; }

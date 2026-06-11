@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
+import DiscountBadge from '../components/DiscountBadge';
 import { getProductImage } from '../services/ImageService';
 
 function ProductPage() {
@@ -102,9 +103,9 @@ function ProductPage() {
         <div className="page-title">{product.name}</div>
       </div>
 
-      <div className="hero">
+      <div className="product">
         {imageUrl ? <img src={imageUrl} alt="Product main" /> : <div className="hero-placeholder" aria-hidden="true" />}
-        <div className="badge">25% OFF</div>
+        <DiscountBadge percentage={25} />
       </div>
 
       <h1 className="title">{product.name}</h1>

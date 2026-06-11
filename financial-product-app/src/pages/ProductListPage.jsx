@@ -2,6 +2,7 @@ import './css/ProductListPage.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductListCard from '../components/ProductListCard';
+import DiscountBadge from '../components/DiscountBadge';
 
 const recommendedProducts = [
   {
@@ -86,7 +87,7 @@ function ProductListPage() {
       <main className="product-list-page__content">
         <section className="product-list-page__featured">
           <div className="featured-hero" onClick={() => navigate('/products/1')} role="button" tabIndex={0}>
-            <div className="featured-hero__badge">25% off</div>
+            <DiscountBadge percentage={25} className="featured-hero__badge" />
             <h1>All Mobile Device Contracts</h1>
             <p>Various models available</p>
             <span className="featured-hero__cta">View offers</span>

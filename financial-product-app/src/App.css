@@ -1,3 +1,6 @@
+body {
+  font-family: 'Inter', sans-serif;
+}
 .counter {
   font-size: 16px;
   padding: 5px 10px;
