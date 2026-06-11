@@ -1,0 +1,14 @@
+[
+  {
+    "type": "A",
+    "description": "Smallest unit of checks. This just requires KYC to be completed."
+  },
+  {
+    "type": "B",
+    "description": "Requires all of the checks in Type A, as well as the Fraud Check, Living Status Check and Duplicate ID Check."
+  },
+  {
+    "type": "C",
+    "description": "Requires all of the checks in Type B, as well as the Marital Status Check & Credit Check."
+  }
+]

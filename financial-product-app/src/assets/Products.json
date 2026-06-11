@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Retail Short Term Insurance",
+    "description": "Provides cover for short-term products for individuals - Electronics, Household Items, Jewellery, Cars etc.",
+    "price": "R500",
+    "fulfilmentType": "C"
+  },
+  {
+    "name": "Retail Long-Term Insurance",
+    "description": "Provides cover for longer term products individuals - household insurance, life insurance etc.",
+    "price": "R1000",
+    "fulfilmentType": "C"
+  },
+  {
+    "name": "Commercial Short Term Insurance",
+    "description": "Provides cover for short-term products for commercial entities - Printers, Company Cars, Theft, etc.",
+    "price": "R5000",
+    "fulfilmentType": "C"
+  },
+  {
+    "name": "Commercial Long-Term Insurance",
+    "description": "Provides cover for longer term products - office insurance, employee benefit insurance, etc.",
+    "price": "R10000",
+    "fulfilmentType": "C"
+  },
+  {
+    "name": "Device Contract",
+    "description": "Allows the customer to take out a device on contract - such as a phone, laptop etc.",
+    "price": "R850",
+    "fulfilmentType": "A"
+  },
+  {
+    "name": "Short-Term Investment Product",
+    "description": "Provides a way for customers to invest their money over a short period of time - 32 day fixed deposit etc.",
+    "price": "R2500",
+    "fulfilmentType": "B"
+  },
+  {
+    "name": "Long-Term Investment Product",
+    "description": "Provides a way for users to invest their money over the long term - Retirement / Annuity Funds, Unit Trusts etc",
+    "price": "R5000",
+    "fulfilmentType": "B"
+  },
+  {
+    "name": "Islamic Investment Product",
+    "description": "Provides a way for Islamic customers to invest their money",
+    "price": "R5000",
+    "fulfilmentType": "B"
+  },
+  {
+    "name": "VIP Investment Product",
+    "description": "Provides an Investment product for VIP customers Over 150 Million Net-Asset Value",
+    "price": "R20000",
+    "fulfilmentType": "B"
+  }
+]

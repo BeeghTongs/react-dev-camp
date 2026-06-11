@@ -1,51 +1,141 @@
 import './css/ProductPage.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { MdArrowBack } from "react-icons/md";
+import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
-import headphone from '../assets/headphone.png';
-import watch from '../assets/watch.png';
+import DiscountBadge from '../components/DiscountBadge';
+import { getProductImage } from '../services/ImageService';
+import { useNavigate } from 'react-router-dom';
+import productCatalogue from '../assets/Products.json';
 
 function ProductPage() {
+  const { id } = useParams();
+  const [expanded, setExpanded] = useState(false);
+  const [product, setProduct] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
+  const [relatedImages, setRelatedImages] = useState({});
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const fulfilmentRequirements = {
+    A: ['KYC check completed'],
+    B: [
+      'KYC check completed',
+      'Fraud Check',
+      'Living Status Check',
+      'Duplicate ID Check',
+    ],
+    C: [
+      'KYC check completed',
+      'Fraud Check',
+      'Living Status Check',
+      'Duplicate ID Check',
+      'Marital Status Check',
+      'Credit Check',
+    ],
+  };
   const products = [
     {
       id: 1,
-      imageUrl: headphone,
       title: 'Wireless Headphones',
       price: 'R350 p/m',
     },
     {
       id: 2,
-      imageUrl: headphone,
       title: 'Gaming Mouse',
       price: 'R120 p/m',
     },
     {
       id: 3,
-      imageUrl: headphone,
       title: 'Mechanical Keyboard',
       price: 'R250 p/m',
     },
   ];
 
-  const fullDesc = `Our comprehensive coverage ensures that your devices are protected against a wide range of mishaps. This plan includes accidental damage, theft, loss and extended hardware protection so you can focus on what matters.`;
+  useEffect(() => {
+    async function fetchProduct() {
+      try{
+        const response = await fetch(`/client/v1/products/${id}`);
 
-  const [expanded, setExpanded] = useState(false);
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        setProduct(data);
+      }
+      catch(error){
+        console.error('Failed to load product:', error);
+      }
+      finally{
+        setLoading(false);
+    }
+  }
+
+    fetchProduct();
+  }, [id]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function fetchProductImages() {
+      const [heroImage, related1, related2, related3] = await Promise.all([
+        getProductImage(id),
+        getProductImage(1),
+        getProductImage(2),
+        getProductImage(3),
+      ]);
+
+      if (active) {
+        setImageUrl(heroImage);
+        setRelatedImages({
+          1: related1,
+          2: related2,
+          3: related3,
+        });
+      }
+    }
+
+    fetchProductImages();
+
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  if (loading) {
+    return <div className="product-page">Loading...</div>;
+  }
+
+  if (!product) {
+    return <div className="product-page">Product not found</div>;
+  }
+
+  const fullDesc =
+    product.description ||
+    'No description available for this product.';
+  const matchedProduct = productCatalogue.find((item) => item.name.toLowerCase() === product.name.toLowerCase());
+  const requirementItems = fulfilmentRequirements[matchedProduct?.fulfilmentType] || [];
+
+
 
   return (
     <div className="product-page">
       <div className="page-header">
-        <button className="back">←</button>
-        <div className="page-title">Islamic Investment Product</div>
+      <button className="back-btn" onClick={() => navigate(`/`)}>
+        <MdArrowBack />
+      </button>
+        <div className="page-title">{product.name}</div>
       </div>
 
-      <div className="hero">
-        <img src={watch} alt="Product main" />
-        <div className="badge">25% OFF</div>
+      <div className="product">
+        {imageUrl ? <img src={imageUrl} alt="Product main" /> : <div className="hero-placeholder" aria-hidden="true" />}
+        <DiscountBadge percentage={25} />
       </div>
 
-      <h1 className="title">Islamic Investment Product</h1>
+      <h1 className="title">{product.name}</h1>
       {/* Description with expand/collapse */}
-      <p className="description">{expanded ? fullDesc : `${fullDesc.slice(0,120)}...`}</p>
+      <p className="description">{expanded ? fullDesc : `${product.description?.slice(0,120) || 'No description available.'}...`}</p>
 
       {/* When collapsed show Read more under the description */}
       {!expanded && (
@@ -63,21 +153,21 @@ function ProductPage() {
       {/* Sections that are shown only when expanded; Read less appears under Requirement */}
       {expanded && (
         <>
-          <div className="section">
+          {/* <div className="section">
             <h3>Benefits</h3>
             <ul>
               <li>Theft and loss recovery</li>
               <li>Comprehensive coverage</li>
               <li>Hardware malfunction coverage</li>
             </ul>
-          </div>
+          </div> */}
 
           <div className="section">
             <h3>Requirement</h3>
             <ul>
-              <li>Minimum age of 18 years old</li>
-              <li>South African resident</li>
-              <li>Have an account with us in good standing</li>
+              {requirementItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
             <div>
               <button
@@ -92,25 +182,34 @@ function ProductPage() {
         </>
       )}
 
-      <div className="related-header">Related product</div>
+      <div className="related-header">Related products</div>
       <div className="recommended-products">
         {products.map((product) => (
           <ProductCard
             key={product.id}
-            imageUrl={product.imageUrl}
+            imageUrl={relatedImages[product.id] || null}
             title={product.title}
             price={product.price}
           />
         ))}
       </div>
 
-      <div className="product-footer">
-        <div className="price">
-          <div className="amount">R 350.00</div>
-          <div className="per">per month</div>
-        </div>
-        <AddToCart />
-      </div>
+          <div className="product-footer">
+            <div className="price">
+              {
+                (() => {
+                  // eslint-disable-next-line no-useless-assignment
+                  let displayPrice = '';
+                  if (typeof product.price === 'number') displayPrice = `R ${product.price.toFixed(2)}`;
+                  else if (typeof product.price === 'string' && product.price.trim().startsWith('R')) displayPrice = product.price;
+                  else displayPrice = `R ${product.price}`;
+                  return <div className="amount">{displayPrice}</div>;
+                })()
+              }
+              <div className="per">per month</div>
+            </div>
+            <AddToCart />
+          </div>
     </div>
   );
 }
