@@ -1,4 +1,5 @@
 .login-page {
+  position: relative;
   min-height: 100vh;
   display: flex;
   align-items: stretch;
@@ -7,6 +8,45 @@
     radial-gradient(1200px 600px at 50% -25%, rgba(42, 107, 186, 0.28), transparent 45%),
     linear-gradient(180deg, #111b34 0%, #172646 100%);
   color: #ffffff;
+}
+
+.login-modal__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(8, 15, 31, 0.58);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.login-modal__content {
+  position: relative;
+  width: min(100%, 480px);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  padding: 28px;
+  box-sizing: border-box;
+  background: rgba(248, 250, 252, 0.96);
+  color: #111827;
+  box-shadow: 0 32px 80px rgba(3, 8, 20, 0.48);
+}
+
+.login-modal__content::-webkit-scrollbar {
+  width: 10px;
+}
+
+.login-modal__content::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.18);
+  border-radius: 999px;
+}
+
+.login-modal__content::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .login-card {
@@ -110,6 +150,18 @@
   font-size: 17px;
   cursor: pointer;
   padding: 0;
+}
+
+@media (max-width: 520px) {
+  .login-modal__overlay {
+    padding: 12px;
+  }
+
+  .login-modal__content {
+    max-height: calc(100vh - 24px);
+    padding: 20px;
+    border-radius: 22px;
+  }
 }
 
 @media (max-width: 420px) {
