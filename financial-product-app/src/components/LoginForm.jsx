@@ -59,10 +59,8 @@ const handleSubmit = async (e) => {
     }
 
     const data = await response.json();
-    console.log('LOGIN RESPONSE:', data);
 
     const jwt = data.loginAccessKey;
-    console.log('JWT TOKEN:', jwt);
 
     localStorage.setItem('jwt', jwt);
 

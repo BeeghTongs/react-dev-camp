@@ -7,7 +7,7 @@
   text-align: left;
   box-shadow: 0 1px 4px rgba(15, 23, 42, 0.06);
   cursor: pointer;
-  min-width: 0;
+  flex: 0 0 100px;
 }
 
 .product-list-card__image-wrap {

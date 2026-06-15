@@ -21,7 +21,7 @@ function LoginPage() {
   };
 
   const handleContinueAsGuest = () => {
-    navigate('/');
+    navigate('/list');
   };
 
   return (
@@ -68,7 +68,7 @@ function LoginPage() {
           }}
         >
           <div className="login-modal__content">
-            <LoginForm onSuccess={() => navigate('/')} onClose={handleCloseModal} />
+            <LoginForm onSuccess={() => navigate('/list')} onClose={handleCloseModal} />
           </div>
         </div>
       )}

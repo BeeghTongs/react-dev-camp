@@ -100,9 +100,10 @@ function ProductListPage() {
             <h2>Recommended for you</h2>
             <button type="button" className="section-link">View all →</button>
           </div>
-          <div className="product-list-grid">
+          <div className="recommended-products">
             {recommendedProducts.map((product) => (
               <ProductListCard
+                className="product-card"
                 key={product.id}
                 imageUrl={product.imageUrl}
                 title={product.title}
@@ -119,9 +120,10 @@ function ProductListPage() {
             <h2>New arrivals</h2>
             <button type="button" className="section-link">View all →</button>
           </div>
-          <div className="product-list-grid">
+          <div className="new-arrivals">
             {newArrivals.map((product) => (
               <ProductListCard
+                className="product-card"
                 key={product.id}
                 imageUrl={product.imageUrl}
                 title={product.name}

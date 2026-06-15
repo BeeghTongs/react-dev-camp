@@ -4,6 +4,7 @@ import './App.css'
 import LoginPage from './pages/LoginPage'
 import ProductListPage from './pages/ProductListPage'
 import ProductPage from './pages/ProductPage'
+import SplashScreen from './pages/SplashScreen';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<ProductListPage />} />
+        <Route path="/" element={<SplashScreen />} />
+        <Route path="/list" element={<ProductListPage />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="/products/:id" element={<ProductPage />} />
       </Routes>

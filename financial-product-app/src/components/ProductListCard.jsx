@@ -1,8 +1,19 @@
 import './css/ProductListCard.css';
 
-function ProductListCard({ imageUrl, title, price, badge, onClick }) {
+function ProductListCard({
+  imageUrl,
+  title,
+  price,
+  badge,
+  onClick,
+  className = ""
+}) {
   return (
-    <button type="button" className="product-list-card" onClick={onClick}>
+    <button
+      type="button"
+      className={`product-list-card ${className}`}
+      onClick={onClick}
+    >
       <div className="product-list-card__image-wrap">
         {badge ? <span className="product-list-card__badge">{badge}</span> : null}
         {imageUrl ? (
