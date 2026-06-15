@@ -1,6 +1,7 @@
 import "./css/RecommendedPage.css";
 import { useNavigate } from "react-router-dom";
 import ProductListCard from "../components/ProductListCard";
+import { MdArrowBack } from "react-icons/md";
 
 const recommendedProducts = [
   {
@@ -31,7 +32,12 @@ export default function RecommendedPage() {
 
   return (
     <div className="recommended-page">
-      <h1>Recommended for you</h1>
+            <div className="page-header">
+            <button className="back-btn" onClick={() => navigate(`/list`)}>
+              <MdArrowBack />
+            </button>
+              <div className="page-title">Recommended to you</div>
+            </div>
 
       <div className="recommended-grid">
         {recommendedProducts.map((product) => (

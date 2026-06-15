@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductListCard from '../components/ProductListCard';
 import DiscountBadge from '../components/DiscountBadge';
+import { MdFingerprint } from 'react-icons/md';
+import { getProductImage } from '../services/ImageService';
 
 const recommendedProducts = [
   {
@@ -49,8 +51,15 @@ function ProductListPage() {
         const data = await response.json();
         const products = Array.isArray(data) ? data : data?.items || [];
 
+        const enriched = await Promise.all(
+        products.map(async (p) => ({
+          ...p,
+          imageUrl: await getProductImage(p.id),
+        }))
+      );
+
         if (active) {
-          setNewArrivals(products);
+          setNewArrivals(enriched);
         }
       } catch (error) {
         console.error('Failed to load new arrivals:', error);
@@ -79,7 +88,7 @@ function ProductListPage() {
     <div className="product-list-page">
       <header className="product-list-page__header">
         <div className="product-list-page__brand">
-          <div className="product-list-page__logo" aria-hidden="true">◎</div>
+          <MdFingerprint className="fingerprint-icon-header"/>
           <span>InsureTechGuard</span>
         </div>
       </header>
