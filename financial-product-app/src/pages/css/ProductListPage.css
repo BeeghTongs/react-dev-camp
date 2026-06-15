@@ -46,6 +46,15 @@
   margin-bottom: 20px;
 }
 
+.fingerprint-icon-header {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  color: #4f7cff;
+}
+
 .featured-hero {
   position: relative;
   min-height: 175px;
@@ -141,11 +150,32 @@
   padding: 0;
 }
 
-.product-list-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.recommended-products {
+  display: flex;
+  flex-direction: row;
   gap: 12px;
+  padding: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
 }
+
+.new-arrivals {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  padding: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+.product-card {
+  flex: 0 0 5px;
+}
+
 
 .bottom-nav {
   position: fixed;
@@ -167,7 +197,7 @@
   border: none;
   background: transparent;
   color: #9ca3af;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 600;
   padding: 8px 6px;
 }

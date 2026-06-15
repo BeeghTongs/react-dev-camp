@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductListCard from '../components/ProductListCard';
 import DiscountBadge from '../components/DiscountBadge';
+import { MdFingerprint } from 'react-icons/md';
+import { getProductImage } from '../services/ImageService';
 
 const recommendedProducts = [
   {
@@ -49,8 +51,15 @@ function ProductListPage() {
         const data = await response.json();
         const products = Array.isArray(data) ? data : data?.items || [];
 
+        const enriched = await Promise.all(
+        products.map(async (p) => ({
+          ...p,
+          imageUrl: await getProductImage(p.id),
+        }))
+      );
+
         if (active) {
-          setNewArrivals(products);
+          setNewArrivals(enriched);
         }
       } catch (error) {
         console.error('Failed to load new arrivals:', error);
@@ -79,7 +88,7 @@ function ProductListPage() {
     <div className="product-list-page">
       <header className="product-list-page__header">
         <div className="product-list-page__brand">
-          <div className="product-list-page__logo" aria-hidden="true">◎</div>
+          <MdFingerprint className="fingerprint-icon-header"/>
           <span>InsureTechGuard</span>
         </div>
       </header>
@@ -97,12 +106,15 @@ function ProductListPage() {
 
         <section className="product-section">
           <div className="product-section__header">
-            <h2>Recommended for you</h2>
-            <button type="button" className="section-link">View all →</button>
+            <h2>Recommended to you</h2>
+            <button type="button" className="section-link" onClick={() => navigate('/recommended')}>
+              View all →
+            </button>
           </div>
-          <div className="product-list-grid">
+          <div className="recommended-products">
             {recommendedProducts.map((product) => (
               <ProductListCard
+                className="product-card"
                 key={product.id}
                 imageUrl={product.imageUrl}
                 title={product.title}
@@ -117,11 +129,14 @@ function ProductListPage() {
         <section className="product-section">
           <div className="product-section__header">
             <h2>New arrivals</h2>
-            <button type="button" className="section-link">View all →</button>
+            <button type="button" className="section-link" onClick={() => navigate('/new-arrivals')}>
+              View all →
+            </button>
           </div>
-          <div className="product-list-grid">
+          <div className="new-arrivals">
             {newArrivals.map((product) => (
               <ProductListCard
+                className="product-card"
                 key={product.id}
                 imageUrl={product.imageUrl}
                 title={product.name}

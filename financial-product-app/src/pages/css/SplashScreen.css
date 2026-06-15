@@ -1,0 +1,47 @@
+
+.splash-screen {
+  height: 100vh;
+  width: 100vw;
+  background-image: url('../../assets/splash.webp'); /* your blue water/bokeh image */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Optional dark overlay for readability */
+.splash-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 40, 80, 0.35);
+}
+
+.splash-content {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 12px;
+}
+
+.app-name {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.fingerprint-icon {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
