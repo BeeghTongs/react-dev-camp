@@ -122,7 +122,7 @@ function ProductPage() {
   return (
     <div className="product-page">
       <div className="page-header">
-      <button className="back-btn" onClick={() => navigate(`/`)}>
+      <button className="back-btn" onClick={() => navigate(`/list`)}>
         <MdArrowBack />
       </button>
         <div className="page-title">{product.name}</div>
@@ -153,14 +153,6 @@ function ProductPage() {
       {/* Sections that are shown only when expanded; Read less appears under Requirement */}
       {expanded && (
         <>
-          {/* <div className="section">
-            <h3>Benefits</h3>
-            <ul>
-              <li>Theft and loss recovery</li>
-              <li>Comprehensive coverage</li>
-              <li>Hardware malfunction coverage</li>
-            </ul>
-          </div> */}
 
           <div className="section">
             <h3>Requirement</h3>
