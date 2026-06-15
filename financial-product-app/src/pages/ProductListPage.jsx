@@ -97,8 +97,10 @@ function ProductListPage() {
 
         <section className="product-section">
           <div className="product-section__header">
-            <h2>Recommended for you</h2>
-            <button type="button" className="section-link">View all →</button>
+            <h2>Recommended to you</h2>
+            <button type="button" className="section-link" onClick={() => navigate('/recommended')}>
+              View all →
+            </button>
           </div>
           <div className="recommended-products">
             {recommendedProducts.map((product) => (
@@ -118,7 +120,9 @@ function ProductListPage() {
         <section className="product-section">
           <div className="product-section__header">
             <h2>New arrivals</h2>
-            <button type="button" className="section-link">View all →</button>
+            <button type="button" className="section-link" onClick={() => navigate('/new-arrivals')}>
+              View all →
+            </button>
           </div>
           <div className="new-arrivals">
             {newArrivals.map((product) => (

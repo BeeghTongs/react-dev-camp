@@ -1,0 +1,18 @@
+.recommended-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 16px;
+}
+
+@media (min-width: 700px) {
+  .recommended-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1000px) {
+  .recommended-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
