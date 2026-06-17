@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import ProductListCard from '../components/ProductListCard';
 import DiscountBadge from '../components/DiscountBadge';
 import { MdFingerprint } from 'react-icons/md';
-import { getProductImage } from '../services/ImageService';
 
 const recommendedProducts = [
   {
@@ -51,15 +50,8 @@ function ProductListPage() {
         const data = await response.json();
         const products = Array.isArray(data) ? data : data?.items || [];
 
-        const enriched = await Promise.all(
-        products.map(async (p) => ({
-          ...p,
-          imageUrl: await getProductImage(p.id),
-        }))
-      );
-
         if (active) {
-          setNewArrivals(enriched);
+          setNewArrivals(products);
         }
       } catch (error) {
         console.error('Failed to load new arrivals:', error);
@@ -114,13 +106,14 @@ function ProductListPage() {
           <div className="recommended-products">
             {recommendedProducts.map((product) => (
               <ProductListCard
-                className="product-card"
+                id={product.id}
                 key={product.id}
-                imageUrl={product.imageUrl}
+                imageUrl={product.imageUrl} // optional fallback
                 title={product.title}
                 price={product.price}
                 badge={product.badge}
                 onClick={() => navigate(`/products/${product.id}`)}
+                className="product-card"
               />
             ))}
           </div>
@@ -136,12 +129,12 @@ function ProductListPage() {
           <div className="new-arrivals">
             {newArrivals.map((product) => (
               <ProductListCard
-                className="product-card"
+                id={product.id}
                 key={product.id}
-                imageUrl={product.imageUrl}
                 title={product.name}
                 price={formatPrice(product.price)}
                 onClick={() => navigate(`/products/${product.id}`)}
+                className="product-card"
               />
             ))}
           </div>

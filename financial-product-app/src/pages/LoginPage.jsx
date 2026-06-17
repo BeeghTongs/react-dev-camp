@@ -21,7 +21,7 @@ function LoginPage() {
   };
 
   const handleContinueAsGuest = () => {
-    navigate('/list');
+    navigate('/guest-list');
   };
 
   return (

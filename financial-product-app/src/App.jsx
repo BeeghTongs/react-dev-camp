@@ -3,6 +3,7 @@ import './App.css'
 
 import LoginPage from './pages/LoginPage'
 import ProductListPage from './pages/ProductListPage'
+import GuestListPage from './pages/GuestListPage'
 import ProductPage from './pages/ProductPage'
 import NewArrivalsPage from './pages/NewArrivalsPage'
 import RecommendedPage from './pages/RecommendedPage'
@@ -17,6 +18,7 @@ function App() {
         <Route path="/new-arrivals" element={<NewArrivalsPage />} />
         <Route path="/recommended" element={<RecommendedPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/guest-list" element={<GuestListPage />} />
         <Route path="/" element={<SplashScreen />} />
         <Route path="/list" element={<ProductListPage />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
