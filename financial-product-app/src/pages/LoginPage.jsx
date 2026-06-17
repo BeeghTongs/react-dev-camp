@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdFingerprint } from 'react-icons/md';
+import { guestLogin } from '../services/authService.js';
 import LoginForm from '../components/LoginForm.jsx';
 import './css/LoginPage.css';
 
@@ -20,8 +21,16 @@ function LoginPage() {
     navigate('/');
   };
 
-  const handleContinueAsGuest = () => {
-    navigate('/guest-list');
+  const handleContinueAsGuest = async () => {
+    try{
+      const user = await guestLogin();
+      console.log('Guest user logged in:', user);
+
+      navigate('/guest-list');
+    }
+    catch (error) {
+      console.error('Error during guest login:', error);
+    }
   };
 
   return (
