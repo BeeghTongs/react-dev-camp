@@ -26,6 +26,8 @@ function LoginPage() {
       const user = await guestLogin();
       console.log('Guest user logged in:', user);
 
+      localStorage.setItem('auth-mode', 'guest');
+
       navigate('/guest-list');
     }
     catch (error) {
