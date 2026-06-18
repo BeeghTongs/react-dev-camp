@@ -44,18 +44,23 @@
 .recommended-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 16px;
   padding: 16px;
+}
+
+.recommended-grid .product-card {
+  width: 100%;
+  min-width: 0;
 }
 
 @media (min-width: 700px) {
   .recommended-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 1000px) {
   .recommended-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 }
