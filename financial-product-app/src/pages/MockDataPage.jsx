@@ -1,12 +1,22 @@
-import './css/MockMobileContractsPage.css';
+import './css/MockDataPage.css';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MdArrowBack } from 'react-icons/md';
 import ProductListCard from '../components/ProductListCard';
 import mockMobileImage from '../assets/mockmobile.jpg';
 import mockMobileImage2 from '../assets/mockmobile2.jpg';
 import mockMobileImage3 from '../assets/mockmobile3.jpg';
+import mockTravelImage from '../assets/mocktravel.jpg';
+import mockHomeImage from '../assets/mockhome.jpg';
 
 const mockMobileImages = [mockMobileImage, mockMobileImage2, mockMobileImage3];
+const mockTravelImages = [mockTravelImage];
+const mockHomeImages = [mockHomeImage];
+
+const collectionImages = {
+  'mobile-contracts': mockMobileImages,
+  'smart-home-protection': mockHomeImages,
+  'travel-cover-essentials': mockTravelImages,
+};
 
 const collectionData = {
   'mobile-contracts': {
@@ -63,6 +73,7 @@ export default function MockDataPage() {
   const [searchParams] = useSearchParams();
   const collection = searchParams.get('collection') || 'mobile-contracts';
   const selectedCollection = collectionData[collection] || defaultCollection;
+  const images = collectionImages[collection] || collectionImages['mobile-contracts'];
 
   return (
     <div className="mock-mobile-contracts-page">
@@ -88,7 +99,7 @@ export default function MockDataPage() {
             title={contract.title}
             price={contract.price}
             badge={contract.badge}
-            imageUrl={mockMobileImages[index % mockMobileImages.length]}
+            imageUrl={images[index % images.length]}
           />
         ))}
       </div>

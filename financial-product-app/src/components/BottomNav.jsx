@@ -21,7 +21,7 @@ function BottomNav() {
           <MdShoppingCart/>
           Cart
         </button>
-        <button type="button" className="bottom-nav__item">
+        <button type="button" className="bottom-nav__item" onClick={() => window.location.assign('/account')}>
           <MdPerson/>
           Account
         </button>
