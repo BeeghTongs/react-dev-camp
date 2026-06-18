@@ -4,13 +4,14 @@ import { useAuthUser } from '../services/useAuthUser';
 export default function RequireAuth({ children, allowGuest = true, requireGuest = false }) {
   const user = useAuthUser();
   const token = typeof window !== 'undefined' ? localStorage.getItem('jwt') : null;
-  const isAuthenticated = Boolean(user || token);
+  const hasJwtToken = Boolean(token);
+  const isAuthenticated = Boolean(user || hasJwtToken);
 
   if (user === undefined && !token) {
     return <div>Loading...</div>;
   }
 
-  const isGuest = user?.isAnonymous === true;
+  const isGuest = !hasJwtToken && user?.isAnonymous === true;
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

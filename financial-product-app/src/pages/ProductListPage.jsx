@@ -2,6 +2,7 @@ import './css/ProductListPage.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductListCard from '../components/ProductListCard';
+import BottomNav from '../components/BottomNav';
 import DiscountBadge from '../components/DiscountBadge';
 import { MdFingerprint } from 'react-icons/md';
 
@@ -93,7 +94,9 @@ function ProductListPage() {
             <p>Various models available</p>
             <span className="featured-hero__cta">View offers</span>
           </div>
-          <div className="featured-hero featured-hero--side" aria-hidden="true" />
+            <div className="featured-hero featured-hero--side" aria-hidden="true" >
+              More Coming Soon!
+            </div>
         </section>
 
         <section className="product-section">
@@ -140,13 +143,7 @@ function ProductListPage() {
           </div>
         </section>
       </main>
-
-      <nav className="bottom-nav" aria-label="Primary">
-        <button type="button" className="bottom-nav__item bottom-nav__item--active">Home</button>
-        <button type="button" className="bottom-nav__item">Subscriptions</button>
-        <button type="button" className="bottom-nav__item">Cart</button>
-        <button type="button" className="bottom-nav__item">Account</button>
-      </nav>
+        <BottomNav />
     </div>
   );
 }
