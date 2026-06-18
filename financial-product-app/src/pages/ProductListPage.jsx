@@ -9,6 +9,7 @@ import { MdFingerprint } from 'react-icons/md';
 const recommendedProducts = [
   {
     id: 1,
+    collection: 'mobile-contracts',
     title: 'All Mobile Device Contracts',
     price: 'R350 p/m',
     badge: '25% off',
@@ -17,6 +18,7 @@ const recommendedProducts = [
   },
   {
     id: 2,
+    collection: 'smart-home-protection',
     title: 'Smart Home Protection',
     price: 'R420 p/m',
     badge: 'New',
@@ -25,6 +27,7 @@ const recommendedProducts = [
   },
   {
     id: 3,
+    collection: 'travel-cover-essentials',
     title: 'Travel Cover Essentials',
     price: 'R280 p/m',
     badge: null,
@@ -88,7 +91,7 @@ function ProductListPage() {
 
       <main className="product-list-page__content">
         <section className="product-list-page__featured">
-          <div className="featured-hero" onClick={() => navigate('/mock-mobile-contracts')} role="button" tabIndex={0}>
+          <div className="featured-hero" onClick={() => navigate('/mock-data?collection=mobile-contracts')} role="button" tabIndex={0}>
             <DiscountBadge percentage={25} className="featured-hero__badge" />
             <h1>All Mobile Device Contracts</h1>
             <p>Various models available</p>
@@ -115,7 +118,7 @@ function ProductListPage() {
                 title={product.title}
                 price={product.price}
                 badge={product.badge}
-                onClick={() => navigate(`/products/${product.id}`)}
+                onClick={() => navigate(`/mock-data?collection=${product.collection}`)}
                 className="product-card"
               />
             ))}
