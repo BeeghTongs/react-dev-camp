@@ -40,6 +40,40 @@
   --muted-2: #9ca3af; /* keep card muted tone as-is */
 }
 
+@media (min-width: 900px) {
+  .product-page {
+    max-width: 1200px;
+  }
+
+  .product-main {
+    display: grid;
+    grid-template-columns: minmax(320px, 1.1fr) minmax(320px, 0.9fr);
+    gap: 40px;
+    align-items: start;
+  }
+
+  .product-panel {
+    display: grid;
+    gap: 20px;
+  }
+
+  .product-summary {
+    display: grid;
+    gap: 20px;
+  }
+
+  .product img {
+    height: auto;
+    min-height: 320px;
+  }
+
+  .recommended-products .product-card {
+    flex: 0 0 min(82vw, 420px);
+    min-width: min(82vw, 295px);
+    width: min(82vw, 295px);
+  }
+}
+
 .page-header{
   display:flex;
   align-items:center;

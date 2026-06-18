@@ -84,6 +84,7 @@
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.2)),
     linear-gradient(135deg, #334155 0%, #94a3b8 100%);
+  font-size: 19px;
 }
 
 .featured-hero__badge {
@@ -221,7 +222,6 @@
 
 @media (min-width: 700px) {
   .product-list-page__content {
-    max-width: 920px;
     margin: 0 auto;
   }
 }
