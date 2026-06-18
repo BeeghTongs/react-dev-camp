@@ -88,7 +88,7 @@ function ProductListPage() {
 
       <main className="product-list-page__content">
         <section className="product-list-page__featured">
-          <div className="featured-hero" onClick={() => navigate('/products/1')} role="button" tabIndex={0}>
+          <div className="featured-hero" onClick={() => navigate('/mock-mobile-contracts')} role="button" tabIndex={0}>
             <DiscountBadge percentage={25} className="featured-hero__badge" />
             <h1>All Mobile Device Contracts</h1>
             <p>Various models available</p>

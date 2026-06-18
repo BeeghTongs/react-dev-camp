@@ -8,11 +8,17 @@ function ProductListCard({
   price,
   badge,
   onClick,
-  className = ""
+  className = "",
+  imageUrl: initialImageUrl = null,
 }) {
-  const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl, setImageUrl] = useState(initialImageUrl);
 
   useEffect(() => {
+    if (initialImageUrl) {
+      setImageUrl(initialImageUrl);
+      return;
+    }
+
     let active = true;
 
     async function loadImage() {
@@ -29,7 +35,7 @@ function ProductListCard({
     return () => {
       active = false;
     };
-  }, [id]);
+  }, [id, initialImageUrl]);
 
   return (
     <button

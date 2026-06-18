@@ -10,6 +10,7 @@ import RecommendedPage from './pages/RecommendedPage'
 import SplashScreen from './pages/SplashScreen';
 import ScrollToTop from './components/ScrollToTop';
 import RequireAuth from './components/RequireAuth';
+import MockMobileContractsPage from './pages/MockMobileContractsPage';
 
 function App() {
   return (
@@ -42,6 +43,11 @@ function App() {
         <Route path="/products/:id" element={
           <RequireAuth>
             <ProductPage />
+          </RequireAuth>
+        } />
+        <Route path="/mock-mobile-contracts" element={
+          <RequireAuth>
+            <MockMobileContractsPage />
           </RequireAuth>
         } />
       </Routes>
