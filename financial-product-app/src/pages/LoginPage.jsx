@@ -3,14 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { MdFingerprint } from 'react-icons/md';
 import { guestLogin } from '../services/authService.js';
 import LoginForm from '../components/LoginForm.jsx';
+import SignUpForm from '../components/SignUpForm.jsx';
 import './css/LoginPage.css';
 
 function LoginPage() {
   const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
 
   const handleLoginClick = () => {
     setShowLoginModal(true);
+  };
+
+  const handleSignupClick = () => {
+    setShowSignupModal(true);
   };
 
   const handleLoginSuccess = async (jwt, email) => {
@@ -36,11 +42,6 @@ function LoginPage() {
   const handleCloseModal = () => {
     setShowLoginModal(false);
   };
-
-  const handleSignUp = () => {
-    navigate('/');
-  };
-  
 
   const handleContinueAsGuest = async () => {
     try{
@@ -73,7 +74,7 @@ function LoginPage() {
 
           <p className="login-card__meta">
             Don&apos;t have an account?{' '}
-            <button type="button" className="login-card__inline-link" onClick={handleSignUp}>
+            <button type="button" className="login-card__inline-link" onClick={handleSignupClick}>
               Sign up
             </button>
           </p>
@@ -101,6 +102,28 @@ function LoginPage() {
         >
           <div className="login-modal__content">
             <LoginForm onSuccess={handleLoginSuccess} onClose={handleCloseModal} />
+          </div>
+        </div>
+      )}
+
+      {showSignupModal && (
+        <div
+          className="login-modal__overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Sign up form"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowSignupModal(false);
+          }}
+        >
+          <div className="login-modal__content">
+            <SignUpForm
+              onClose={() => setShowSignupModal(false)}
+              onSwitchToLogin={() => {
+                setShowSignupModal(false);
+                setShowLoginModal(true);
+              }}
+            />
           </div>
         </div>
       )}
