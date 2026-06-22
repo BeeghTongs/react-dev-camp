@@ -58,7 +58,9 @@ function App() {
           </RequireAuth>
         } />
         <Route path="/identity-verification" element={
+          <RequireAuth allowGuest={false}>
             <IdentityVerificationPage />
+          </RequireAuth>
         } />
       </Routes>
     </BrowserRouter>
