@@ -13,6 +13,26 @@ function LoginPage() {
     setShowLoginModal(true);
   };
 
+  const handleLoginSuccess = async (jwt, email) => {
+  localStorage.setItem('jwt', jwt);
+
+  const res = await fetch(`/v1/customer?emailAddress=${email}`, {
+    headers: {
+      Authorization: `Bearer ${jwt}`,
+    },
+  });
+
+  const user = await res.json();
+
+  delete user.idNumber;
+  delete user.customerAccounts;
+  delete user.customerType;
+
+  localStorage.setItem('user', JSON.stringify(user));
+
+  navigate('/list');
+};
+
   const handleCloseModal = () => {
     setShowLoginModal(false);
   };
@@ -20,6 +40,7 @@ function LoginPage() {
   const handleSignUp = () => {
     navigate('/');
   };
+  
 
   const handleContinueAsGuest = async () => {
     try{
@@ -79,7 +100,7 @@ function LoginPage() {
           }}
         >
           <div className="login-modal__content">
-            <LoginForm onSuccess={() => navigate('/list')} onClose={handleCloseModal} />
+            <LoginForm onSuccess={handleLoginSuccess} onClose={handleCloseModal} />
           </div>
         </div>
       )}

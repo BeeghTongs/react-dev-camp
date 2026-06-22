@@ -62,9 +62,7 @@ const handleSubmit = async (e) => {
 
     const jwt = data.loginAccessKey;
 
-    localStorage.setItem('jwt', jwt);
-
-    onSuccess?.();
+    onSuccess?.(jwt,formData.email);
   } catch (error) {
     console.error('Login failed:', error);
     setAuthError('Incorrect email or password. Please try again.');
