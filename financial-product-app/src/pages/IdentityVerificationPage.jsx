@@ -31,6 +31,13 @@ export default function IdentityVerificationPage() {
   const [itemStatus, setItemStatus] = useState({ residence: 'idle', selfie: 'idle' })
   const [uploadErrors, setUploadErrors] = useState({ residence: '', selfie: '' })
   const [isUploading, setIsUploading] = useState(false)
+  const [cameraCaptureId, setCameraCaptureId] = useState(null)
+  const [cameraError, setCameraError] = useState('')
+  const [capturedPhoto, setCapturedPhoto] = useState(null)
+  const [reviewingCapture, setReviewingCapture] = useState(false)
+  const videoRef = useRef(null)
+  const canvasRef = useRef(null)
+  const streamRef = useRef(null)
 
   const hasAllFiles = useMemo(
     () => files.residence !== null && files.selfie !== null,
@@ -58,8 +65,71 @@ export default function IdentityVerificationPage() {
     setActiveUploadId(null)
   }
 
-  const handleModalOption = (id) => {
-    fileInputs.current[id]?.click()
+  const stopCameraStream = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop())
+      streamRef.current = null
+    }
+  }
+
+  const closeCameraCapture = () => {
+    stopCameraStream()
+    setCameraCaptureId(null)
+    setCameraError('')
+    setReviewingCapture(false)
+    if (capturedPhoto?.url) {
+      URL.revokeObjectURL(capturedPhoto.url)
+    }
+    setCapturedPhoto(null)
+  }
+
+  const startCameraCapture = async (id) => {
+    setCameraError('')
+    setReviewingCapture(false)
+    if (capturedPhoto?.url) {
+      URL.revokeObjectURL(capturedPhoto.url)
+      setCapturedPhoto(null)
+    }
+    setCameraCaptureId(id)
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: id === 'selfie' ? 'user' : 'environment',
+        },
+        audio: false,
+      })
+      streamRef.current = stream
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream
+      }
+    } catch (error) {
+      console.error('Camera capture failed:', error)
+      setCameraError('Unable to access your camera. Please check permissions or try a different browser.')
+      setCameraCaptureId(null)
+    }
+  }
+
+  const handleModalOption = (id, option) => {
+    if (option === 'camera') {
+      startCameraCapture(id)
+      handleCloseUploadSheet()
+      return
+    }
+
+    const input = fileInputs.current[id]
+    const item = uploadItems.find((entry) => entry.id === id)
+    if (!input || !item) return
+
+    if (option === 'photo') {
+      input.setAttribute('accept', 'image/*')
+      input.removeAttribute('capture')
+    } else {
+      input.setAttribute('accept', item.accept)
+      input.removeAttribute('capture')
+    }
+
+    input.click()
     handleCloseUploadSheet()
   }
 
@@ -188,7 +258,6 @@ export default function IdentityVerificationPage() {
               ref={(el) => (fileInputs.current[item.id] = el)}
               type="file"
               accept={item.accept}
-              capture={item.id === 'selfie' ? 'user' : undefined}
               className="sr-only"
               onChange={handleFileChange(item.id)}
             />
@@ -236,14 +305,14 @@ export default function IdentityVerificationPage() {
                 <button
                   type="button"
                   className="upload-sheet__option"
-                  onClick={() => handleModalOption(activeUploadId)}
+                  onClick={() => handleModalOption(activeUploadId, 'camera')}
                 >
                   Take photo with camera
                 </button>
                 <button
                   type="button"
                   className="upload-sheet__option"
-                  onClick={() => handleModalOption(activeUploadId)}
+                  onClick={() => handleModalOption(activeUploadId, 'photo')}
                 >
                   Upload photo
                 </button>
@@ -264,6 +333,110 @@ export default function IdentityVerificationPage() {
               >
                 Cancel
               </button>
+            </div>
+          </div>
+        ) : null}
+
+        {cameraCaptureId ? (
+          <div className="camera-capture__overlay" role="dialog" aria-modal="true">
+            <div className="camera-capture__panel">
+              <div className="camera-capture__video-wrap">
+                {reviewingCapture && capturedPhoto ? (
+                  <img
+                    src={capturedPhoto.url}
+                    alt="Selfie preview"
+                    className="camera-capture__preview"
+                  />
+                ) : (
+                  <>
+                    <video ref={videoRef} autoPlay playsInline muted className="camera-capture__video" />
+                    {cameraCaptureId === 'selfie' ? (
+                      <div className="camera-capture__frame" aria-hidden="true" />
+                    ) : null}
+                  </>
+                )}
+              </div>
+              {reviewingCapture && capturedPhoto ? (
+                <p className="camera-capture__preview-text">
+                  Review your photo and submit when ready.
+                </p>
+              ) : null}
+              <div className="camera-capture__controls">
+                {reviewingCapture && capturedPhoto ? (
+                  <>
+                    <button
+                      type="button"
+                      className="camera-capture__action"
+                      onClick={() => {
+                        const blob = capturedPhoto.blob
+                        if (!blob) return
+                        const file = new File([
+                          blob,
+                        ], `${cameraCaptureId}-${Date.now()}.png`, {
+                          type: 'image/png',
+                        })
+                        setFiles((current) => ({ ...current, [cameraCaptureId]: file }))
+                        setItemStatus((current) => ({ ...current, [cameraCaptureId]: 'success' }))
+                        setUploadErrors((current) => ({ ...current, [cameraCaptureId]: '' }))
+                        setUploadStatus('')
+                        closeCameraCapture()
+                      }}
+                    >
+                      Submit selfie
+                    </button>
+                    <button
+                      type="button"
+                      className="camera-capture__action camera-capture__cancel"
+                      onClick={() => {
+                        setReviewingCapture(false)
+                        setCapturedPhoto(null)
+                        if (cameraCaptureId) {
+                          startCameraCapture(cameraCaptureId)
+                        }
+                      }}
+                    >
+                      Retake selfie
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className="camera-capture__action"
+                      onClick={async () => {
+                        if (!videoRef.current || !canvasRef.current) return
+                        const video = videoRef.current
+                        const canvas = canvasRef.current
+                        const width = video.videoWidth
+                        const height = video.videoHeight
+                        if (!width || !height) return
+                        canvas.width = width
+                        canvas.height = height
+                        const ctx = canvas.getContext('2d')
+                        ctx.drawImage(video, 0, 0, width, height)
+                        canvas.toBlob((blob) => {
+                          if (!blob) return
+                          const url = URL.createObjectURL(blob)
+                          setCapturedPhoto({ url, blob })
+                          setReviewingCapture(true)
+                          stopCameraStream()
+                        }, 'image/png')
+                      }}
+                    >
+                      Capture photo
+                    </button>
+                    <button
+                      type="button"
+                      className="camera-capture__action camera-capture__cancel"
+                      onClick={closeCameraCapture}
+                    >
+                      Cancel
+                    </button>
+                  </>
+                )}
+              </div>
+              {cameraError ? <p className="camera-capture__error">{cameraError}</p> : null}
+              <canvas ref={canvasRef} className="sr-only" />
             </div>
           </div>
         ) : null}

@@ -193,6 +193,121 @@
   -webkit-backdrop-filter: blur(14px);
 }
 
+.camera-capture__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.camera-capture__panel {
+  width: min(520px, 100%);
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.28);
+}
+
+.camera-capture__review {
+  width: 100%;
+  height: auto;
+  background: #000;
+}
+
+.camera-capture__preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.camera-capture__preview-text {
+  margin: 16px 20px 8px;
+  font-size: 15px;
+  color: #111827;
+  text-align: center;
+}
+
+.camera-capture__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+  display: block;
+}
+
+.camera-capture__video-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+  min-height: auto;
+  max-height: 65vh;
+  aspect-ratio: 3 / 4;
+}
+
+.camera-capture__preview {
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.camera-capture__frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+}
+
+.camera-capture__frame::before {
+  content: '';
+  width: min(220px, 62%);
+  height: min(300px, 78%);
+  border-radius: 50% / 60%;
+  border: 2px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.35);
+  
+}
+
+.camera-capture__controls {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.camera-capture__action {
+  flex: 1 1 140px;
+  border: none;
+  border-radius: 16px;
+  background: #2563eb;
+  color: #ffffff;
+  padding: 14px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.camera-capture__cancel {
+  background: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+.camera-capture__error {
+  margin: 0 16px 16px;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
 .upload-sheet {
   width: min(90%, 520px);
   background: #f8fafc;
@@ -282,5 +397,21 @@
 
   .identity-card__title {
     font-size: 28px;
+  }
+
+  .camera-capture__panel {
+    width: 100%;
+    max-height: 96vh;
+  }
+
+  .camera-capture__video-wrap {
+    aspect-ratio: 3 / 4;
+    max-height: 70vh;
+    min-height: 0;
+  }
+
+  .camera-capture__frame::before {
+    width: 72%;
+    height: 88%;
   }
 }
