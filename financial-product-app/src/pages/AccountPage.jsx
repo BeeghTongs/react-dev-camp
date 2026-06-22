@@ -36,6 +36,13 @@ export default function AccountPage() {
           <button
             type="button"
             className="account-card__signout-button"
+            onClick={() => navigate('/identity-verification')}
+          >
+            Complete identity verification
+          </button>
+          <button
+            type="button"
+            className="account-card__signout-button"
             onClick={handleSignOut}
           >
             Sign out

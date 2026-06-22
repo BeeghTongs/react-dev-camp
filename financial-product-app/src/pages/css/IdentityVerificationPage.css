@@ -1,0 +1,149 @@
+.identity-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(180deg, #f8fafc 0%, #e5ebf5 100%);
+}
+
+.identity-card {
+  width: min(480px, 100%);
+  background: #ffffff;
+  border-radius: 32px;
+  padding: 34px 28px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+  display: grid;
+  gap: 28px;
+}
+
+.identity-card__brand {
+  display: grid;
+  gap: 18px;
+  text-align: center;
+}
+
+.identity-card__icon {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 28px;
+  background: #f0f7ff;
+  color: #2563eb;
+}
+
+.identity-card__icon-image{
+    margin-bottom: 30px;
+}
+
+.identity-card__title {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.05;
+  font-weight: 700;
+  color: #111827;
+}
+
+.identity-card__subtitle {
+  margin: 0;
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.identity-card__list {
+  display: grid;
+  gap: 16px;
+}
+
+.identity-item {
+  width: 100%;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background: #f8fafc;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  text-align: left;
+  color: #0f172a;
+  cursor: pointer;
+}
+
+.identity-item:hover,
+.identity-item:focus-visible {
+  border-color: #cbd5e1;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.identity-item__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.identity-item__subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.identity-card__submit {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+  color: #ffffff;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.identity-card__submit:disabled {
+  opacity: 0.56;
+  cursor: not-allowed;
+}
+
+.identity-card__secondary {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.identity-card__status {
+  margin: 0;
+  font-size: 14px;
+  color: #2563eb;
+  text-align: center;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 520px) {
+  .identity-card {
+    padding: 26px 18px;
+  }
+
+  .identity-card__title {
+    font-size: 28px;
+  }
+}

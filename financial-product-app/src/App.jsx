@@ -8,6 +8,7 @@ import ProductPage from './pages/ProductPage'
 import NewArrivalsPage from './pages/NewArrivalsPage'
 import RecommendedPage from './pages/RecommendedPage'
 import AccountPage from './pages/AccountPage';
+import IdentityVerificationPage from './pages/IdentityVerificationPage';
 import SplashScreen from './pages/SplashScreen';
 import ScrollToTop from './components/ScrollToTop';
 import RequireAuth from './components/RequireAuth';
@@ -55,6 +56,9 @@ function App() {
           <RequireAuth>
             <AccountPage />
           </RequireAuth>
+        } />
+        <Route path="/identity-verification" element={
+            <IdentityVerificationPage />
         } />
       </Routes>
     </BrowserRouter>
