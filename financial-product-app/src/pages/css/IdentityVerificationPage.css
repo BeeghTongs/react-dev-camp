@@ -203,7 +203,8 @@
   background: rgba(15, 23, 42, 0.72);
 }
 
-.camera-capture__panel {
+.camera-capture__panel,
+.selfie-prep__panel {
   width: min(520px, 100%);
   max-height: 92vh;
   display: flex;
@@ -273,7 +274,106 @@
   border-radius: 50% / 60%;
   border: 2px solid rgba(255, 255, 255, 0.92);
   box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.35);
-  
+}
+
+.selfie-prep__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.selfie-prep__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 20px 0;
+}
+
+.selfie-prep__title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.selfie-prep__close {
+  border: none;
+  background: transparent;
+  color: #475569;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.selfie-prep__text {
+  margin: 16px 20px 0;
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.selfie-prep__list {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0 20px 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.selfie-prep__item {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.selfie-prep__item-title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.selfie-prep__item-text {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.selfie-prep__actions {
+  display: flex;
+  gap: 12px;
+  padding: 0 20px 22px;
+  flex-wrap: wrap;
+}
+
+.selfie-prep__action,
+.selfie-prep__cancel {
+  flex: 1 1 130px;
+  min-width: 0;
+  border: none;
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.selfie-prep__action {
+  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+  color: #ffffff;
+}
+
+.selfie-prep__cancel {
+  background: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
 }
 
 .camera-capture__controls {

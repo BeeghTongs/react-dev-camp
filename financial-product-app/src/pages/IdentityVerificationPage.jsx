@@ -32,6 +32,7 @@ export default function IdentityVerificationPage() {
   const [uploadErrors, setUploadErrors] = useState({ residence: '', selfie: '' })
   const [isUploading, setIsUploading] = useState(false)
   const [cameraCaptureId, setCameraCaptureId] = useState(null)
+  const [showSelfiePrep, setShowSelfiePrep] = useState(false)
   const [cameraError, setCameraError] = useState('')
   const [capturedPhoto, setCapturedPhoto] = useState(null)
   const [reviewingCapture, setReviewingCapture] = useState(false)
@@ -112,6 +113,11 @@ export default function IdentityVerificationPage() {
 
   const handleModalOption = (id, option) => {
     if (option === 'camera') {
+      if (id === 'selfie') {
+        setShowSelfiePrep(true)
+        handleCloseUploadSheet()
+        return
+      }
       startCameraCapture(id)
       handleCloseUploadSheet()
       return
@@ -337,7 +343,55 @@ export default function IdentityVerificationPage() {
           </div>
         ) : null}
 
-        {cameraCaptureId ? (
+        {showSelfiePrep ? (
+          <div className="selfie-prep__overlay" role="dialog" aria-modal="true">
+            <div className="selfie-prep__panel" role="document">
+              <div className="selfie-prep__header">
+                <h2 className="selfie-prep__title">Prep for your selfie</h2>
+                <button
+                  type="button"
+                  className="selfie-prep__close"
+                  aria-label="Close selfie instructions"
+                  onClick={() => setShowSelfiePrep(false)}
+                >
+                  ×
+                </button>
+              </div>
+              <p className="selfie-prep__text">
+                Start with good lighting and face forward so your eyes are open and clearly visible.
+              </p>
+              <ul className="selfie-prep__list">
+                <li className="selfie-prep__item">
+                  <p className="selfie-prep__item-title">Start with good lighting</p>
+                  <p className="selfie-prep__item-text">Face forward and make sure your eyes are open and clearly visible.</p>
+                </li>
+                <li className="selfie-prep__item">
+                  <p className="selfie-prep__item-title">Avoid face obstructions</p>
+                  <p className="selfie-prep__item-text">Remove anything that covers your face. Eyeglasses are okay.</p>
+                </li>
+              </ul>
+              <div className="selfie-prep__actions">
+                <button
+                  type="button"
+                  className="selfie-prep__action"
+                  onClick={() => {
+                    setShowSelfiePrep(false)
+                    startCameraCapture('selfie')
+                  }}
+                >
+                  Got it
+                </button>
+                <button
+                  type="button"
+                  className="selfie-prep__cancel"
+                  onClick={() => setShowSelfiePrep(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        ) : cameraCaptureId ? (
           <div className="camera-capture__overlay" role="dialog" aria-modal="true">
             <div className="camera-capture__panel">
               <div className="camera-capture__video-wrap">
