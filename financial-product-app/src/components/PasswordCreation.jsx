@@ -10,10 +10,36 @@ const requirements = [
   { key: 'length', label: '8 characters', test: (value) => value.length >= 8 }
 ]
 
-function PasswordCreation({ password, onBack, onPasswordCreated, isLoading }) {
+const sha1 = async (message) => {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-1', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+};
+
+const isPasswordPwned = async (password) => {
+  const hash = await sha1(password);
+
+  const prefix = hash.slice(0, 5);
+  const suffix = hash.slice(5);
+
+  const res = await fetch(
+    `https://api.pwnedpasswords.com/range/${prefix}`
+  );
+
+  const data = await res.text();
+
+  const lines = data.split('\n');
+
+  return lines.some(line => line.startsWith(suffix));
+};
+
+function PasswordCreation({ email, password, onBack, onPasswordCreated, isLoading }) {
   const [value, setValue] = useState(password || '')
   const [showPassword, setShowPassword] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [checkingPwned, setCheckingPwned] = useState(false)
+  const [pwnedErrorLocal, setPwnedErrorLocal] = useState('')
 
   const results = requirements.map((requirement) => ({
     ...requirement,
@@ -36,11 +62,30 @@ function PasswordCreation({ password, onBack, onPasswordCreated, isLoading }) {
     setValue(event.target.value)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     setSubmitted(true)
+    
     if (!isPasswordValid) return
-    onPasswordCreated?.(value)
+
+    setCheckingPwned(true)
+    setPwnedErrorLocal('')
+
+    try {
+      const isPwned = await isPasswordPwned(value)
+      
+      if (isPwned) {
+        setPwnedErrorLocal('This password has been compromised in a data breach. Please choose a different password.')
+        setCheckingPwned(false)
+        return
+      }
+
+      onPasswordCreated?.(value)
+    } catch (error) {
+      console.error('Error checking password:', error)
+      setPwnedErrorLocal('Could not verify password security. Please try again.')
+      setCheckingPwned(false)
+    }
   }
 
   return (
@@ -51,6 +96,16 @@ function PasswordCreation({ password, onBack, onPasswordCreated, isLoading }) {
       </div>
 
       <form className="password-creation__form" onSubmit={handleSubmit} noValidate>
+        {/* Hidden email field for accessibility and password manager support */}
+        <input
+          type="email"
+          value={email || ''}
+          readOnly
+          style={{ display: 'none' }}
+          autoComplete="username"
+          aria-hidden="true"
+        />
+
         <div className="password-creation__field">
           <label className="password-creation__label" htmlFor="signup-password">
             Password
@@ -78,6 +133,12 @@ function PasswordCreation({ password, onBack, onPasswordCreated, isLoading }) {
             </button>
           </div>
         </div>
+
+        {pwnedErrorLocal && (
+          <span className="password-creation__error" role="alert">
+            {pwnedErrorLocal}
+          </span>
+        )}
 
         <div className="password-creation__strength" aria-live="polite">
           <div className="password-creation__strength-bars">
@@ -108,11 +169,11 @@ function PasswordCreation({ password, onBack, onPasswordCreated, isLoading }) {
         </div>
 
         <div className="password-creation__actions">
-          <button type="button" className="password-creation__secondary" onClick={onBack} disabled={isLoading}>
+          <button type="button" className="password-creation__secondary" onClick={onBack} disabled={isLoading || checkingPwned}>
             Back
           </button>
-          <button type="submit" className="password-creation__submit" disabled={isLoading || !isPasswordValid}>
-            {isLoading ? 'Next…' : 'Next'}
+          <button type="submit" className="password-creation__submit" disabled={isLoading || !isPasswordValid || checkingPwned}>
+            {checkingPwned ? 'Checking password…' : isLoading ? 'Next…' : 'Next'}
           </button>
         </div>
       </form>

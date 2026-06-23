@@ -146,6 +146,7 @@ function SignUpForm({ onSwitchToLogin }) {
         />
       ) : (
         <PasswordCreation
+          email={formData.email}
           password={formData.password}
           onBack={() => setStep('details')}
           onPasswordCreated={handlePasswordCreated}
