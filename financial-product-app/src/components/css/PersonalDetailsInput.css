@@ -6,3 +6,7 @@
     font-size: 1.25rem;
     color: #111827;
 }
+
+.signup-form__input{
+    border-radius: 5px;
+}

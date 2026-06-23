@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import CodeVerification from './CodeVerification.jsx'
+import PasswordCreation from './PasswordCreation.jsx'
 import PersonalDetailsInput from './PersonalDetailsInput.jsx'
 import './css/SignUpForm.css'
 
 function SignUpForm({ onClose, onSwitchToLogin }) {
   const [formData, setFormData] = useState({
     email: '',
+    password: '',
     firstName: '',
     surname: '',
     idNumber: ''
@@ -53,11 +55,16 @@ function SignUpForm({ onClose, onSwitchToLogin }) {
     setStep('details')
   }
 
+  const handlePasswordCreated = async (password) => {
+    setFormData((prev) => ({ ...prev, password }))
+    window.alert(`Registered ${formData.firstName} ${formData.surname}`)
+  }
+
   const handlePersonalDetailsSubmit = async () => {
     setIsLoading(true)
     await new Promise((resolve) => setTimeout(resolve, 700))
     setIsLoading(false)
-    window.alert(`Registered ${formData.firstName} ${formData.surname}`)
+    setStep('password')
   }
 
   return (
@@ -120,7 +127,7 @@ function SignUpForm({ onClose, onSwitchToLogin }) {
           }}
           isLoading={isLoading}
         />
-      ) : (
+      ) : step === 'details' ? (
         <PersonalDetailsInput
           formData={formData}
           onChange={handleChange}
@@ -128,12 +135,23 @@ function SignUpForm({ onClose, onSwitchToLogin }) {
           onSubmit={handlePersonalDetailsSubmit}
           isLoading={isLoading}
         />
+      ) : (
+        <PasswordCreation
+          password={formData.password}
+          onBack={() => setStep('details')}
+          onPasswordCreated={handlePasswordCreated}
+          isLoading={isLoading}
+        />
       )}
 
       {step === 'email' ? (
         <p className="signup-card__meta">
           Already have an account?{' '}
-          <button type="button" className="signup-card__inline-link" onClick={onSwitchToLogin} className="signup-form__log-in-btn">
+          <button
+            type="button"
+            className="signup-form__log-in-btn"
+            onClick={onSwitchToLogin}
+          >
             Log in
           </button>
         </p>
