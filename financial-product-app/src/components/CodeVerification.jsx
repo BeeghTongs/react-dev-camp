@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import './css/CodeVerification.css'
+import { verifyCode, sendVerificationCode } from '../services/emailService.js'
 
 function CodeVerification({ email, onBack, onVerified, onResend, isLoading }) {
   const [codeDigits, setCodeDigits] = useState(Array(6).fill(''))
@@ -45,21 +46,39 @@ function CodeVerification({ email, onBack, onVerified, onResend, isLoading }) {
   }
 
   const handleSubmit = (event) => {
-    event.preventDefault()
-    const code = codeDigits.join('')
+    event.preventDefault();
+
+    const code = codeDigits.join('');
+
     if (code.length < 6) {
-      setVerificationError('Enter the 6-digit code sent to your email.')
-      return
+      setVerificationError('Enter the 6-digit code sent to your email.');
+      return;
     }
 
-    onVerified?.(code)
+    const isValid = verifyCode(code, email);
+
+    if (!isValid) {
+      setVerificationError('Invalid or expired verification code. Please request a new code.');
+      return;
+    }
+
+    onVerified?.(code);
+  };
+
+  
+
+const handleResend = async () => {
+  setCodeDigits(Array(6).fill(''));
+  setVerificationError('');
+
+  try {
+    await sendVerificationCode(email);
+  } catch (err) {
+    setVerificationError('Failed to resend code. Try again.');
   }
 
-  const handleResend = () => {
-    setCodeDigits(Array(6).fill(''))
-    setVerificationError('')
-    onResend?.()
-  }
+  onResend?.();
+};
 
   return (
     <div className="code-verification">

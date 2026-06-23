@@ -3,9 +3,10 @@ import { FcGoogle } from 'react-icons/fc'
 import CodeVerification from './CodeVerification.jsx'
 import PasswordCreation from './PasswordCreation.jsx'
 import PersonalDetailsInput from './PersonalDetailsInput.jsx'
+import { sendVerificationCode } from '../services/emailService.js'
 import './css/SignUpForm.css'
 
-function SignUpForm({ onClose, onSwitchToLogin }) {
+function SignUpForm({ onSwitchToLogin }) {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -42,13 +43,21 @@ function SignUpForm({ onClose, onSwitchToLogin }) {
       return
     }
 
-    setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 700))
-    setIsLoading(false)
+      setIsLoading(true)
+
+  try {
+    await sendVerificationCode(formData.email) 
+
     setStep('code')
+  } catch (err) {
+    console.error('Failed to send OTP:', err)
+    setErrors({ email: 'Failed to send verification code. Try again.' })
+  } finally {
+    setIsLoading(false)
+  }
   }
 
-  const handleVerification = async (code) => {
+  const handleVerification = async () => {
     setIsLoading(true)
     await new Promise((resolve) => setTimeout(resolve, 700))
     setIsLoading(false)
