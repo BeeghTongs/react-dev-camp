@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import CodeVerification from './CodeVerification.jsx'
 import PasswordCreation from './PasswordCreation.jsx'
@@ -8,6 +9,7 @@ import { completeSignup } from '../services/signupService.js'
 import './css/SignUpForm.css'
 
 function SignUpForm({ onSwitchToLogin }) {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -79,15 +81,24 @@ function SignUpForm({ onSwitchToLogin }) {
         idNumber: formData.idNumber,
       })
 
-      // Save token to session storage for authenticated requests
-      sessionStorage.setItem('authToken', signupResult.token)
-      sessionStorage.setItem('user', JSON.stringify(signupResult.profile))
+      localStorage.setItem('jwt', signupResult.token)
 
-      // Show success and redirect or navigate
+      const res = await fetch(`/v1/customer?emailAddress=${formData.email}`, {
+        headers: {
+          Authorization: `Bearer ${signupResult.token}`,
+        },
+      })
+
+      const user = await res.json()
+
+      delete user.idNumber
+      delete user.customerAccounts
+      delete user.customerType
+
+      localStorage.setItem('user', JSON.stringify(user))
+
       window.alert(`Welcome ${formData.firstName}! Your account has been created successfully.`)
-      
-      // TODO: Redirect to home/dashboard or trigger parent navigation
-      // onSignupSuccess?.(signupResult)
+      navigate('/identity-verification', { replace: true })
     } catch (error) {
       console.error('Signup failed:', error)
       const message = error.message || 'Failed to complete signup. Please try again.'

@@ -55,8 +55,7 @@ function CodeVerification({ email, onBack, onVerified, onResend, isLoading }) {
       return;
     }
 
-   // const isValid = verifyCode(code, email);
-   const isValid = true; // Temporarily bypass verification for testing
+   const isValid = verifyCode(code, email);
 
     if (!isValid) {
       setVerificationError('Invalid or expired verification code. Please request a new code.');

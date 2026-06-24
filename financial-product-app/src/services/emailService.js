@@ -16,7 +16,7 @@ export const sendVerificationCode = async (email) => {
     timestamp
   }));
 
-  /*
+  
     await emailjs.send(
     import.meta.env.VITE_EMAILJS_SERVICE_ID,
     import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
@@ -29,7 +29,7 @@ export const sendVerificationCode = async (email) => {
     )
     .then((res) => console.log('EmailJS success:', res))
     .catch((err) => console.error('EmailJS error:', err));
-*/
+
   return code;
 };
 
