@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { trackEvent } from '../services/analyticsService.js'
 import './css/SignUpForm.css'
 import './css/PersonalDetailsInput.css'
 
@@ -28,6 +29,10 @@ const isValidSouthAfricanId = (id) => {
 function PersonalDetailsInput({ formData, onChange, onSubmit, isLoading }) {
   const [idError, setIdError] = useState('');
 
+    useEffect(() => {
+    trackEvent('sign_up_personal_details_view')
+  }, []);
+
   const handleIdChange = (event) => {
     onChange(event);
     setIdError('');
@@ -37,6 +42,7 @@ function PersonalDetailsInput({ formData, onChange, onSubmit, isLoading }) {
     const idValue = formData.idNumber;
     
     if (idValue?.trim() && !isValidSouthAfricanId(idValue)) {
+      trackEvent('sign_up_invalid_id')
       setIdError('Please enter a valid South African ID number');
     } else {
       setIdError('');

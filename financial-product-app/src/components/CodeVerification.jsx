@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import './css/CodeVerification.css'
 import { verifyCode, sendVerificationCode } from '../services/emailService.js'
+import { trackEvent } from '../services/analyticsService.js'
 
 function CodeVerification({ email, onBack, onVerified, onResend, isLoading }) {
   const [codeDigits, setCodeDigits] = useState(Array(6).fill(''))
@@ -50,8 +51,13 @@ function CodeVerification({ email, onBack, onVerified, onResend, isLoading }) {
 
     const code = codeDigits.join('');
 
+    trackEvent('sign_up_otp_attempt')
+
     if (code.length < 6) {
       setVerificationError('Enter the 6-digit code sent to your email.');
+
+      trackEvent('sign_up_otp_failed', { reason: 'short_code' })
+
       return;
     }
 
@@ -59,8 +65,11 @@ function CodeVerification({ email, onBack, onVerified, onResend, isLoading }) {
 
     if (!isValid) {
       setVerificationError('Invalid or expired verification code. Please request a new code.');
+      trackEvent('sign_up_otp_failed', { reason: 'invalid_code' })
       return;
     }
+
+     trackEvent('sign_up_otp_verified')
 
     onVerified?.(code);
   };
@@ -71,10 +80,20 @@ const handleResend = async () => {
   setCodeDigits(Array(6).fill(''));
   setVerificationError('');
 
+   trackEvent('sign_up_otp_resend')
+
   try {
+    trackEvent('sign_up_otp_resend')
+
     await sendVerificationCode(email);
+
   } catch (err) {
     setVerificationError('Failed to resend code. Try again.');
+
+    trackEvent('sign_up_error', {
+        step: 'otp_resend',
+        message: err.message
+      })
   }
 
   onResend?.();

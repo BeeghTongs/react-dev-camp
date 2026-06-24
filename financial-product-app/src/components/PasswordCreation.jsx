@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
+import { trackEvent } from '../services/analyticsService.js'
 import './css/PasswordCreation.css'
 
 const requirements = [
@@ -47,7 +48,6 @@ function PasswordCreation({ email, password, onBack, onPasswordCreated, isLoadin
   }))
 
   const strengthCount = results.filter((item) => item.valid).length
-  const strengthPercentage = (strengthCount / requirements.length) * 100
   
   const getStrengthColor = () => {
     if (strengthCount <= 1) return 'weak'
@@ -66,7 +66,10 @@ function PasswordCreation({ email, password, onBack, onPasswordCreated, isLoadin
     event.preventDefault()
     setSubmitted(true)
     
-    if (!isPasswordValid) return
+    if (!isPasswordValid) {
+       trackEvent('sign_up_password_requirements_failed')
+      return
+    }
 
     setCheckingPwned(true)
     setPwnedErrorLocal('')
@@ -75,13 +78,18 @@ function PasswordCreation({ email, password, onBack, onPasswordCreated, isLoadin
       const isPwned = await isPasswordPwned(value)
 
       if (isPwned) {
+        trackEvent('sign_up_password_pwned_blocked')
         setPwnedErrorLocal('This password has been compromised in a data breach. Please choose a different password.')
         return
       }
 
+       trackEvent('sign_up_password_complete')
+
       await onPasswordCreated?.(value)
     } catch (error) {
-      console.error('Error checking password:', error)
+
+      trackEvent('sign_up_password_pwned_check_failed')
+
       setPwnedErrorLocal('Could not verify password security. Please try again.')
     } finally {
       setCheckingPwned(false)

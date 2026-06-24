@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import CodeVerification from './CodeVerification.jsx'
@@ -6,6 +6,7 @@ import PasswordCreation from './PasswordCreation.jsx'
 import PersonalDetailsInput from './PersonalDetailsInput.jsx'
 import { sendVerificationCode } from '../services/emailService.js'
 import { completeSignup } from '../services/signupService.js'
+import { trackEvent } from '../services/analyticsService.js'
 import './css/SignUpForm.css'
 
 function SignUpForm({ onSwitchToLogin }) {
@@ -20,6 +21,10 @@ function SignUpForm({ onSwitchToLogin }) {
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
   const [step, setStep] = useState('email')
+
+    useEffect(() => {
+    trackEvent('sign_up_start')
+  }, [])
 
   const validate = () => {
     const next = {}
@@ -49,11 +54,22 @@ function SignUpForm({ onSwitchToLogin }) {
       setIsLoading(true)
 
   try {
+    trackEvent('sign_up_email_submitted', {
+      hasEmail: true
+    })
     await sendVerificationCode(formData.email) 
+
+       trackEvent('sign_up_otp_sent', {
+      email: formData.email
+    })
 
     setStep('code')
   } catch (err) {
-    console.error('Failed to send OTP:', err)
+      trackEvent('sign_up_error', {
+        step: 'email',
+        message: err.message
+      })
+
     setErrors({ email: 'Failed to send verification code. Try again.' })
   } finally {
     setIsLoading(false)
@@ -100,7 +116,12 @@ function SignUpForm({ onSwitchToLogin }) {
       window.alert(`Welcome ${formData.firstName}! Your account has been created successfully.`)
       navigate('/identity-verification', { replace: true })
     } catch (error) {
-      console.error('Signup failed:', error)
+
+      trackEvent('sign_up_error', {
+        step: 'final_signup',
+        message: error.message
+      })
+
       const message = error.message || 'Failed to complete signup. Please try again.'
       setErrors({ signup: message })
 
@@ -113,6 +134,11 @@ function SignUpForm({ onSwitchToLogin }) {
 
   const handlePersonalDetailsSubmit = async () => {
     setIsLoading(true)
+
+    trackEvent('sign_up_personal_details_complete', {
+      hasIdNumber: !!formData.idNumber
+    })
+
     await new Promise((resolve) => setTimeout(resolve, 700))
     setIsLoading(false)
     setStep('password')
