@@ -73,17 +73,17 @@ function PasswordCreation({ email, password, onBack, onPasswordCreated, isLoadin
 
     try {
       const isPwned = await isPasswordPwned(value)
-      
+
       if (isPwned) {
         setPwnedErrorLocal('This password has been compromised in a data breach. Please choose a different password.')
-        setCheckingPwned(false)
         return
       }
 
-      onPasswordCreated?.(value)
+      await onPasswordCreated?.(value)
     } catch (error) {
       console.error('Error checking password:', error)
       setPwnedErrorLocal('Could not verify password security. Please try again.')
+    } finally {
       setCheckingPwned(false)
     }
   }

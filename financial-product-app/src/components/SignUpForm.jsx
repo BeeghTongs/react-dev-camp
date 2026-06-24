@@ -4,6 +4,7 @@ import CodeVerification from './CodeVerification.jsx'
 import PasswordCreation from './PasswordCreation.jsx'
 import PersonalDetailsInput from './PersonalDetailsInput.jsx'
 import { sendVerificationCode } from '../services/emailService.js'
+import { completeSignup } from '../services/signupService.js'
 import './css/SignUpForm.css'
 
 function SignUpForm({ onSwitchToLogin }) {
@@ -66,7 +67,37 @@ function SignUpForm({ onSwitchToLogin }) {
 
   const handlePasswordCreated = async (password) => {
     setFormData((prev) => ({ ...prev, password }))
-    window.alert(`Registered ${formData.firstName} ${formData.surname}`)
+    setIsLoading(true)
+    setErrors({})
+
+    try {
+      const signupResult = await completeSignup({
+        email: formData.email,
+        password,
+        firstName: formData.firstName,
+        lastName: formData.surname,
+        idNumber: formData.idNumber,
+      })
+
+      // Save token to session storage for authenticated requests
+      sessionStorage.setItem('authToken', signupResult.token)
+      sessionStorage.setItem('user', JSON.stringify(signupResult.profile))
+
+      // Show success and redirect or navigate
+      window.alert(`Welcome ${formData.firstName}! Your account has been created successfully.`)
+      
+      // TODO: Redirect to home/dashboard or trigger parent navigation
+      // onSignupSuccess?.(signupResult)
+    } catch (error) {
+      console.error('Signup failed:', error)
+      const message = error.message || 'Failed to complete signup. Please try again.'
+      setErrors({ signup: message })
+
+      await new Promise((resolve) => setTimeout(resolve, 800))
+      onSwitchToLogin?.()
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handlePersonalDetailsSubmit = async () => {
@@ -145,13 +176,20 @@ function SignUpForm({ onSwitchToLogin }) {
           isLoading={isLoading}
         />
       ) : (
-        <PasswordCreation
-          email={formData.email}
-          password={formData.password}
-          onBack={() => setStep('details')}
-          onPasswordCreated={handlePasswordCreated}
-          isLoading={isLoading}
-        />
+        <>
+          {errors.signup && (
+            <span className="signup-form__error" role="alert">
+              {errors.signup}
+            </span>
+          )}
+          <PasswordCreation
+            email={formData.email}
+            password={formData.password}
+            onBack={() => setStep('details')}
+            onPasswordCreated={handlePasswordCreated}
+            isLoading={isLoading}
+          />
+        </>
       )}
 
       {step === 'email' ? (
