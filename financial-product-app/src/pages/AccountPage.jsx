@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { MdFingerprint } from 'react-icons/md';
 import { signOut } from 'firebase/auth';
 import { auth } from '../services/firebase';
+import BottomNav from '../components/BottomNav';
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ export default function AccountPage() {
           </button>
         </div>
       </main>
+      <BottomNav />
     </div>
   );
 }

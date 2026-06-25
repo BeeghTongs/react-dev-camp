@@ -112,8 +112,7 @@ function SignUpForm({ onSwitchToLogin }) {
       delete user.customerType
 
       localStorage.setItem('user', JSON.stringify(user))
-
-      window.alert(`Welcome ${formData.firstName}! Your account has been created successfully.`)
+      
       navigate('/identity-verification', { replace: true })
     } catch (error) {
 
