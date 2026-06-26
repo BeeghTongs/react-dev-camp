@@ -272,13 +272,14 @@ export default function IdentityVerificationPage() {
           <button
             type="submit"
             className="identity-card__submit"
-            disabled={!hasAllFiles}
+            disabled={!hasAllFiles || isUploading}
           >
-            Continue to Home
+            {isUploading ? 'Uploading…' : 'Continue to Home'}
           </button>
           <button
             type="button"
             className="identity-card__secondary"
+            disabled={isUploading}
             onClick={() => navigate(-1)}
           >
             Not now
@@ -394,7 +395,7 @@ export default function IdentityVerificationPage() {
         ) : cameraCaptureId ? (
           <div className="camera-capture__overlay" role="dialog" aria-modal="true">
             <div className="camera-capture__panel">
-              <div className="camera-capture__video-wrap">
+              <div className={`camera-capture__video-wrap${cameraCaptureId === 'selfie' ? ' camera-capture__video-wrap--selfie' : ''}`}>
                 {reviewingCapture && capturedPhoto ? (
                   <img
                     src={capturedPhoto.url}
@@ -402,12 +403,7 @@ export default function IdentityVerificationPage() {
                     className="camera-capture__preview"
                   />
                 ) : (
-                  <>
-                    <video ref={videoRef} autoPlay playsInline muted className="camera-capture__video" />
-                    {cameraCaptureId === 'selfie' ? (
-                      <div className="camera-capture__frame" aria-hidden="true" />
-                    ) : null}
-                  </>
+                  <video ref={videoRef} autoPlay playsInline muted className="camera-capture__video" />
                 )}
               </div>
               {reviewingCapture && capturedPhoto ? (

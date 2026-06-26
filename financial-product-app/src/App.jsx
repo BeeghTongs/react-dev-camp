@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 
 import LoginPage from './pages/LoginPage'
+import SignUpPage from './pages/SignUpPage'
 import ProductListPage from './pages/ProductListPage'
 import GuestListPage from './pages/GuestListPage'
 import ProductPage from './pages/ProductPage'
@@ -30,6 +31,7 @@ function App() {
           </RequireAuth>
           } />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/guest-list" element={
           <RequireAuth requireGuest>
             <GuestListPage />

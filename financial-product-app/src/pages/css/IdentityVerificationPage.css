@@ -162,6 +162,11 @@
   cursor: pointer;
 }
 
+.identity-card__secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .identity-card__status {
   margin: 0;
   font-size: 14px;
@@ -197,13 +202,20 @@
   position: fixed;
   inset: 0;
   z-index: 30;
-  display: grid;
-  place-items: center;
-  padding: 12px;
-  background: rgba(15, 23, 42, 0.72);
+  background: #141c14;
+  display: flex;
+  flex-direction: column;
 }
 
-.camera-capture__panel,
+.camera-capture__panel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #141c14;
+  overflow: hidden;
+}
+
 .selfie-prep__panel {
   width: min(520px, 100%);
   max-height: 92vh;
@@ -218,7 +230,7 @@
 .camera-capture__review {
   width: 100%;
   height: auto;
-  background: #000;
+  background: #141c14;
 }
 
 .camera-capture__preview {
@@ -229,52 +241,56 @@
 }
 
 .camera-capture__preview-text {
-  margin: 16px 20px 8px;
+  margin: 0;
+  padding: 14px 20px 4px;
   font-size: 15px;
-  color: #111827;
+  color: rgba(255, 255, 255, 0.8);
   text-align: center;
+  background: #141c14;
 }
 
 .camera-capture__video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: #000;
+  background: #141c14;
   display: block;
 }
 
 .camera-capture__video-wrap {
   position: relative;
-  width: 100%;
+  flex: 1;
+  background: #141c14;
   overflow: hidden;
-  background: #000;
-  min-height: auto;
-  max-height: 65vh;
-  aspect-ratio: 3 / 4;
+  min-height: 0;
 }
 
-.camera-capture__preview {
-  width: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.camera-capture__frame {
+/* Solid black mask with a true oval cutout — only the oval reveals the feed */
+.camera-capture__video-wrap--selfie::after {
+  content: '';
   position: absolute;
   inset: 0;
+  z-index: 1;
+  background: #141c14;
   pointer-events: none;
-  display: grid;
-  place-items: center;
+  -webkit-mask-image: radial-gradient(ellipse 45% 38% at 50% 44%, transparent 99%, #000 100%);
+  mask-image: radial-gradient(ellipse 45% 38% at 50% 44%, transparent 99%, #000 100%);
 }
 
-.camera-capture__frame::before {
+/* Oval guide border — size and position mirror the cutout exactly */
+.camera-capture__video-wrap--selfie::before {
   content: '';
-  width: min(220px, 62%);
-  height: min(300px, 78%);
-  border-radius: 50% / 60%;
-  border: 2px solid rgba(255, 255, 255, 0.92);
-  box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.35);
-}
+  position: absolute;
+  width: 90%;
+  height: 76%;
+  top: 44%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2.5px solid rgba(255, 255, 255, 0.88);
+  z-index: 3;
+  pointer-events: none;
+} 
 
 .selfie-prep__overlay {
   position: fixed;
@@ -379,33 +395,38 @@
 .camera-capture__controls {
   display: flex;
   gap: 12px;
-  padding: 16px;
-  background: #f8fafc;
-  justify-content: flex-end;
+  padding: 20px 16px 32px;
+  background: #141c14;
+  justify-content: center;
   flex-wrap: wrap;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .camera-capture__action {
   flex: 1 1 140px;
+  max-width: 200px;
   border: none;
-  border-radius: 16px;
+  border-radius: 999px;
   background: #2563eb;
-  color: #ffffff;
+  color: #fff;
   padding: 14px;
   cursor: pointer;
   font-weight: 700;
+  font-size: 15px;
 }
 
 .camera-capture__cancel {
-  background: #f8fafc;
-  color: #0f172a;
-  border: 1px solid #cbd5e1;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .camera-capture__error {
-  margin: 0 16px 16px;
-  color: #b91c1c;
+  margin: 0;
+  padding: 0 16px 16px;
+  color: #f87171;
   font-size: 14px;
+  background: #141c14;
 }
 
 .upload-sheet {
@@ -498,20 +519,20 @@
   .identity-card__title {
     font-size: 28px;
   }
+}
 
+@media (min-width: 768px) {
   .camera-capture__panel {
-    width: 100%;
-    max-height: 96vh;
+    max-width: 420px;
+    margin: 0 auto;
   }
 
-  .camera-capture__video-wrap {
-    aspect-ratio: 3 / 4;
-    max-height: 70vh;
-    min-height: 0;
+  .camera-capture__video-wrap--selfie::after {
+    -webkit-mask-image: radial-gradient(ellipse 41% 38% at 50% 44%, transparent 99%, #000 100%);
+    mask-image: radial-gradient(ellipse 41% 38% at 50% 44%, transparent 99%, #000 100%);
   }
 
-  .camera-capture__frame::before {
-    width: 72%;
-    height: 88%;
+  .camera-capture__video-wrap--selfie::before {
+    width: 82%;
   }
 }
