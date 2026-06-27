@@ -20,22 +20,34 @@ export default function AccountPage() {
     }
   })();
 
-  const userId = user?.id ?? null;
-
-  const [kycStatus, setKycStatus] = useState(() =>
-    isGuest || !userId ? 'none' : 'loading'
-  );
+  const [kycStatus, setKycStatus] = useState(() => {
+    if (isGuest || !user?.email) return 'none';
+    if (!localStorage.getItem('jwt')) return 'pending';
+    return 'loading';
+  });
 
   useEffect(() => {
-    if (isGuest || !userId) return;
+    if (isGuest || !user?.email) return;
 
-    listAll(ref(storage, `kyc/${userId}`))
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) return;
+
+    // Re-verify the user's identity via the backend JWT before touching Storage.
+    // This prevents a tampered localStorage id from querying another user's folder.
+    fetch(`/v1/customer?emailAddress=${encodeURIComponent(user.email)}`, {
+      headers: { Authorization: `Bearer ${jwt}` },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Unauthorized');
+        return res.json();
+      })
+      .then((verified) => listAll(ref(storage, `kyc/${verified.id}`)))
       .then((result) => {
         const hasDocuments = result.prefixes.length > 0 || result.items.length > 0;
         setKycStatus(hasDocuments ? 'uploaded' : 'pending');
       })
       .catch(() => setKycStatus('pending'));
-  }, [isGuest, userId]);
+  }, [isGuest, user?.email]);
 
   const displayName = user ? `${user.firstName} ${user.lastName}` : null;
   const initials = user
