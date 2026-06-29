@@ -63,8 +63,8 @@
 }
 
 .subscriptions-summary-card__dollar-icon {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
   border-radius: 8px;
   background: #4f7cff;
   display: flex;
@@ -75,7 +75,7 @@
 }
 
 .subscriptions-summary-card__label {
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
 }
@@ -90,7 +90,7 @@
 
 .subscriptions-summary-card__sub {
   margin: 0;
-  font-size: 13px;
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.55);
 }
 
@@ -116,10 +116,9 @@
 
 .subscriptions-summary-card__stat-label {
   margin: 0 0 2px;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .subscriptions-summary-card__stat-value {
@@ -131,7 +130,7 @@
 
 .subscriptions-summary-card__stat-sub {
   margin: 0;
-  font-size: 12px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.55);
 }
 
@@ -196,4 +195,23 @@
   margin: 0;
   font-size: 13px;
   color: #94a3b8;
+}
+
+/* ── Desktop 2-column layout ── */
+@media (min-width: 1024px) {
+  .subscriptions-page__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .subscriptions-summary-card {
+    margin-bottom: 0;
+    position: sticky;
+    top: 24px;
+  }
 }

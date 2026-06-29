@@ -1,6 +1,6 @@
 import './css/SubscriptionsPage.css';
 import { useEffect, useState } from 'react';
-import { MdAttachMoney, MdNotifications, MdAdd } from 'react-icons/md';
+import { MdAttachMoney, MdAdd } from 'react-icons/md';
 import { ImFileEmpty } from "react-icons/im";
 import { useNavigate } from 'react-router-dom';
 import Subscription from '../components/Subscription';
@@ -76,9 +76,6 @@ function SubscriptionsPage() {
       <Header />
       <header className="subscriptions-page__header">
         <h1 className="subscriptions-page__title">Subscriptions</h1>
-        <button type="button" className="subscriptions-page__bell" aria-label="Notifications">
-          <MdNotifications />
-        </button>
       </header>
 
       <main className="subscriptions-page__content">
@@ -98,16 +95,7 @@ function SubscriptionsPage() {
 
           <div className="subscriptions-summary-card__stats">
             <div className="subscriptions-summary-card__stat">
-              <p className="subscriptions-summary-card__stat-label">Annual projection</p>
-              <p className="subscriptions-summary-card__stat-value">
-                ${annualProjection.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-              </p>
-              <p className="subscriptions-summary-card__stat-sub">Yearly total</p>
-            </div>
-            <div className="subscriptions-summary-card__divider" />
-            <div className="subscriptions-summary-card__stat">
               <p className="subscriptions-summary-card__stat-label">Next Due</p>
-              <p className="subscriptions-summary-card__stat-value">Non-stop</p>
               <p className="subscriptions-summary-card__stat-sub">
                 Jul 1 &nbsp;<strong>${(subscriptions[0]?.product?.[0]?.price ?? 0).toFixed(2)}</strong>
               </p>
