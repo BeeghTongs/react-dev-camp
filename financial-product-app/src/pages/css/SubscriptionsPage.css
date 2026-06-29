@@ -1,6 +1,6 @@
 .subscriptions-page {
   min-height: 100vh;
-  background: #ffffff;
+  background: #fafafa;
   color: #0f172a;
   padding-bottom: 88px;
 }
@@ -11,7 +11,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 15px 20px 16px;
-  background: #ffffff;
+  background: #fafafa;
 }
 
 .subscriptions-page__title {

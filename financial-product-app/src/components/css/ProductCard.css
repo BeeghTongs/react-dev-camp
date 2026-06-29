@@ -1,7 +1,7 @@
 .product-card {
   flex: 0 0 auto;
   width: min(82vw, 320px);
-  background: #ffffff;
+  background: #fafafa;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(16,24,40,0.08);
   overflow: hidden;
