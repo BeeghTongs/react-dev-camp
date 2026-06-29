@@ -1,0 +1,24 @@
+.customer-type-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(1200px 600px at 50% -25%, rgba(42, 107, 186, 0.28), transparent 45%),
+    linear-gradient(180deg, #111b34 0%, #172646 100%);
+  padding: 24px;
+}
+
+.customer-type-card {
+  width: min(480px, 100%);
+  background: #ffffff;
+  border-radius: 32px;
+  padding: 34px 28px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+}
+
+@media (max-width: 520px) {
+  .customer-type-card {
+    padding: 26px 18px;
+  }
+}

@@ -130,23 +130,73 @@ export const createClientProfile = async (token, profileData) => {
   return payload;
 };
 
+export const getCustomerTypes = async (token) => {
+  const response = await fetch(`${API_BASE}/customerTypes`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!response.ok) {
+    const error = await getErrorMessage(response, 'Failed to load customer types');
+    throw new Error(error);
+  }
+
+  return response.json();
+};
+
+export const getClientProfile = async (token) => {
+  const response = await fetch(`${CLIENT_API_BASE}/profile`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!response.ok) {
+    const error = await getErrorMessage(response, 'Failed to fetch profile');
+    throw new Error(error);
+  }
+
+  return response.json();
+};
+
+export const updateClientProfile = async (token, profileData) => {
+  const response = await fetch(`${CLIENT_API_BASE}/profile`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      email: profileData.email,
+      firstName: profileData.firstName,
+      lastName: profileData.lastName,
+      idNumber: profileData.idNumber,
+      customerTypeId: profileData.customerTypeId,
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await getErrorMessage(response, 'Failed to update profile');
+    throw new Error(error);
+  }
+
+  return response.json();
+};
+
 export const completeSignup = async (signupData) => {
-  const { email, password, firstName, lastName, idNumber } = signupData;
-  
+  const { email, password, firstName, lastName, idNumber, customerTypeId } = signupData;
+
   try {
     // Step 1: Create user
    await createUser(email, password);
 
     // Step 2: Get authentication token
     const token = await getAuthToken(email, password);
-    
+
     // Step 3: Create client profile
     const profile = await createClientProfile(token, {
       email,
       firstName,
       lastName,
       idNumber,
-      customerTypeId: 0,
+      customerTypeId: customerTypeId ?? 0,
     });
     
     return {

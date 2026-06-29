@@ -280,7 +280,7 @@ export default function IdentityVerificationPage() {
             type="button"
             className="identity-card__secondary"
             disabled={isUploading}
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/list')}
           >
             Not now
           </button>

@@ -16,7 +16,7 @@ function SignUpForm({ onSwitchToLogin }) {
     password: '',
     firstName: '',
     surname: '',
-    idNumber: ''
+    idNumber: '',
   })
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
@@ -95,6 +95,7 @@ function SignUpForm({ onSwitchToLogin }) {
         firstName: formData.firstName,
         lastName: formData.surname,
         idNumber: formData.idNumber,
+        customerTypeId: 0,
       })
 
       localStorage.setItem('jwt', signupResult.token)
@@ -113,7 +114,7 @@ function SignUpForm({ onSwitchToLogin }) {
 
       localStorage.setItem('user', JSON.stringify(user))
       
-      navigate('/identity-verification', { replace: true })
+      navigate('/customer-type', { replace: true })
     } catch (error) {
 
       trackEvent('sign_up_error', {
