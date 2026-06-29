@@ -27,6 +27,16 @@ function CustomerType() {
       const token = localStorage.getItem('jwt')
       const profile = await getClientProfile(token)
       await updateClientProfile(token, { ...profile, customerTypeId: selectedId })
+
+      const selectedType = customerTypes.find((t) => t.id === selectedId)
+      if (selectedType) {
+        try {
+          const stored = JSON.parse(localStorage.getItem('user') || '{}')
+          stored.customerType = selectedType
+          localStorage.setItem('user', JSON.stringify(stored))
+        } catch {}
+      }
+
       sessionStorage.removeItem('signup_awaiting_customer_type')
       navigate('/identity-verification')
     } catch (err) {

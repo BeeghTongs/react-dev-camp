@@ -30,7 +30,6 @@ function LoginPage() {
 
   delete user.idNumber;
   delete user.customerAccounts;
-  delete user.customerType;
 
   localStorage.setItem('user', JSON.stringify(user));
 

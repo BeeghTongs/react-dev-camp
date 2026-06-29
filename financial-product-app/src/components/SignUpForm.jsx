@@ -124,7 +124,6 @@ function SignUpForm({ onSwitchToLogin }) {
 
       delete user.idNumber
       delete user.customerAccounts
-      delete user.customerType
 
       localStorage.setItem('user', JSON.stringify(user))
       sessionStorage.removeItem(SIGNUP_SESSION_KEY)

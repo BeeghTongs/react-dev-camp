@@ -93,6 +93,12 @@ export default function AccountPage() {
           ) : (
             <p className="account-card__subtitle">Browsing as guest.</p>
           )}
+
+          {!isGuest && user?.customerType?.name && (
+            <span className="account-card__type-badge">
+              {user.customerType.name.charAt(0) + user.customerType.name.slice(1).toLowerCase()}
+            </span>
+          )}
         </div>
 
         <div className="account-card__actions">
