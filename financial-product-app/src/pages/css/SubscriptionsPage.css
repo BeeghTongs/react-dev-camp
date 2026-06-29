@@ -139,7 +139,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 4px;
+  padding: 16px 0 14px;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 0;
 }
 
 .subscriptions-list-section__title {
@@ -166,7 +168,6 @@
 }
 
 .subscriptions-list {
-  margin-top: 8px;
   background: #f8fafc;
   border-radius: 20px;
   padding: 0 16px;

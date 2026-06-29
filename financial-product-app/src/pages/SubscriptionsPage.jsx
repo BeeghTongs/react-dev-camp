@@ -52,8 +52,8 @@ function SubscriptionsPage() {
         }
 
         const data = await response.json();
-         setSubscriptions(data?.subscriptions ?? []);
-        //setSubscriptions(mockSubscriptions)
+         //setSubscriptions(data?.subscriptions ?? []);
+        setSubscriptions(mockSubscriptions)
       } catch (error) {
         if (error.name !== 'AbortError') {
           console.error('Error fetching subscriptions:', error);
@@ -67,7 +67,6 @@ function SubscriptionsPage() {
   }, []);
 
   const totalMonthly = subscriptions.reduce((sum, s) => sum + (s.product?.[0]?.price ?? 0), 0);
-  const annualProjection = totalMonthly * 12;
 
 
 
@@ -104,14 +103,13 @@ function SubscriptionsPage() {
         </div>
 
         <section className="subscriptions-list-section">
-          <div className="subscriptions-list-section__header">
-            <h2 className="subscriptions-list-section__title">Your Subscriptions</h2>
-            <button type="button" className="subscriptions-list-section__add" onClick={() => navigate('/list')}>
-              <MdAdd /> Add
-            </button>
-          </div>
-
           <div className="subscriptions-list">
+            <div className="subscriptions-list-section__header">
+              <h2 className="subscriptions-list-section__title">Your Subscriptions</h2>
+              <button type="button" className="subscriptions-list-section__add" onClick={() => navigate('/list')}>
+                <MdAdd /> Add
+              </button>
+            </div>
             {subscriptions.length === 0 ? (
               <div className="subscriptions-empty">
                 <ImFileEmpty size={50} />
