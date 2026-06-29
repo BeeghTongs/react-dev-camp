@@ -228,7 +228,11 @@ function ProductPage() {
               <div className="amount">{formatDisplayPrice(product.price)}</div>
               <div className="per">per month</div>
             </div>
-            <AddToCart />
+            <AddToCart
+              productId={id}
+              name={product.name}
+              price={product.price}
+            />
           </div>
     </div>
   );
