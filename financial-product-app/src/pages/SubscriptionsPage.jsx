@@ -52,8 +52,8 @@ function SubscriptionsPage() {
         }
 
         const data = await response.json();
-         //setSubscriptions(data?.subscriptions ?? []);
-        setSubscriptions(mockSubscriptions)
+         setSubscriptions(data?.subscriptions ?? []);
+        //setSubscriptions(mockSubscriptions)
       } catch (error) {
         if (error.name !== 'AbortError') {
           console.error('Error fetching subscriptions:', error);

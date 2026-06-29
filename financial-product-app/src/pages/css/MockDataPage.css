@@ -13,16 +13,23 @@
 }
 
 .mock-mobile-contracts-back {
-  appearance: none;
-  border: none;
-  background: transparent;
-  color: #1c1c1c;
-  font-size: 24px;
-  padding: 4px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
   cursor: pointer;
+  font-size: 20px;
+  color: #0f172a;
+  transition: background 0.15s ease;
+}
+
+.mock-mobile-contracts-back:hover {
+  background: #e2e8f0;
 }
 
 .mock-mobile-contracts-title {

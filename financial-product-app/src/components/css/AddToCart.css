@@ -9,4 +9,8 @@
 	cursor:pointer;
 	transition: transform 120ms ease, box-shadow 120ms ease;
 }
-.add-button:active{ transform: translateY(1px); }
+.add-button:hover {
+  box-shadow: 0 8px 20px rgba(11, 137, 209, 0.32);
+  transform: translateY(-1px);
+}
+.add-button:active { transform: translateY(1px); box-shadow: none; }

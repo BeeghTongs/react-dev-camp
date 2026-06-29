@@ -115,6 +115,15 @@ export default function AccountPage() {
               Checking verification status…
             </div>
           )}
+          {isGuest && (
+            <button
+              type="button"
+              className="account-card__signout-button"
+              onClick={() => navigate('/login')}
+            >
+              Sign in
+            </button>
+          )}
           <button
             type="button"
             className="account-card__signout-button account-card__signout-button--ghost"

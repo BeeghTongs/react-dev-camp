@@ -26,24 +26,6 @@ function ProductPage() {
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const fulfilmentRequirements = {
-    A: ['KYC check completed'],
-    B: [
-      'KYC check completed',
-      'Fraud check',
-      'Living status check',
-      'Duplicate ID check',
-    ],
-    C: [
-      'KYC check completed',
-      'Fraud check',
-      'Living status check',
-      'Duplicate ID check',
-      'Marital status check',
-      'Credit check',
-    ],
-  };
-
   const readableFulfillmentRequirements = {
   A: ['Identity verification (KYC check completed)'],
   B: [
@@ -128,11 +110,37 @@ function ProductPage() {
   }, [id]);
 
   if (loading) {
-    return <div className="product-page">Loading...</div>;
+    return (
+      <div className="product-page">
+        <div className="page-header">
+          <button className="back-btn" onClick={() => navigate('/list')} aria-label="Back">
+            <MdArrowBack />
+          </button>
+        </div>
+        <div className="skeleton skeleton--hero" />
+        <div className="skeleton skeleton--title" />
+        <div className="skeleton skeleton--line" />
+        <div className="skeleton skeleton--line" />
+        <div className="skeleton skeleton--line-short" />
+      </div>
+    );
   }
 
   if (!product) {
-    return <div className="product-page">Product not found</div>;
+    return (
+      <div className="product-page product-page--error">
+        <p>Product not found</p>
+        <button className="back-btn" onClick={() => navigate('/list')} aria-label="Back">
+          <MdArrowBack />
+        </button>
+      </div>
+    );
+  }
+
+  function formatDisplayPrice(price) {
+    if (typeof price === 'number') return `R ${price.toFixed(2)}`;
+    if (typeof price === 'string' && price.trim().startsWith('R')) return price;
+    return `R ${price}`;
   }
 
   const fullDesc =
@@ -217,16 +225,7 @@ function ProductPage() {
 
           <div className="product-footer">
             <div className="price">
-              {
-                (() => {
-                  // eslint-disable-next-line no-useless-assignment
-                  let displayPrice = '';
-                  if (typeof product.price === 'number') displayPrice = `R ${product.price.toFixed(2)}`;
-                  else if (typeof product.price === 'string' && product.price.trim().startsWith('R')) displayPrice = product.price;
-                  else displayPrice = `R ${product.price}`;
-                  return <div className="amount">{displayPrice}</div>;
-                })()
-              }
+              <div className="amount">{formatDisplayPrice(product.price)}</div>
               <div className="per">per month</div>
             </div>
             <AddToCart />

@@ -21,7 +21,6 @@ const collectionImages = {
 const collectionData = {
   'mobile-contracts': {
     title: 'Mobile Contracts',
-    subtitle: 'Select the best plan for your device usage',
     items: [
       { id: 101, title: 'Unlimited Talk & Text', price: 'R199 p/m', badge: 'Popular' },
       { id: 102, title: '5GB Social Bundle', price: 'R129 p/m', badge: 'New' },
@@ -42,7 +41,6 @@ const collectionData = {
   },
   'smart-home-protection': {
     title: 'Smart Home Protection',
-    subtitle: 'Protect your home with tailored coverage',
     items: [
       { id: 201, title: 'Home Sensor Kit', price: 'R199 p/m', badge: 'Recommended' },
       { id: 202, title: '24/7 Monitoring', price: 'R349 p/m', badge: 'Premium' },
@@ -54,7 +52,6 @@ const collectionData = {
   },
   'travel-cover-essentials': {
     title: 'Travel Cover Essentials',
-    subtitle: 'Plans designed for your next trip',
     items: [
       { id: 301, title: 'Overseas Medical Cover', price: 'R259 p/m', badge: 'New' },
       { id: 302, title: 'Baggage Protection', price: 'R129 p/m', badge: 'Popular' },
@@ -87,7 +84,6 @@ export default function MockDataPage() {
         </button>
         <div>
           <h1 className="mock-mobile-contracts-title">{selectedCollection.title}</h1>
-          <p className="mock-mobile-contracts-subtitle">{selectedCollection.subtitle}</p>
         </div>
       </header>
 

@@ -1,15 +1,20 @@
 import './css/BottomNav.css';
+import { useState } from 'react';
 import {
   MdHome,
   MdSubscriptions,
   MdShoppingCart,
   MdPerson,
 } from 'react-icons/md';
+import { GoRepoLocked } from "react-icons/go";
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [showGuestModal, setShowGuestModal] = useState(false);
+
+  const isGuest = localStorage.getItem('auth-mode') === 'guest';
 
   const getHomeRoute = () => {
     const authMode = localStorage.getItem('auth-mode');
@@ -38,6 +43,7 @@ function BottomNav() {
   const isSubscriptionsActive = location.pathname === '/subscriptions';
 
   return (
+    <>
     <nav className="bottom-nav" aria-label="Primary">
       <button
         type="button"
@@ -50,7 +56,7 @@ function BottomNav() {
       <button
         type="button"
         className={`bottom-nav__item${isSubscriptionsActive ? ' bottom-nav__item--active' : ''}`}
-        onClick={() => navigate('/subscriptions')}
+        onClick={() => isGuest ? setShowGuestModal(true) : navigate('/subscriptions')}
       >
         <MdSubscriptions />
         Subscriptions
@@ -68,6 +74,33 @@ function BottomNav() {
         Account
       </button>
     </nav>
+
+    {showGuestModal && (
+      <div className="guest-modal-overlay" onClick={() => setShowGuestModal(false)}>
+        <div className="guest-modal" onClick={(e) => e.stopPropagation()}>
+          <GoRepoLocked className="guest-modal__icon" />
+          <h2 className="guest-modal__title">Sign in required</h2>
+          <p className="guest-modal__body">
+            You need to be logged in to view and manage your subscriptions.
+          </p>
+          <button
+            type="button"
+            className="guest-modal__signin"
+            onClick={() => navigate('/login')}
+          >
+            Sign in
+          </button>
+          <button
+            type="button"
+            className="guest-modal__dismiss"
+            onClick={() => setShowGuestModal(false)}
+          >
+            Maybe later
+          </button>
+        </div>
+      </div>
+    )}
+    </>
   );
 }
 
