@@ -27,6 +27,7 @@ function CustomerType() {
       const token = localStorage.getItem('jwt')
       const profile = await getClientProfile(token)
       await updateClientProfile(token, { ...profile, customerTypeId: selectedId })
+      sessionStorage.removeItem('signup_awaiting_customer_type')
       navigate('/identity-verification')
     } catch (err) {
       setSubmitError(err.message)

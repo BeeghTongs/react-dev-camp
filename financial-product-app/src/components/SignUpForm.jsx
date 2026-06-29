@@ -9,20 +9,34 @@ import { completeSignup } from '../services/signupService.js'
 import { trackEvent } from '../services/analyticsService.js'
 import './css/SignUpForm.css'
 
+const SIGNUP_SESSION_KEY = 'signup_progress'
+
 function SignUpForm({ onSwitchToLogin }) {
   const navigate = useNavigate()
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    firstName: '',
-    surname: '',
-    idNumber: '',
+
+  const [formData, setFormData] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem(SIGNUP_SESSION_KEY)
+      if (saved) return { ...JSON.parse(saved).formData, password: '' }
+    } catch {}
+    return { email: '', password: '', firstName: '', surname: '', idNumber: '' }
   })
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false)
-  const [step, setStep] = useState('email')
+  const [step, setStep] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem(SIGNUP_SESSION_KEY)
+      if (saved) return JSON.parse(saved).step ?? 'email'
+    } catch {}
+    return 'email'
+  })
 
-    useEffect(() => {
+  useEffect(() => {
+    const { password: _omit, ...persistable } = formData
+    sessionStorage.setItem(SIGNUP_SESSION_KEY, JSON.stringify({ step, formData: persistable }))
+  }, [step, formData])
+
+  useEffect(() => {
     trackEvent('sign_up_start')
   }, [])
 
@@ -113,7 +127,8 @@ function SignUpForm({ onSwitchToLogin }) {
       delete user.customerType
 
       localStorage.setItem('user', JSON.stringify(user))
-      
+      sessionStorage.removeItem(SIGNUP_SESSION_KEY)
+      sessionStorage.setItem('signup_awaiting_customer_type', '1')
       navigate('/customer-type', { replace: true })
     } catch (error) {
 
@@ -126,6 +141,7 @@ function SignUpForm({ onSwitchToLogin }) {
       setErrors({ signup: message })
 
       await new Promise((resolve) => setTimeout(resolve, 800))
+      sessionStorage.removeItem(SIGNUP_SESSION_KEY)
       onSwitchToLogin?.()
     } finally {
       setIsLoading(false)
@@ -235,7 +251,7 @@ function SignUpForm({ onSwitchToLogin }) {
           <button
             type="button"
             className="signup-form__log-in-btn"
-            onClick={onSwitchToLogin}
+            onClick={() => { sessionStorage.removeItem(SIGNUP_SESSION_KEY); onSwitchToLogin?.() }}
           >
             Log in
           </button>
