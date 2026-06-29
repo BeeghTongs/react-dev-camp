@@ -16,6 +16,7 @@ import RequireAuth from './components/RequireAuth';
 import MockDataPage from './pages/MockDataPage';
 import SubscriptionsPage from './pages/SubscriptionsPage';
 import CustomerTypePage from './pages/CustomerTypePage';
+import CartPage from './pages/CartPage';
 
 function App() {
   return (
@@ -74,6 +75,11 @@ function App() {
         <Route path="/subscriptions" element={
           <RequireAuth allowGuest={false}>
             <SubscriptionsPage />
+          </RequireAuth>
+        } />
+        <Route path="/cart" element={
+          <RequireAuth>
+            <CartPage />
           </RequireAuth>
         } />
       </Routes>

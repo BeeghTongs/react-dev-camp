@@ -61,7 +61,11 @@ function BottomNav() {
         <MdSubscriptions />
         Subscriptions
       </button>
-      <button type="button" className="bottom-nav__item">
+      <button
+        type="button"
+        className={`bottom-nav__item${location.pathname === '/cart' ? ' bottom-nav__item--active' : ''}`}
+        onClick={() => navigate('/cart')}
+      >
         <MdShoppingCart />
         Cart
       </button>

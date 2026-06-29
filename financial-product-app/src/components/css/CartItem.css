@@ -1,0 +1,124 @@
+.cart-item {
+  display: grid;
+  grid-template-columns: 64px 1fr 108px 90px 32px;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item__image {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f8fafc;
+  display: block;
+}
+
+.cart-item__placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+}
+
+.cart-item__name {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.4;
+}
+
+.cart-item__qty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.cart-item__qty-btn {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  line-height: 1;
+}
+
+.cart-item__qty-btn:hover {
+  background: #f1f5f9;
+}
+
+.cart-item__qty-count {
+  min-width: 24px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  user-select: none;
+}
+
+.cart-item__price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.cart-item__remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #94a3b8;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.cart-item__remove:hover {
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+@media (max-width: 520px) {
+  .cart-item {
+    grid-template-columns: 56px 1fr 96px 72px 28px;
+    gap: 8px;
+  }
+
+  .cart-item__image,
+  .cart-item__placeholder {
+    width: 56px;
+    height: 56px;
+  }
+
+  .cart-item__name {
+    font-size: 12px;
+  }
+
+  .cart-item__price {
+    font-size: 13px;
+  }
+}
