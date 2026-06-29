@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import ProductListCard from "../components/ProductListCard";
 import { MdArrowBack } from "react-icons/md";
 
+
 const recommendedProducts = [
   {
     id: 1,

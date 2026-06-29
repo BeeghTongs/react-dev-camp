@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductListCard from '../components/ProductListCard';
 import BottomNav from '../components/BottomNav';
+import Header from '../components/Header';
 import DiscountBadge from '../components/DiscountBadge';
-import { MdFingerprint } from 'react-icons/md';
 
 const categoryFilters = ['All', 'Insurance', 'Investments', 'Accounts'];
 
@@ -70,12 +70,7 @@ function GuestListPage() {
 
   return (
     <div className="guest-list-page">
-      <header className="guest-list-page__header">
-        <div className="guest-list-page__brand">
-          <MdFingerprint className="fingerprint-icon-header" />
-          <span>InsureTechGuard</span>
-        </div>
-      </header>
+      <Header />
 
       <main className="guest-list-page__content">
         <section className="guest-list-page__featured">

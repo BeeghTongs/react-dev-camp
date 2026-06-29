@@ -6,6 +6,7 @@ import { signOut } from 'firebase/auth';
 import { ref, listAll } from 'firebase/storage';
 import { auth, storage } from '../services/firebase';
 import BottomNav from '../components/BottomNav';
+import Header from '../components/Header';
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -70,6 +71,7 @@ export default function AccountPage() {
 
   return (
     <div className="account-page">
+      <Header />
       <main className="account-card">
         <div className="account-card__brand-wrap">
           {!isGuest && initials ? (

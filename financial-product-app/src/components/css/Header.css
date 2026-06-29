@@ -1,0 +1,29 @@
+.product-list-page__header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 18px 16px 14px;
+}
+
+.product-list-page__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.product-list-page__logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #6bbdf2, #4f7cff);
+  color: #ffffff;
+  font-size: 18px;
+  box-shadow: 0 8px 20px rgba(79, 124, 255, 0.22);
+}

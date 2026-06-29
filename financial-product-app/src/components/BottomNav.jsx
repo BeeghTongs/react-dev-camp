@@ -35,6 +35,7 @@ function BottomNav() {
 
   const isHomeActive = ['/list', '/guest-list', '/'].includes(location.pathname);
   const isAccountActive = location.pathname === '/account';
+  const isSubscriptionsActive = location.pathname === '/subscriptions';
 
   return (
     <nav className="bottom-nav" aria-label="Primary">
@@ -46,7 +47,11 @@ function BottomNav() {
         <MdHome />
         Home
       </button>
-      <button type="button" className="bottom-nav__item">
+      <button
+        type="button"
+        className={`bottom-nav__item${isSubscriptionsActive ? ' bottom-nav__item--active' : ''}`}
+        onClick={() => navigate('/subscriptions')}
+      >
         <MdSubscriptions />
         Subscriptions
       </button>

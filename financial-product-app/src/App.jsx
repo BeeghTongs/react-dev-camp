@@ -14,6 +14,7 @@ import SplashScreen from './pages/SplashScreen';
 import ScrollToTop from './components/ScrollToTop';
 import RequireAuth from './components/RequireAuth';
 import MockDataPage from './pages/MockDataPage';
+import SubscriptionsPage from './pages/SubscriptionsPage';
 
 function App() {
   return (
@@ -62,6 +63,11 @@ function App() {
         <Route path="/identity-verification" element={
           <RequireAuth allowGuest={false}>
             <IdentityVerificationPage />
+          </RequireAuth>
+        } />
+        <Route path="/subscriptions" element={
+          <RequireAuth allowGuest={false}>
+            <SubscriptionsPage />
           </RequireAuth>
         } />
       </Routes>

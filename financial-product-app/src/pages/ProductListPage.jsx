@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductListCard from '../components/ProductListCard';
 import BottomNav from '../components/BottomNav';
+import Header from '../components/Header';
 import DiscountBadge from '../components/DiscountBadge';
-import { MdFingerprint } from 'react-icons/md';
 
 const recommendedProducts = [
   {
@@ -82,13 +82,7 @@ function ProductListPage() {
 
   return (
     <div className="product-list-page">
-      <header className="product-list-page__header">
-        <div className="product-list-page__brand">
-          <MdFingerprint className="fingerprint-icon-header"/>
-          <span>InsureTechGuard</span>
-        </div>
-      </header>
-
+      <Header />
       <main className="product-list-page__content">
         <section className="product-list-page__featured">
           <div className="featured-hero" onClick={() => navigate('/mock-data?collection=mobile-contracts')} role="button" tabIndex={0}>
@@ -106,7 +100,7 @@ function ProductListPage() {
           <div className="product-section__header">
             <h2>Recommended to you</h2>
             <button type="button" className="section-link" onClick={() => navigate('/recommended')}>
-              View all →
+              View All
             </button>
           </div>
           <div className="recommended-products">
@@ -129,7 +123,7 @@ function ProductListPage() {
           <div className="product-section__header">
             <h2>New arrivals</h2>
             <button type="button" className="section-link" onClick={() => navigate('/new-arrivals')}>
-              View all →
+              View All
             </button>
           </div>
           <div className="new-arrivals">
