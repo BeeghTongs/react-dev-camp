@@ -137,17 +137,25 @@
 .section-link {
   appearance: none;
   border: none;
-  background: transparent;
-  color: #4f7cff;
-  font-size: 14px;
+  background: linear-gradient(90deg, #2dafe6, #0b89d1);
+  color: #ffffff;
+  font-size: 13px;
   font-weight: 600;
-  padding: 0;
+  padding: 8px 16px;
+  border-radius: 999px;
   cursor: pointer;
-  transition: opacity 0.15s ease;
+  box-shadow: 0 4px 10px rgba(11, 137, 209, 0.2);
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
 .section-link:hover {
-  opacity: 0.75;
+  box-shadow: 0 6px 16px rgba(11, 137, 209, 0.32);
+  transform: translateY(-1px);
+}
+
+.section-link:active {
+  transform: translateY(1px);
+  box-shadow: none;
 }
 
 /* ── Horizontal scroll rows ── */
