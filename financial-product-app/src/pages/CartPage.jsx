@@ -1,15 +1,29 @@
 import './css/CartPage.css';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import CartItem from '../components/CartItem';
 import Header from '../components/Header';
 import BottomNav from '../components/BottomNav';
 import OrderSummary from '../components/OrderSummary';
 import PaymentMethod from '../components/Payment Method';
 import { useCart } from '../services/useCart';
+import { getProductImage } from '../services/ImageService';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 function CartPage() {
-  const { items, remove, clearCart } = useCart();
+  const { items, loading, remove, clearCart } = useCart();
   const [showConfirm, setShowConfirm] = useState(false);
+  const [images, setImages] = useState({});
+  const fetchedIds = useRef(new Set());
+
+  useEffect(() => {
+    items.forEach((item) => {
+      if (fetchedIds.current.has(item.productId)) return;
+      fetchedIds.current.add(item.productId);
+      getProductImage(item.productId).then((url) => {
+        setImages((prev) => ({ ...prev, [item.productId]: url }));
+      });
+    });
+  }, [items]);
 
   const subtotal = items.reduce((sum, item) => sum + item.unitPrice, 0);
 
@@ -26,7 +40,9 @@ function CartPage() {
         <div className="cart-page__left">
           <h2 className="cart-page__title">Shopping Cart</h2>
 
-          {items.length > 0 ? (
+          {loading ? (
+            <LoadingSpinner label="Loading your cart…" />
+          ) : items.length > 0 ? (
             <>
               <div className="cart-page__table-header">
                 <span className="cart-page__th--product">Product</span>
@@ -38,6 +54,7 @@ function CartPage() {
                 {items.map((item) => (
                   <CartItem
                     key={item.productId}
+                    image={images[item.productId]}
                     name={item.name}
                     price={item.unitPrice}
                     onEnquire={() => {}}

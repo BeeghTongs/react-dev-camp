@@ -5,14 +5,19 @@ import { getProfileId } from './authService';
 
 export function useCart() {
   const [items, setItems] = useState([]);
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(undefined); // undefined = profile fetch in flight
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getProfileId().then(setUserId);
+    getProfileId().then((id) => setUserId(id ?? null));
   }, []);
 
   useEffect(() => {
-    if (!userId) return;
+    if (userId === undefined) return;
+    if (userId === null) {
+      setLoading(false);
+      return;
+    }
 
     const q = query(collection(db, 'cart'), where('userId', '==', userId));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -27,6 +32,7 @@ export function useCart() {
         grouped[pid].docIds.push(d.id);
       });
       setItems(Object.values(grouped));
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -54,5 +60,5 @@ export function useCart() {
     await Promise.all(items.flatMap((item) => item.docIds.map((id) => deleteDoc(doc(db, 'cart', id)))));
   }
 
-  return { items, increment, decrement, remove, clearCart };
+  return { items, loading, increment, decrement, remove, clearCart };
 }
