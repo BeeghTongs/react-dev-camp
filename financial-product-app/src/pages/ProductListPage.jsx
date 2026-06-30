@@ -5,6 +5,7 @@ import ProductListCard from '../components/ProductListCard';
 import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
 import DiscountBadge from '../components/DiscountBadge';
+import { validateToken } from '../services/authService';
 
 const recommendedProducts = [
   {
@@ -38,14 +39,33 @@ const recommendedProducts = [
 
 function ProductListPage() {
   const navigate = useNavigate();
+  const [sessionChecked, setSessionChecked] = useState(false);
   const [newArrivals, setNewArrivals] = useState([]);
 
   useEffect(() => {
+    validateToken().then((valid) => {
+      if (!valid) {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('auth-mode');
+        localStorage.removeItem('user');
+        navigate('/login', { replace: true });
+      } else {
+        setSessionChecked(true);
+      }
+    });
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!sessionChecked) return;
+
     let active = true;
+    const jwt = localStorage.getItem('jwt');
 
     async function fetchNewArrivals() {
       try {
-        const response = await fetch('/client/v1/products');
+        const response = await fetch('/client/v1/products', {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
 
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
@@ -70,7 +90,9 @@ function ProductListPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [sessionChecked]);
+
+  if (!sessionChecked) return null;
 
   const formatPrice = (price) => {
     if (typeof price === 'number') {

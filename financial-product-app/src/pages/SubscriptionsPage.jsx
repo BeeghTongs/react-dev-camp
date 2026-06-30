@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Subscription from '../components/Subscription';
 import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
+import { validateToken } from '../services/authService';
 
 const mockSubscriptions = [
   { subscriptionId: 1, product: [{ id: 1, name: 'YouTube Premium', description: 'Ad-free videos and music', price: 24.00, imageUrl: '' }] },
@@ -34,8 +35,25 @@ function iconTextFromName(name) {
 
 function SubscriptionsPage() {
   const [subscriptions, setSubscriptions] = useState(mockSubscriptions);
+  const [sessionChecked, setSessionChecked] = useState(false);
   const navigate = useNavigate();
+
   useEffect(() => {
+    validateToken().then((valid) => {
+      if (!valid) {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('auth-mode');
+        localStorage.removeItem('user');
+        navigate('/login', { replace: true });
+      } else {
+        setSessionChecked(true);
+      }
+    });
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!sessionChecked) return;
+
     const controller = new AbortController();
 
     async function fetchSubscriptions() {
@@ -64,7 +82,9 @@ function SubscriptionsPage() {
     fetchSubscriptions();
 
     return () => controller.abort();
-  }, []);
+  }, [sessionChecked]);
+
+  if (!sessionChecked) return null;
 
   const totalMonthly = subscriptions.reduce((sum, s) => sum + (s.product?.[0]?.price ?? 0), 0);
 
