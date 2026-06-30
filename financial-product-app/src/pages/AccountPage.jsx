@@ -14,22 +14,11 @@ export default function AccountPage() {
 
   const isGuest = localStorage.getItem('auth-mode') === 'guest';
 
-  const user = (() => {
-    try {
-      return JSON.parse(localStorage.getItem('user'));
-    } catch {
-      return null;
-    }
-  })();
-
   const [sessionChecked, setSessionChecked] = useState(isGuest);
+  const [profile, setProfile] = useState(null);
+  const [kycStatus, setKycStatus] = useState(isGuest ? 'none' : 'loading');
 
-  const [kycStatus, setKycStatus] = useState(() => {
-    if (isGuest || !user?.email) return 'none';
-    if (!localStorage.getItem('jwt')) return 'pending';
-    return 'loading';
-  });
-
+  // 1. Validate token
   useEffect(() => {
     if (isGuest) return;
 
@@ -45,34 +34,49 @@ export default function AccountPage() {
     });
   }, [isGuest, navigate]);
 
+  // 2. Fetch profile from API once session is confirmed
   useEffect(() => {
-    if (!sessionChecked || isGuest || !user?.email) return;
+    if (!sessionChecked || isGuest) return;
 
     const jwt = localStorage.getItem('jwt');
-    if (!jwt) return;
 
-    // Re-verify the user's identity via the backend JWT before touching Storage.
-    // This prevents a tampered localStorage id from querying another user's folder.
-    fetch(`/v1/customer?emailAddress=${encodeURIComponent(user.email)}`, {
-      headers: { Authorization: `Bearer ${jwt}` },
+    fetch('/client/v1/profile', {
+      headers: {
+        accept: 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
     })
       .then((res) => {
-        if (!res.ok) throw new Error('Unauthorized');
+        if (!res.ok) throw new Error('Profile fetch failed: ' + res.status);
         return res.json();
       })
-      .then((verified) => listAll(ref(storage, `kyc/${verified.id}`)))
+      .then((data) => {
+        console.debug('[AccountPage] Profile loaded:', data);
+        setProfile(data);
+      })
+      .catch((err) => {
+        console.error('[AccountPage] Failed to load profile:', err);
+        navigate('/login', { replace: true });
+      });
+  }, [sessionChecked, isGuest, navigate]);
+
+  // 3. Check KYC storage once we have the profile id
+  useEffect(() => {
+    if (!profile?.id) return;
+
+    listAll(ref(storage, `kyc/${profile.id}`))
       .then((result) => {
         const hasDocuments = result.prefixes.length > 0 || result.items.length > 0;
         setKycStatus(hasDocuments ? 'uploaded' : 'pending');
       })
       .catch(() => setKycStatus('pending'));
-  }, [sessionChecked, isGuest, user?.email]);
+  }, [profile?.id]);
 
-  if (!sessionChecked) return null;
+  if (!sessionChecked || (!isGuest && !profile)) return null;
 
-  const displayName = user ? `${user.firstName} ${user.lastName}` : null;
-  const initials = user
-    ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.toUpperCase()
+  const displayName = profile ? `${profile.firstName} ${profile.lastName}` : null;
+  const initials = profile
+    ? `${profile.firstName?.[0] ?? ''}${profile.lastName?.[0] ?? ''}`.toUpperCase()
     : null;
 
   const handleSignOut = async () => {
@@ -84,7 +88,6 @@ export default function AccountPage() {
 
     localStorage.removeItem('jwt');
     localStorage.removeItem('auth-mode');
-    localStorage.removeItem('user');
 
     navigate('/login', { replace: true });
   };
@@ -108,15 +111,15 @@ export default function AccountPage() {
             {!isGuest && displayName ? displayName : 'Account'}
           </h1>
 
-          {!isGuest && user?.email ? (
-            <p className="account-card__email">{user.email}</p>
+          {!isGuest && profile?.email ? (
+            <p className="account-card__email">{profile.email}</p>
           ) : (
             <p className="account-card__subtitle">Browsing as guest.</p>
           )}
 
-          {!isGuest && user?.customerType?.name && (
+          {!isGuest && profile?.customerType?.name && (
             <span className="account-card__type-badge">
-              {user.customerType.name.charAt(0) + user.customerType.name.slice(1).toLowerCase()}
+              {profile.customerType.name.charAt(0) + profile.customerType.name.slice(1).toLowerCase()}
             </span>
           )}
         </div>
