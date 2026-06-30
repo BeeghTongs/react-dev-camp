@@ -1,7 +1,9 @@
 import "./css/RecommendedPage.css";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductListCard from "../components/ProductListCard";
 import { MdArrowBack } from "react-icons/md";
+import { validateToken } from "../services/authService";
 
 
 const recommendedProducts = [
@@ -30,6 +32,22 @@ const recommendedProducts = [
 
 export default function RecommendedPage() {
   const navigate = useNavigate();
+  const [sessionChecked, setSessionChecked] = useState(false);
+
+  useEffect(() => {
+    validateToken().then((valid) => {
+      if (!valid) {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('auth-mode');
+        localStorage.removeItem('user');
+        navigate('/login', { replace: true });
+      } else {
+        setSessionChecked(true);
+      }
+    });
+  }, [navigate]);
+
+  if (!sessionChecked) return null;
 
   return (
     <div className="recommended-page">

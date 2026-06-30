@@ -1,6 +1,8 @@
 import './css/MockDataPage.css';
+import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { MdArrowBack } from 'react-icons/md';
+import { validateToken } from '../services/authService';
 import ProductListCard from '../components/ProductListCard';
 import mockMobileImage from '../assets/mockmobile.jpg';
 import mockMobileImage2 from '../assets/mockmobile2.jpg';
@@ -67,10 +69,26 @@ const defaultCollection = collectionData['mobile-contracts'];
 
 export default function MockDataPage() {
   const navigate = useNavigate();
+  const [sessionChecked, setSessionChecked] = useState(false);
   const [searchParams] = useSearchParams();
   const collection = searchParams.get('collection') || 'mobile-contracts';
   const selectedCollection = collectionData[collection] || defaultCollection;
   const images = collectionImages[collection] || collectionImages['mobile-contracts'];
+
+  useEffect(() => {
+    validateToken().then((valid) => {
+      if (!valid) {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('auth-mode');
+        localStorage.removeItem('user');
+        navigate('/login', { replace: true });
+      } else {
+        setSessionChecked(true);
+      }
+    });
+  }, [navigate]);
+
+  if (!sessionChecked) return null;
 
   return (
     <div className="mock-mobile-contracts-page">

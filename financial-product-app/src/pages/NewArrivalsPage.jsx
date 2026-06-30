@@ -3,15 +3,36 @@ import { useNavigate } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
 import ProductListCard from "../components/ProductListCard";
 import "./css/NewArrivalsPage.css";
+import { validateToken } from "../services/authService";
 
 function NewArrivalsPage() {
   const [products, setProducts] = useState([]);
+  const [sessionChecked, setSessionChecked] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    validateToken().then((valid) => {
+      if (!valid) {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('auth-mode');
+        localStorage.removeItem('user');
+        navigate('/login', { replace: true });
+      } else {
+        setSessionChecked(true);
+      }
+    });
+  }, [navigate]);
+
+  useEffect(() => {
+    if (!sessionChecked) return;
+
+    const jwt = localStorage.getItem('jwt');
+
     async function load() {
       try {
-        const response = await fetch("/client/v1/products");
+        const response = await fetch("/client/v1/products", {
+          headers: { Authorization: `Bearer ${jwt}` },
+        });
         const data = await response.json();
 
         const items = Array.isArray(data) ? data : data?.items || [];
@@ -24,7 +45,9 @@ function NewArrivalsPage() {
     }
 
     load();
-  }, []);
+  }, [sessionChecked]);
+
+  if (!sessionChecked) return null;
 
   return (
     <div className="new-arrivals-page">
