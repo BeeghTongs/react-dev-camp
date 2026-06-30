@@ -5,6 +5,7 @@ import { MdFingerprint } from 'react-icons/md';
 import { signOut } from 'firebase/auth';
 import { ref, listAll } from 'firebase/storage';
 import { auth, storage } from '../services/firebase';
+import { validateToken } from '../services/authService';
 import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
 
@@ -21,6 +22,8 @@ export default function AccountPage() {
     }
   })();
 
+  const [sessionChecked, setSessionChecked] = useState(isGuest);
+
   const [kycStatus, setKycStatus] = useState(() => {
     if (isGuest || !user?.email) return 'none';
     if (!localStorage.getItem('jwt')) return 'pending';
@@ -28,7 +31,22 @@ export default function AccountPage() {
   });
 
   useEffect(() => {
-    if (isGuest || !user?.email) return;
+    if (isGuest) return;
+
+    validateToken().then((valid) => {
+      if (!valid) {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('auth-mode');
+        localStorage.removeItem('user');
+        navigate('/login', { replace: true });
+      } else {
+        setSessionChecked(true);
+      }
+    });
+  }, [isGuest, navigate]);
+
+  useEffect(() => {
+    if (!sessionChecked || isGuest || !user?.email) return;
 
     const jwt = localStorage.getItem('jwt');
     if (!jwt) return;
@@ -48,7 +66,9 @@ export default function AccountPage() {
         setKycStatus(hasDocuments ? 'uploaded' : 'pending');
       })
       .catch(() => setKycStatus('pending'));
-  }, [isGuest, user?.email]);
+  }, [sessionChecked, isGuest, user?.email]);
+
+  if (!sessionChecked) return null;
 
   const displayName = user ? `${user.firstName} ${user.lastName}` : null;
   const initials = user
