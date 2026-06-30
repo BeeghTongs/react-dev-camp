@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react';
 import { onSnapshot, collection, query, where, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
-
-function getUserId() {
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
-  return user?.id || null;
-}
+import { getProfileId } from './authService';
 
 export function useCart() {
   const [items, setItems] = useState([]);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const userId = getUserId();
+    getProfileId().then(setUserId);
+  }, []);
+
+  useEffect(() => {
     if (!userId) return;
 
     const q = query(collection(db, 'cart'), where('userId', '==', userId));
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      // Group docs by productId to aggregate quantity
       const grouped = {};
       snapshot.docs.forEach((d) => {
         const data = d.data();
@@ -31,10 +30,10 @@ export function useCart() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [userId]);
 
   async function increment(productId, name, price) {
-    const userId = getUserId();
+    if (!userId) return;
     await addDoc(collection(db, 'cart'), { productId, name, price, userId, addedAt: serverTimestamp() });
   }
 

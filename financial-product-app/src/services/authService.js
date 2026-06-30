@@ -1,6 +1,21 @@
 import { signInAnonymously } from 'firebase/auth';
 import { auth } from './firebase';
 
+export async function getProfileId() {
+  const jwt = localStorage.getItem('jwt');
+  if (!jwt) return null;
+  try {
+    const res = await fetch('/client/v1/profile', {
+      headers: { accept: 'application/json', Authorization: `Bearer ${jwt}` },
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data?.id ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function guestLogin() {
   const result = await signInAnonymously(auth);
   return result.user;
