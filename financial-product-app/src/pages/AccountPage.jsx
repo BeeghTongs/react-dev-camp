@@ -51,7 +51,6 @@ export default function AccountPage() {
         return res.json();
       })
       .then((data) => {
-        console.debug('[AccountPage] Profile loaded:', data);
         setProfile(data);
       })
       .catch((err) => {
@@ -88,6 +87,7 @@ export default function AccountPage() {
 
     localStorage.removeItem('jwt');
     localStorage.removeItem('auth-mode');
+    localStorage.removeItem('user');
 
     navigate('/login', { replace: true });
   };

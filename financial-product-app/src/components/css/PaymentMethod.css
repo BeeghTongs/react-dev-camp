@@ -1,0 +1,52 @@
+.cart-panel__payment-icons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.cart-panel__payment-icon {
+  width: 48px;
+  height: 36px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  background: #fafafa;
+}
+
+.cart-panel__payment-icon--paypal    { color: #003087; }
+.cart-panel__payment-icon--skrill   { color: #862165; }
+.cart-panel__payment-icon--mastercard { color: #eb001b; }
+.cart-panel__payment-icon--bitcoin  { color: #f7931a; }
+
+.cart-panel__skrill-text {
+  font-size: 16px;
+  font-weight: 800;
+  color: #862165;
+  font-style: italic;
+}
+
+.cart-panel__checkout-btn {
+  width: 100%;
+  background: linear-gradient(90deg, #1768d6 0%, #1eb8e3 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(23, 104, 214, 0.22);
+  transition: filter 0.15s;
+}
+
+.cart-panel__checkout-btn:hover:not(:disabled) {
+  filter: brightness(1.06);
+}
+
+.cart-panel__checkout-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
