@@ -3,7 +3,7 @@ import { useState } from 'react';
 import {
   MdHome,
   MdSubscriptions,
-  MdShoppingCart,
+  MdFavoriteBorder,
   MdPerson,
 } from 'react-icons/md';
 import { GoRepoLocked } from "react-icons/go";
@@ -66,8 +66,8 @@ function BottomNav() {
         className={`bottom-nav__item${location.pathname === '/cart' ? ' bottom-nav__item--active' : ''}`}
         onClick={() => navigate('/cart')}
       >
-        <MdShoppingCart />
-        Cart
+        <MdFavoriteBorder />
+        Wishlist
       </button>
       <button
         type="button"

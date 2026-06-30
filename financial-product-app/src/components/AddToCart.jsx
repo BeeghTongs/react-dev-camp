@@ -33,7 +33,7 @@ function AddToCart({ productId, name, price }) {
 
   return (
     <button className="add-button" onClick={handleAddToCart}>
-      Add to cart
+      Add to wishlist
     </button>
   );
 }

@@ -38,7 +38,7 @@
 
 .cart-item__enquire {
   height: 30px;
-  width: 108px;
+  width: 90px;
   border: 1px solid #d1d5db;
   border-radius: 999px;
   background: linear-gradient(90deg, #1768d6 0%, #1eb8e3 100%);
@@ -60,6 +60,12 @@
   color: #0f172a;
   text-align: right;
   white-space: nowrap;
+}
+
+.cart-item__price-period {
+  font-size: 11px;
+  font-weight: 400;
+  color: #94a3b8;
 }
 
 .cart-item__remove {

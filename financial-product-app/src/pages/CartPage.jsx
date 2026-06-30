@@ -38,10 +38,10 @@ function CartPage() {
       <div className="cart-page__body">
 
         <div className="cart-page__left">
-          <h2 className="cart-page__title">Shopping Cart</h2>
+          <h2 className="cart-page__title">My Wishlist</h2>
 
           {loading ? (
-            <LoadingSpinner label="Loading your cart…" />
+            <LoadingSpinner label="Loading your wishlist…" />
           ) : items.length > 0 ? (
             <>
               <div className="cart-page__table-header">
@@ -64,13 +64,13 @@ function CartPage() {
               </div>
             </>
           ) : (
-            <p className="cart-page__empty">Your cart is empty.</p>
+            <p className="cart-page__empty">Your wishlist is empty.</p>
           )}
 
           {items.length > 0 && (
             <div className="cart-page__footer-actions">
               <button className="cart-page__cancel-btn" onClick={() => setShowConfirm(true)}>
-                Cancel Order
+                Remove All Items
               </button>
             </div>
           )}
@@ -89,7 +89,7 @@ function CartPage() {
           <div className="confirm-dialog" onClick={(e) => e.stopPropagation()}>
             <h3 className="confirm-dialog__title">Cancel Order?</h3>
             <p className="confirm-dialog__message">
-              This will remove all items from your cart. This action cannot be undone.
+              This will remove all items from your wishlist. This action cannot be undone.
             </p>
             <div className="confirm-dialog__actions">
               <button className="confirm-dialog__btn confirm-dialog__btn--ghost" onClick={() => setShowConfirm(false)}>

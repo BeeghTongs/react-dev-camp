@@ -30,7 +30,7 @@ function Subscription({ productId, name, price, period = 'month', iconBg, iconTe
         <p className="subscription-item__period">{period}ly</p>
       </div>
       <div className="subscription-item__price">
-        <span className="subscription-item__amount">${price.toFixed(2)}</span>
+        <span className="subscription-item__amount">R{price.toFixed(2)}</span>
         <span className="subscription-item__per">/{period}</span>
       </div>
     </div>

@@ -70,8 +70,8 @@ function SubscriptionsPage() {
         }
 
         const data = await response.json();
-         setSubscriptions(data?.subscriptions ?? []);
-        //setSubscriptions(mockSubscriptions)
+         //setSubscriptions(data?.subscriptions ?? []);
+        setSubscriptions(mockSubscriptions)
       } catch (error) {
         if (error.name !== 'AbortError') {
           console.error('Error fetching subscriptions:', error);
@@ -106,7 +106,7 @@ function SubscriptionsPage() {
               </span>
               <span className="subscriptions-summary-card__label">Total Monthly</span>
             </div>
-            <p className="subscriptions-summary-card__amount">${totalMonthly.toFixed(2)}</p>
+            <p className="subscriptions-summary-card__amount">R {totalMonthly.toFixed(2)}</p>
             <p className="subscriptions-summary-card__sub">
               Across {subscriptions.length} subscriptions
             </p>
@@ -116,7 +116,7 @@ function SubscriptionsPage() {
             <div className="subscriptions-summary-card__stat">
               <p className="subscriptions-summary-card__stat-label">Next Due</p>
               <p className="subscriptions-summary-card__stat-sub">
-                Jul 1 &nbsp;<strong>${(subscriptions[0]?.product?.[0]?.price ?? 0).toFixed(2)}</strong>
+                Jul 1 &nbsp;<strong>R {(subscriptions[0]?.product?.[0]?.price ?? 0).toFixed(2)}</strong>
               </p>
             </div>
           </div>

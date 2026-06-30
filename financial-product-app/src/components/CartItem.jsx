@@ -13,7 +13,7 @@ function CartItem({ image, name, price, onEnquire, onRemove }) {
         <p className="cart-item__name">{name}</p>
       </div>
       <button className="cart-item__enquire" onClick={onEnquire}>Enquire</button>
-      <div className="cart-item__price">R{price.toFixed(2)}</div>
+      <div className="cart-item__price">R{price.toFixed(2)}<span className="cart-item__price-period">/mo</span></div>
       <button className="cart-item__remove" onClick={onRemove} aria-label="Remove item">
         <MdDeleteOutline />
       </button>
