@@ -1,5 +1,5 @@
 import './css/ProductPage.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MdArrowBack } from "react-icons/md";
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
@@ -8,15 +8,6 @@ import DiscountBadge from '../components/DiscountBadge';
 import { getProductImage } from '../services/ImageService';
 import { useNavigate } from 'react-router-dom';
 import productCatalogue from '../assets/Products.json';
-import watch from '../assets/watch.png';
-import headphone from '../assets/headphone.png';
-import keyboard from '../assets/keyboard.jpg';
-
-const relatedProductImages = {
-  1: headphone,
-  2: watch,
-  3: keyboard,
-};
 
 function ProductPage() {
   const { id } = useParams();
@@ -25,6 +16,9 @@ function ProductPage() {
   const [product, setProduct] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [relatedImages, setRelatedImages] = useState({});
+  const fetchedRelatedImageIds = useRef(new Set());
   const navigate = useNavigate();
   const readableFulfillmentRequirements = {
   A: ['Identity verification (KYC check completed)'],
@@ -43,24 +37,6 @@ function ProductPage() {
     'Credit history review',
   ],
 };
-  const products = [
-    {
-      id: 1,
-      title: 'Wireless Headphones',
-      price: 'R350 p/m',
-    },
-    {
-      id: 2,
-      title: 'Gaming Mouse',
-      price: 'R120 p/m',
-    },
-    {
-      id: 3,
-      title: 'Mechanical Keyboard',
-      price: 'R250 p/m',
-    },
-  ];
-
   useEffect(() => {
     async function fetchProduct() {
       try{
@@ -108,6 +84,59 @@ function ProductPage() {
       mediaQuery.removeEventListener('change', handleMedia);
     };
   }, [id]);
+
+  // Related products: other live products that share this one's fulfilment
+  // type (Products.json groups insurance/investment/device-contract types).
+  useEffect(() => {
+    if (!product) return;
+
+    const matched = productCatalogue.find(
+      (item) => item.name.toLowerCase() === product.name.toLowerCase()
+    );
+    const fulfilmentType = matched?.fulfilmentType;
+    if (!fulfilmentType) return;
+
+    let active = true;
+
+    async function fetchRelated() {
+      try {
+        const response = await fetch('/client/v1/products');
+        if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+
+        const data = await response.json();
+        const items = Array.isArray(data) ? data : data?.items || [];
+
+        const related = items.filter((item) => {
+          if (String(item.id) === String(id)) return false;
+          const itemMatch = productCatalogue.find(
+            (cat) => cat.name.toLowerCase() === item.name.toLowerCase()
+          );
+          return itemMatch?.fulfilmentType === fulfilmentType;
+        });
+
+        if (active) setRelatedProducts(related);
+      } catch (error) {
+        console.error('Failed to load related products:', error);
+        if (active) setRelatedProducts([]);
+      }
+    }
+
+    fetchRelated();
+
+    return () => {
+      active = false;
+    };
+  }, [product, id]);
+
+  useEffect(() => {
+    relatedProducts.forEach((item) => {
+      if (fetchedRelatedImageIds.current.has(item.id)) return;
+      fetchedRelatedImageIds.current.add(item.id);
+      getProductImage(item.id).then((url) => {
+        setRelatedImages((prev) => ({ ...prev, [item.id]: url }));
+      });
+    });
+  }, [relatedProducts]);
 
   if (loading) {
     return (
@@ -211,17 +240,22 @@ function ProductPage() {
 
       </div>
 
-      <div className="related-header">Related products</div>
-      <div className="recommended-products">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            imageUrl={relatedProductImages[product.id]}
-            title={product.title}
-            price={product.price}
-          />
-        ))}
-      </div>
+      {relatedProducts.length > 0 && (
+        <>
+          <div className="related-header">Related products</div>
+          <div className="recommended-products">
+            {relatedProducts.map((item) => (
+              <ProductCard
+                key={item.id}
+                imageUrl={relatedImages[item.id]}
+                title={item.name}
+                price={formatDisplayPrice(item.price)}
+                onClick={() => navigate(`/products/${item.id}`)}
+              />
+            ))}
+          </div>
+        </>
+      )}
 
           <div className="product-footer">
             <div className="price">
