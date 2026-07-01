@@ -1,7 +1,9 @@
 .product-card {
+  display: block;
   flex: 0 0 auto;
   width: min(82vw, 320px);
   background: #fafafa;
+  border: none;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(16,24,40,0.08);
   overflow: hidden;
@@ -9,6 +11,8 @@
   margin: 0;
   padding: 12px; /* space between card edge and content */
   box-sizing: border-box;
+  text-align: left;
+  cursor: pointer;
 }
 
 .product-card__image {

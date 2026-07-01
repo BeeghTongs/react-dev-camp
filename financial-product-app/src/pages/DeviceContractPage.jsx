@@ -65,9 +65,11 @@ export default function DeviceContractPage() {
       <Header />
 
       <div className="dcp__inner">
-        <button className="dcp__back" onClick={() => navigate(-1)}>
-          <MdArrowBack /> Back
-        </button>
+        <div className="page-header">
+          <button className="back-btn" onClick={() => navigate(-1)} aria-label="Back">
+            <MdArrowBack />
+          </button>
+        </div>
 
         <h1 className="dcp__page-title">Deal details</h1>
 
@@ -96,7 +98,7 @@ export default function DeviceContractPage() {
                     {provider === p.id && p.available && (
                       <MdCheckCircle className="dcp__type-check" style={{ color: p.colour }} />
                     )}
-                    {!p.available && <span className="dcp__type-oos">Out of stock</span>}
+                    {!p.available && <span className="dcp__type-oos">Unavailable</span>}
                   </button>
                 ))}
               </div>
@@ -197,11 +199,6 @@ export default function DeviceContractPage() {
                     </button>
                   ))}
                 </div>
-              </div>
-
-              {/* Availability + delivery */}
-              <div className="dcp__available-badge">
-                <MdCheckCircle className="dcp__available-icon" /> Available online
               </div>
 
               <div className="dcp__delivery-box">

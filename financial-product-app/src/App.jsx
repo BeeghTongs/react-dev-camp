@@ -18,6 +18,7 @@ import SubscriptionsPage from './pages/SubscriptionsPage';
 import CustomerTypePage from './pages/CustomerTypePage';
 import CartPage from './pages/CartPage';
 import DeviceContractPage from './pages/DeviceContractPage';
+import DeviceList from './pages/DeviceList';
 
 function App() {
   return (
@@ -86,6 +87,11 @@ function App() {
         <Route path="/device-contract" element={
           <RequireAuth>
             <DeviceContractPage />
+          </RequireAuth>
+        } />
+        <Route path="/devices" element={
+          <RequireAuth>
+            <DeviceList />
           </RequireAuth>
         } />
       </Routes>

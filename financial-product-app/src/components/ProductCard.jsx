@@ -1,8 +1,8 @@
 import './css/ProductCard.css';
 
-function ProductCard({imageUrl,title,price}) {
+function ProductCard({imageUrl,title,price,onClick}) {
   return (
-    <div className="product-card">
+    <button type="button" className="product-card" onClick={onClick}>
       {imageUrl ? (
         <img src={imageUrl} alt={title} className="product-card__image" />
       ) : (
@@ -12,7 +12,7 @@ function ProductCard({imageUrl,title,price}) {
         <h3 className="product-card__title">{title}</h3>
         <p className="product-card__price">from {price}</p>
       </div>
-    </div>
+    </button>
   );
 }
 
