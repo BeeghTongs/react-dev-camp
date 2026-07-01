@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MdFingerprint, MdClose, MdVisibility, MdVisibilityOff } from 'react-icons/md';
 import './css/LoginForm.css';
 
 function LoginForm({ onSuccess, onClose }) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -30,6 +32,11 @@ function LoginForm({ onSuccess, onClose }) {
     // Clear field error on change
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
     if (authError) setAuthError('');
+  };
+
+  const handleSignUpClick = () => {
+    onClose?.();
+    navigate('/sign-up');
   };
 
 const handleSubmit = async (e) => {
@@ -175,6 +182,13 @@ const handleSubmit = async (e) => {
           {isLoading ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
+
+      <p className="login-form__signup">
+        Don&apos;t have an account?{' '}
+        <button type="button" className="login-form__signup-link" onClick={handleSignUpClick}>
+          Sign up
+        </button>
+      </p>
     </div>
   );
 }
