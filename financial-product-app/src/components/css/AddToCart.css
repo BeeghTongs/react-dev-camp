@@ -14,3 +14,39 @@
   transform: translateY(-1px);
 }
 .add-button:active { transform: translateY(1px); box-shadow: none; }
+
+.add-to-cart-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 100px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0f172a;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25);
+  z-index: 50;
+  animation: add-to-cart-toast-in 0.2s ease-out;
+}
+
+.add-to-cart-toast__icon {
+  color: #4ade80;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+@keyframes add-to-cart-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}

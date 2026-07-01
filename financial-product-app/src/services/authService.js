@@ -3,7 +3,11 @@ import { auth } from './firebase';
 
 export async function getProfileId() {
   const jwt = localStorage.getItem('jwt');
-  if (!jwt) return null;
+  if (!jwt) {
+    // Guests have no token — their Firebase anonymous uid doubles as their user id.
+    const user = auth.currentUser;
+    return user?.isAnonymous ? user.uid : null;
+  }
   try {
     const res = await fetch('/client/v1/profile', {
       headers: { accept: 'application/json', Authorization: `Bearer ${jwt}` },
