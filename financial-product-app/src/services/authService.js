@@ -1,5 +1,6 @@
 import { signInAnonymously } from 'firebase/auth';
-import { auth } from './firebase';
+import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { auth, db } from './firebase';
 
 export async function getProfileId() {
   const jwt = localStorage.getItem('jwt');
@@ -23,6 +24,33 @@ export async function getProfileId() {
 export async function guestLogin() {
   const result = await signInAnonymously(auth);
   return result.user;
+}
+export async function mergeGuestWishlist(guestUserId, accountUserId) {
+  if (!guestUserId || !accountUserId || guestUserId === accountUserId) return;
+
+  const guestSnap = await getDocs(query(collection(db, 'cart'), where('userId', '==', guestUserId)));
+  if (guestSnap.empty) return;
+
+  const accountSnap = await getDocs(query(collection(db, 'cart'), where('userId', '==', accountUserId)));
+  const existingProductIds = new Set(accountSnap.docs.map((d) => d.data().productId));
+
+  await Promise.all(
+    guestSnap.docs.map((guestDoc) => {
+      const { productId } = guestDoc.data();
+      return existingProductIds.has(productId)
+        ? deleteDoc(doc(db, 'cart', guestDoc.id))
+        : updateDoc(doc(db, 'cart', guestDoc.id), { userId: accountUserId });
+    })
+  );
+}
+
+// Called when a guest signs out: their wishlist has nowhere to go (the
+// anonymous identity is being deleted), so remove it instead of orphaning it.
+export async function clearGuestWishlist(guestUserId) {
+  if (!guestUserId) return;
+
+  const guestSnap = await getDocs(query(collection(db, 'cart'), where('userId', '==', guestUserId)));
+  await Promise.all(guestSnap.docs.map((guestDoc) => deleteDoc(doc(db, 'cart', guestDoc.id))));
 }
 
 export async function validateToken() {

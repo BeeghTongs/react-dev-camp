@@ -2,10 +2,10 @@ import './css/AccountPage.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdFingerprint } from 'react-icons/md';
-import { signOut } from 'firebase/auth';
+import { signOut, deleteUser } from 'firebase/auth';
 import { ref, listAll } from 'firebase/storage';
 import { auth, storage } from '../services/firebase';
-import { validateToken } from '../services/authService';
+import { validateToken, clearGuestWishlist } from '../services/authService';
 import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
 
@@ -17,6 +17,7 @@ export default function AccountPage() {
   const [sessionChecked, setSessionChecked] = useState(isGuest);
   const [profile, setProfile] = useState(null);
   const [kycStatus, setKycStatus] = useState(isGuest ? 'none' : 'loading');
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   // 1. Validate token
   useEffect(() => {
@@ -80,7 +81,14 @@ export default function AccountPage() {
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth);
+      if (isGuest && auth.currentUser) {
+        // Guests have no real account to sign back into — remove their wishlist
+        // and the anonymous Firebase identity entirely instead of leaving them parked.
+        await clearGuestWishlist(auth.currentUser.uid);
+        await deleteUser(auth.currentUser);
+      } else {
+        await signOut(auth);
+      }
     } catch (error) {
       console.warn('Firebase sign-out failed:', error);
     }
@@ -156,13 +164,42 @@ export default function AccountPage() {
           <button
             type="button"
             className="account-card__signout-button account-card__signout-button--ghost"
-            onClick={handleSignOut}
+            onClick={() => setShowSignOutConfirm(true)}
           >
             Sign out
           </button>
         </div>
       </main>
       <BottomNav />
+
+      {showSignOutConfirm && (
+        <div className="confirm-overlay" onClick={() => setShowSignOutConfirm(false)}>
+          <div className="confirm-dialog" onClick={(e) => e.stopPropagation()}>
+            <h3 className="confirm-dialog__title">Sign out?</h3>
+            <p className="confirm-dialog__message">
+              {isGuest
+                ? 'This will delete your guest session and wishlist — they cannot be recovered.'
+                : 'You will need to sign in again to access your account.'}
+            </p>
+            <div className="confirm-dialog__actions">
+              <button
+                type="button"
+                className="confirm-dialog__btn confirm-dialog__btn--ghost"
+                onClick={() => setShowSignOutConfirm(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="confirm-dialog__btn confirm-dialog__btn--danger"
+                onClick={handleSignOut}
+              >
+                Sign out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

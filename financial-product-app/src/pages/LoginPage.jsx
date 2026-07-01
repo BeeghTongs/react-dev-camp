@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdFingerprint } from 'react-icons/md';
-import { guestLogin } from '../services/authService.js';
+import { guestLogin, getProfileId, mergeGuestWishlist } from '../services/authService.js';
+import { auth } from '../services/firebase.js';
 import LoginForm from '../components/LoginForm.jsx';
 import './css/LoginPage.css';
 
@@ -18,7 +19,12 @@ function LoginPage() {
   };
 
   const handleLoginSuccess = async (jwt, email) => {
+  const guestUser = auth.currentUser;
+  const guestUserId = guestUser?.isAnonymous ? guestUser.uid : null;
+
   localStorage.setItem('jwt', jwt);
+  localStorage.removeItem('auth-mode');
+  localStorage.removeItem('user');
 
   const res = await fetch(`/v1/customer?emailAddress=${email}`, {
     headers: {
@@ -30,6 +36,14 @@ function LoginPage() {
 
   delete user.idNumber;
   delete user.customerAccounts;
+
+  if (guestUserId) {
+    const accountUserId = await getProfileId();
+    if (accountUserId) {
+      await mergeGuestWishlist(guestUserId, accountUserId);
+    }
+  }
+
   navigate('/list');
 };
 
