@@ -7,6 +7,15 @@ import { FaSimCard } from 'react-icons/fa';
 import Header from '../components/Header';
 import BottomNav from '../components/BottomNav';
 
+const PROVIDERS = [
+  { id: 'vodacom', name: 'Vodacom', colour: '#e60000', available: true },
+  { id: 'mtn',     name: 'MTN',     colour: '#ffcb05', textDark: true, available: true },
+  { id: 'telkom',  name: 'Telkom',  colour: '#0072ce', available: true },
+  { id: 'cellc',   name: 'Cell C',  colour: '#000000', available: false },
+  { id: 'rain',    name: 'Rain',    colour: '#00d1b2', textDark: true, available: false },
+  { id: 'virgin',  name: 'Virgin Mobile', colour: '#e10a0a', available: false },
+];
+
 const MOCK = {
   device: {
     name: 'Apple iPhone 17 256GB 5G',
@@ -31,17 +40,24 @@ const MOCK = {
     { Icon: BsFillCameraVideoFill, label: 'Bonus Video Ticket 1GB 3 Months' },
     { Icon: FaSimCard,            label: 'Promotional 30GB – 30 days' },
   ],
-  duration: { months: 36, pricePerMonth: 799 },
+  durations: [
+    { months: 24, pricePerMonth: 899 },
+    { months: 36, pricePerMonth: 799 },
+  ],
   delivery: { fee: 79 },
 };
 
 export default function DeviceContractPage() {
   const navigate = useNavigate();
-  const [appType, setAppType] = useState('new');
+  const [provider, setProvider] = useState(
+    PROVIDERS.find((p) => p.available)?.id ?? PROVIDERS[0].id
+  );
   const [colour, setColour] = useState(MOCK.device.colours[0].name);
+  const [durationMonths, setDurationMonths] = useState(MOCK.durations[0].months);
 
   const selectedColour = MOCK.device.colours.find((c) => c.name === colour);
-  const { duration, delivery } = MOCK;
+  const { delivery } = MOCK;
+  const duration = MOCK.durations.find((d) => d.months === durationMonths);
   const monthlyTotal = duration.pricePerMonth;
 
   return (
@@ -64,22 +80,25 @@ export default function DeviceContractPage() {
               <span className="dcp__step-line" />
             </div>
             <div className="dcp__step-body">
-              <h2 className="dcp__step-title">Confirm your application type</h2>
+              <h2 className="dcp__step-title">Choose a provider</h2>
               <div className="dcp__app-type-btns">
-                <button
-                  className={`dcp__type-btn${appType === 'new' ? ' dcp__type-btn--active' : ''}`}
-                  onClick={() => setAppType('new')}
-                >
-                  New Contract
-                  {appType === 'new' && <MdCheckCircle className="dcp__type-check" />}
-                </button>
-                <button
-                  className={`dcp__type-btn${appType === 'upgrade' ? ' dcp__type-btn--active' : ''}`}
-                  onClick={() => setAppType('upgrade')}
-                >
-                  Upgrade
-                  {appType === 'upgrade' && <MdCheckCircle className="dcp__type-check" />}
-                </button>
+                {PROVIDERS.map((p) => (
+                  <button
+                    key={p.id}
+                    className={`dcp__type-btn${provider === p.id ? ' dcp__type-btn--active' : ''}${!p.available ? ' dcp__type-btn--disabled' : ''}`}
+                    style={provider === p.id ? { borderColor: p.colour } : undefined}
+                    onClick={() => p.available && setProvider(p.id)}
+                    disabled={!p.available}
+                    aria-disabled={!p.available}
+                  >
+                    <span className="dcp__provider-dot" style={{ background: p.colour }} />
+                    {p.name}
+                    {provider === p.id && p.available && (
+                      <MdCheckCircle className="dcp__type-check" style={{ color: p.colour }} />
+                    )}
+                    {!p.available && <span className="dcp__type-oos">Out of stock</span>}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
@@ -164,10 +183,19 @@ export default function DeviceContractPage() {
               {/* Duration picker */}
               <div className="dcp__duration-section">
                 <p className="dcp__duration-label">Choose the duration &amp; price:</p>
-                <div className="dcp__duration-pill dcp__duration-pill--active">
-                  <span>x{duration.months} months</span>
-                  <span>R{duration.pricePerMonth} PM</span>
-                  <MdCheckCircle className="dcp__duration-check" />
+                <div className="dcp__duration-options">
+                  {MOCK.durations.map((d) => (
+                    <button
+                      key={d.months}
+                      type="button"
+                      className={`dcp__duration-pill${durationMonths === d.months ? ' dcp__duration-pill--active' : ''}`}
+                      onClick={() => setDurationMonths(d.months)}
+                    >
+                      <span>x{d.months} months</span>
+                      <span>R{d.pricePerMonth} PM</span>
+                      {durationMonths === d.months && <MdCheckCircle className="dcp__duration-check" />}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -206,9 +234,9 @@ export default function DeviceContractPage() {
 
               <div className="dcp__summary-table">
                 <div className="dcp__summary-row">
-                  <span className="dcp__summary-key">Application type</span>
+                  <span className="dcp__summary-key">Provider</span>
                   <span className="dcp__summary-val">
-                    {appType === 'new' ? 'New contract' : 'Upgrade'}
+                    {PROVIDERS.find((p) => p.id === provider)?.name}
                   </span>
                 </div>
                 <div className="dcp__summary-row">
@@ -242,11 +270,14 @@ export default function DeviceContractPage() {
                 </div>
               </div>
 
-              <button className="dcp__get-deal-btn">Get this deal</button>
             </div>
           </div>
 
         </div>
+      </div>
+
+      <div className="dcp__sticky-cta">
+        <button className="dcp__get-deal-btn">Get this deal</button>
       </div>
 
       <BottomNav />
