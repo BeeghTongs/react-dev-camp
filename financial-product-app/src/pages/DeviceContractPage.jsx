@@ -28,8 +28,8 @@ const MOCK = {
     ],
   },
   durations: [
-    { months: 24, pricePerMonth: 899 },
-    { months: 36, pricePerMonth: 799 },
+    { months: 24, pricePerMonth: 1399 },
+    { months: 36, pricePerMonth: 1299 },
   ],
   delivery: { fee: 79 },
 };

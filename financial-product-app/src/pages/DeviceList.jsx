@@ -18,18 +18,18 @@ const PHONE_IMAGES = [mockMobileImage, mockMobileImage2, mockMobileImage3];
 const LISTING_MONTHS = 36;
 
 const PHONES = [
-  { id: 'iphone-17', name: 'Apple iPhone 17 256GB 5G', pricePerMonth: 799 },
-  { id: 'iphone-17-pro', name: 'Apple iPhone 17 Pro 256GB 5G', pricePerMonth: 999 },
-  { id: 'galaxy-s25', name: 'Samsung Galaxy S25 256GB 5G', pricePerMonth: 749 },
-  { id: 'galaxy-a56', name: 'Samsung Galaxy A56 128GB 5G', pricePerMonth: 379 },
-  { id: 'honor-400', name: 'HONOR 400 512GB 5G', pricePerMonth: 399 },
-  { id: 'pixel-10', name: 'Google Pixel 10 128GB 5G', pricePerMonth: 599 },
+  { id: 'iphone-17', name: 'Apple iPhone 17 256GB 5G', pricePerMonth: 1299 },
+  { id: 'iphone-17-pro', name: 'Apple iPhone 17 Pro 256GB 5G', pricePerMonth: 1499 },
+  { id: 'galaxy-s25', name: 'Samsung Galaxy S25 256GB 5G', pricePerMonth: 1099 },
+  { id: 'galaxy-a56', name: 'Samsung Galaxy A56 128GB 5G', pricePerMonth: 850 },
+  { id: 'honor-400', name: 'HONOR 400 512GB 5G', pricePerMonth: 899 },
+  { id: 'pixel-10', name: 'Google Pixel 10 128GB 5G', pricePerMonth: 999 },
 ];
 
 const LAPTOPS = [
-  { id: 'macbook-air-15', name: 'Apple MacBook Air 15" M4 256GB', pricePerMonth: 1099 },
-  { id: 'dell-xps-14', name: 'Dell XPS 14 512GB', pricePerMonth: 899 },
-  { id: 'lenovo-ideapad', name: 'Lenovo IdeaPad Slim 3 256GB', pricePerMonth: 459 },
+  { id: 'macbook-air-15', name: 'Apple MacBook Air 15" M4 256GB', pricePerMonth: 1599 },
+  { id: 'dell-xps-14', name: 'Dell XPS 14 512GB', pricePerMonth: 1199 },
+  { id: 'lenovo-ideapad', name: 'Lenovo IdeaPad Slim 3 256GB', pricePerMonth: 899 },
 ];
 
 export default function DeviceList() {
