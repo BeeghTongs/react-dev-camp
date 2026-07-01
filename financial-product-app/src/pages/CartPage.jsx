@@ -44,11 +44,7 @@ function CartPage() {
             <LoadingSpinner label="Loading your wishlist…" />
           ) : items.length > 0 ? (
             <>
-              <div className="cart-page__table-header">
-                <span className="cart-page__th--product">Product</span>
-                <span className="cart-page__th--qty">Quantity</span>
-                <span className="cart-page__th--price">Price</span>
-              </div>
+              <div className="cart-page__table-header"/>
 
               <div className="cart-page__items">
                 {items.map((item) => (

@@ -17,6 +17,7 @@ import MockDataPage from './pages/MockDataPage';
 import SubscriptionsPage from './pages/SubscriptionsPage';
 import CustomerTypePage from './pages/CustomerTypePage';
 import CartPage from './pages/CartPage';
+import DeviceContractPage from './pages/DeviceContractPage';
 
 function App() {
   return (
@@ -80,6 +81,11 @@ function App() {
         <Route path="/cart" element={
           <RequireAuth>
             <CartPage />
+          </RequireAuth>
+        } />
+        <Route path="/device-contract" element={
+          <RequireAuth>
+            <DeviceContractPage />
           </RequireAuth>
         } />
       </Routes>
