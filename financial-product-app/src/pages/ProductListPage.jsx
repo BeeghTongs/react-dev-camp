@@ -11,9 +11,9 @@ const recommendedProducts = [
   {
     id: 1,
     collection: 'mobile-contracts',
-    title: 'All Mobile Device Contracts',
+    title: 'All Device Contracts',
     price: 'R350 p/m',
-    badge: '25% off',
+    badge: null,
     imageUrl:
       'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=900&q=80',
   },
@@ -107,9 +107,9 @@ function ProductListPage() {
       <Header />
       <main className="product-list-page__content">
         <section className="product-list-page__featured">
-          <div className="featured-hero" onClick={() => navigate('/mock-data?collection=mobile-contracts')} role="button" tabIndex={0}>
+          <div className="featured-hero" onClick={() => navigate('/devices')} role="button" tabIndex={0}>
             <DiscountBadge percentage={25} className="featured-hero__badge" />
-            <h1>All Mobile Device Contracts</h1>
+            <h1>All Device Contracts</h1>
             <p>Various models available</p>
             <span className="featured-hero__cta">View offers</span>
           </div>

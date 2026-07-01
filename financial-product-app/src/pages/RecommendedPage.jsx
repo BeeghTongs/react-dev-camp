@@ -2,6 +2,8 @@ import "./css/RecommendedPage.css";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductListCard from "../components/ProductListCard";
+import BottomNav from "../components/BottomNav";
+import SearchBar from "../components/SearchBar";
 import { MdArrowBack } from "react-icons/md";
 import { validateToken } from "../services/authService";
 
@@ -33,6 +35,7 @@ const recommendedProducts = [
 export default function RecommendedPage() {
   const navigate = useNavigate();
   const [sessionChecked, setSessionChecked] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     validateToken().then((valid) => {
@@ -49,6 +52,11 @@ export default function RecommendedPage() {
 
   if (!sessionChecked) return null;
 
+  const query = search.trim().toLowerCase();
+  const filteredProducts = recommendedProducts.filter((product) =>
+    product.title.toLowerCase().includes(query)
+  );
+
   return (
     <div className="recommended-page">
       <div className="page-header">
@@ -58,8 +66,10 @@ export default function RecommendedPage() {
         <div className="page-title">Recommended to you</div>
       </div>
 
+      <SearchBar value={search} onChange={setSearch} placeholder="Search recommended" />
+
       <div className="recommended-grid">
-        {recommendedProducts.map((product) => (
+        {filteredProducts.map((product) => (
           <ProductListCard
             key={product.id}
             id={product.id}
@@ -70,6 +80,7 @@ export default function RecommendedPage() {
           />
         ))}
       </div>
+      <BottomNav />
     </div>
   );
 }

@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
 import ProductListCard from "../components/ProductListCard";
+import BottomNav from "../components/BottomNav";
+import SearchBar from "../components/SearchBar";
 import "./css/NewArrivalsPage.css";
 import { validateToken } from "../services/authService";
 
 function NewArrivalsPage() {
   const [products, setProducts] = useState([]);
   const [sessionChecked, setSessionChecked] = useState(false);
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,6 +52,11 @@ function NewArrivalsPage() {
 
   if (!sessionChecked) return null;
 
+  const query = search.trim().toLowerCase();
+  const filteredProducts = products.filter((product) =>
+    product.name?.toLowerCase().includes(query)
+  );
+
   return (
     <div className="new-arrivals-page">
       <div className="page-header">
@@ -59,17 +67,20 @@ function NewArrivalsPage() {
         <div className="page-title">New arrivals</div>
       </div>
 
+      <SearchBar value={search} onChange={setSearch} placeholder="Search new arrivals" />
+
       <div className="new-arrivals-grid">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <ProductListCard
             key={product.id}
             id={product.id}
             title={product.name}
-            price={product.price}
+            price={`R${product.price} p/m`}
             onClick={() => navigate(`/products/${product.id}`)}
           />
         ))}
       </div>
+      <BottomNav />
     </div>
   );
 }
