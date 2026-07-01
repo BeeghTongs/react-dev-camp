@@ -13,19 +13,23 @@ import mockLaptopImage1 from '../assets/mockLaptop1.jpg';
 
 const PHONE_IMAGES = [mockMobileImage, mockMobileImage2, mockMobileImage3];
 
+// Prices shown here are the 36-month rate; the 24-month option is offered
+// as an alternative once the shopper reaches the device contract page.
+const LISTING_MONTHS = 36;
+
 const PHONES = [
-  { id: 'iphone-17', name: 'Apple iPhone 17 256GB 5G', pricePerMonth: 799, months: 36 },
-  { id: 'iphone-17-pro', name: 'Apple iPhone 17 Pro 256GB 5G', pricePerMonth: 999, months: 36 },
-  { id: 'galaxy-s25', name: 'Samsung Galaxy S25 256GB 5G', pricePerMonth: 749, months: 36 },
-  { id: 'galaxy-a56', name: 'Samsung Galaxy A56 128GB 5G', pricePerMonth: 449, months: 24 },
-  { id: 'honor-400', name: 'HONOR 400 512GB 5G', pricePerMonth: 399, months: 36 },
-  { id: 'pixel-10', name: 'Google Pixel 10 128GB 5G', pricePerMonth: 599, months: 36 },
+  { id: 'iphone-17', name: 'Apple iPhone 17 256GB 5G', pricePerMonth: 799 },
+  { id: 'iphone-17-pro', name: 'Apple iPhone 17 Pro 256GB 5G', pricePerMonth: 999 },
+  { id: 'galaxy-s25', name: 'Samsung Galaxy S25 256GB 5G', pricePerMonth: 749 },
+  { id: 'galaxy-a56', name: 'Samsung Galaxy A56 128GB 5G', pricePerMonth: 379 },
+  { id: 'honor-400', name: 'HONOR 400 512GB 5G', pricePerMonth: 399 },
+  { id: 'pixel-10', name: 'Google Pixel 10 128GB 5G', pricePerMonth: 599 },
 ];
 
 const LAPTOPS = [
-  { id: 'macbook-air-15', name: 'Apple MacBook Air 15" M4 256GB', pricePerMonth: 1099, months: 36 },
-  { id: 'dell-xps-14', name: 'Dell XPS 14 512GB', pricePerMonth: 899, months: 36 },
-  { id: 'lenovo-ideapad', name: 'Lenovo IdeaPad Slim 3 256GB', pricePerMonth: 549, months: 24 },
+  { id: 'macbook-air-15', name: 'Apple MacBook Air 15" M4 256GB', pricePerMonth: 1099 },
+  { id: 'dell-xps-14', name: 'Dell XPS 14 512GB', pricePerMonth: 899 },
+  { id: 'lenovo-ideapad', name: 'Lenovo IdeaPad Slim 3 256GB', pricePerMonth: 459 },
 ];
 
 export default function DeviceList() {
@@ -63,8 +67,10 @@ export default function DeviceList() {
                   key={device.id}
                   imageUrl={PHONE_IMAGES[PHONES.indexOf(device) % PHONE_IMAGES.length]}
                   title={device.name}
-                  price={`R${device.pricePerMonth} PM x ${device.months}`}
-                  onClick={() => navigate('/device-contract')}
+                  price={`R${device.pricePerMonth} PM x ${LISTING_MONTHS}`}
+                  onClick={() => navigate('/device-contract', {
+                    state: { name: device.name, pricePerMonth: device.pricePerMonth, months: LISTING_MONTHS },
+                  })}
                 />
               ))}
             </div>
@@ -80,8 +86,10 @@ export default function DeviceList() {
                   key={device.id}
                   imageUrl={mockLaptopImage1}
                   title={device.name}
-                  price={`R${device.pricePerMonth} PM x ${device.months}`}
-                  onClick={() => navigate('/device-contract')}
+                  price={`R${device.pricePerMonth} PM x ${LISTING_MONTHS}`}
+                  onClick={() => navigate('/device-contract', {
+                    state: { name: device.name, pricePerMonth: device.pricePerMonth, months: LISTING_MONTHS },
+                  })}
                 />
               ))}
             </div>

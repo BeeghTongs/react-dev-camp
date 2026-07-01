@@ -1,6 +1,6 @@
 import './css/DeviceContractPage.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MdArrowBack, MdCheckCircle, MdLocalShipping, MdVerifiedUser } from 'react-icons/md';
 import { BsFillCameraVideoFill } from 'react-icons/bs';
 import { FaSimCard } from 'react-icons/fa';
@@ -27,19 +27,6 @@ const MOCK = {
       { name: 'White',    hex: '#f5f5f0' },
     ],
   },
-  plan: {
-    name: 'RED Core 3GB 100min',
-    features: [
-      { label: '3GB Anytime data' },
-      { label: '100 minutes' },
-      { label: '150 SMS' },
-    ],
-  },
-  includes: [
-    { Icon: MdVerifiedUser,       label: 'Free 1-Year Extended Warranty' },
-    { Icon: BsFillCameraVideoFill, label: 'Bonus Video Ticket 1GB 3 Months' },
-    { Icon: FaSimCard,            label: 'Promotional 30GB – 30 days' },
-  ],
   durations: [
     { months: 24, pricePerMonth: 899 },
     { months: 36, pricePerMonth: 799 },
@@ -47,18 +34,83 @@ const MOCK = {
   delivery: { fee: 79 },
 };
 
+// Devices are listed with a 36-month price; the 24-month option costs a fixed
+// premium per month for the shorter commitment.
+const SHORT_TERM_SURCHARGE = 100;
+
+// Each network bundles its own plan and perks with the device.
+const PROVIDER_PLANS = {
+  vodacom: {
+    plan: {
+      name: 'RED Core 3GB 100min',
+      features: [
+        { label: '3GB Anytime data' },
+        { label: '100 minutes' },
+        { label: '150 SMS' },
+      ],
+    },
+    includes: [
+      { Icon: MdVerifiedUser,        label: 'Free 1-Year Extended Warranty' },
+      { Icon: BsFillCameraVideoFill, label: 'Bonus Video Ticket 1GB 3 Months' },
+      { Icon: FaSimCard,             label: 'Promotional 30GB – 30 days' },
+    ],
+  },
+  mtn: {
+    plan: {
+      name: 'MTN Xtraordinary 5GB 150min',
+      features: [
+        { label: '5GB Anytime data' },
+        { label: '150 minutes' },
+        { label: '200 SMS' },
+      ],
+    },
+    includes: [
+      { Icon: MdVerifiedUser,        label: 'Free 6-Month Device Insurance' },
+      { Icon: BsFillCameraVideoFill, label: 'Bonus 10GB Weekend Data' },
+      { Icon: FaSimCard,             label: 'Free MTN Music Streaming – 3 Months' },
+    ],
+  },
+  telkom: {
+    plan: {
+      name: 'Telkom Freedom 4GB 200min',
+      features: [
+        { label: '4GB Anytime data' },
+        { label: '200 minutes' },
+        { label: 'Unlimited Telkom-to-Telkom calls' },
+      ],
+    },
+    includes: [
+      { Icon: MdVerifiedUser,        label: 'Free 1-Year Screen Protection' },
+      { Icon: BsFillCameraVideoFill, label: 'Bonus 5GB Night Owl Data' },
+      { Icon: FaSimCard,             label: 'R100 Telkom Rewards Voucher' },
+    ],
+  },
+};
+
 export default function DeviceContractPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const selectedDevice = location.state;
+
+  const deviceName = selectedDevice?.name ?? MOCK.device.name;
+  const durations = selectedDevice
+    ? [
+        { months: 24, pricePerMonth: selectedDevice.pricePerMonth + SHORT_TERM_SURCHARGE },
+        { months: 36, pricePerMonth: selectedDevice.pricePerMonth },
+      ]
+    : MOCK.durations;
+
   const [provider, setProvider] = useState(
     PROVIDERS.find((p) => p.available)?.id ?? PROVIDERS[0].id
   );
   const [colour, setColour] = useState(MOCK.device.colours[0].name);
-  const [durationMonths, setDurationMonths] = useState(MOCK.durations[0].months);
+  const [durationMonths, setDurationMonths] = useState(selectedDevice ? 36 : durations[0].months);
 
   const selectedColour = MOCK.device.colours.find((c) => c.name === colour);
   const { delivery } = MOCK;
-  const duration = MOCK.durations.find((d) => d.months === durationMonths);
+  const duration = durations.find((d) => d.months === durationMonths);
   const monthlyTotal = duration.pricePerMonth;
+  const { plan, includes } = PROVIDER_PLANS[provider] ?? PROVIDER_PLANS.vodacom;
 
   return (
     <div className="dcp">
@@ -115,7 +167,7 @@ export default function DeviceContractPage() {
               <h2 className="dcp__step-title">Review your selected deal</h2>
 
               <div className="dcp__deal-card">
-                <p className="dcp__deal-card-name">{MOCK.device.name}</p>
+                <p className="dcp__deal-card-name">{deviceName}</p>
                 <div className="dcp__deal-cols">
 
                   {/* Device column */}
@@ -123,7 +175,7 @@ export default function DeviceContractPage() {
                     <p className="dcp__col-label">Device:</p>
                     <div className="dcp__device-row">
                       <div className="dcp__device-thumb" style={{ background: selectedColour.hex }} />
-                      <span className="dcp__device-name">{MOCK.device.name}</span>
+                      <span className="dcp__device-name">{deviceName}</span>
                     </div>
                     <p className="dcp__colour-label">
                       Choose a colour: <strong>{colour}</strong>
@@ -144,9 +196,9 @@ export default function DeviceContractPage() {
                   {/* Plan column */}
                   <div className="dcp__deal-col">
                     <p className="dcp__col-label">Plan:</p>
-                    <p className="dcp__plan-name">{MOCK.plan.name}</p>
+                    <p className="dcp__plan-name">{plan.name}</p>
                     <ul className="dcp__plan-features">
-                      {MOCK.plan.features.map((f) => (
+                      {plan.features.map((f) => (
                         <li key={f.label} className="dcp__plan-feature">
                           <span className="dcp__feature-dot" />
                           {f.label}
@@ -159,11 +211,11 @@ export default function DeviceContractPage() {
                   <div className="dcp__deal-col">
                     <p className="dcp__col-label">Also includes:</p>
                     <ul className="dcp__includes">
-                      {MOCK.includes.map((item, i) => (
+                      {includes.map((item, i) => (
                         <li key={i} className="dcp__include-item">
                           <span className="dcp__include-icon"><item.Icon /></span>
                           <span className="dcp__include-label">{item.label}</span>
-                          {i < MOCK.includes.length - 1 && <span className="dcp__include-plus">+</span>}
+                          {i < includes.length - 1 && <span className="dcp__include-plus">+</span>}
                         </li>
                       ))}
                     </ul>
@@ -186,7 +238,7 @@ export default function DeviceContractPage() {
               <div className="dcp__duration-section">
                 <p className="dcp__duration-label">Choose the duration &amp; price:</p>
                 <div className="dcp__duration-options">
-                  {MOCK.durations.map((d) => (
+                  {durations.map((d) => (
                     <button
                       key={d.months}
                       type="button"
@@ -245,7 +297,7 @@ export default function DeviceContractPage() {
                   <span className="dcp__summary-key dcp__summary-key--bold">Deal</span>
                 </div>
                 <div className="dcp__summary-row">
-                  <span className="dcp__summary-key">{MOCK.device.name}</span>
+                  <span className="dcp__summary-key">{deviceName}</span>
                   <span className="dcp__summary-val">R{monthlyTotal}.00 PM</span>
                 </div>
                 <div className="dcp__summary-divider" />
