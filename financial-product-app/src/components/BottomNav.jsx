@@ -8,11 +8,13 @@ import {
 } from 'react-icons/md';
 import { GoRepoLocked } from "react-icons/go";
 import { useLocation, useNavigate } from 'react-router-dom';
+import LoginModal from './LoginModal';
 
 function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
   const [showGuestModal, setShowGuestModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const isGuest = localStorage.getItem('auth-mode') === 'guest';
 
@@ -90,7 +92,10 @@ function BottomNav() {
           <button
             type="button"
             className="guest-modal__signin"
-            onClick={() => navigate('/login')}
+            onClick={() => {
+              setShowGuestModal(false);
+              setShowLoginModal(true);
+            }}
           >
             Sign in
           </button>
@@ -103,6 +108,16 @@ function BottomNav() {
           </button>
         </div>
       </div>
+    )}
+
+    {showLoginModal && (
+      <LoginModal
+        onClose={() => setShowLoginModal(false)}
+        onSuccess={() => {
+          setShowLoginModal(false);
+          navigate('/subscriptions');
+        }}
+      />
     )}
     </>
   );

@@ -1,4 +1,4 @@
-import { signInAnonymously } from 'firebase/auth';
+import { signInAnonymously, deleteUser } from 'firebase/auth';
 import { collection, deleteDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { auth, db } from './firebase';
 
@@ -51,6 +51,39 @@ export async function clearGuestWishlist(guestUserId) {
 
   const guestSnap = await getDocs(query(collection(db, 'cart'), where('userId', '==', guestUserId)));
   await Promise.all(guestSnap.docs.map((guestDoc) => deleteDoc(doc(db, 'cart', guestDoc.id))));
+}
+
+// Shared by every place that renders the login form (LoginPage, or a guest
+// prompted to sign in mid-session): persists the token and, if the person was
+// browsing as a guest, folds their guest wishlist into the newly signed-in account.
+export async function completeLogin(jwt, email) {
+  const guestUser = auth.currentUser;
+  const guestUserId = guestUser?.isAnonymous ? guestUser.uid : null;
+
+  localStorage.setItem('jwt', jwt);
+  localStorage.removeItem('auth-mode');
+  localStorage.removeItem('user');
+
+  const res = await fetch(`/v1/customer?emailAddress=${email}`, {
+    headers: { Authorization: `Bearer ${jwt}` },
+  });
+  const user = await res.json();
+  delete user.idNumber;
+  delete user.customerAccounts;
+
+  if (guestUserId) {
+    const accountUserId = await getProfileId();
+    if (accountUserId) {
+      await mergeGuestWishlist(guestUserId, accountUserId);
+    }
+
+    // The guest identity has served its purpose now that its wishlist is merged.
+    try {
+      await deleteUser(guestUser);
+    } catch (error) {
+      console.warn('Failed to delete guest identity after login:', error);
+    }
+  }
 }
 
 export async function validateToken() {

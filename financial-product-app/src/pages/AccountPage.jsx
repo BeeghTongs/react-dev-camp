@@ -8,6 +8,7 @@ import { auth, storage } from '../services/firebase';
 import { validateToken, clearGuestWishlist } from '../services/authService';
 import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
+import LoginModal from '../components/LoginModal';
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export default function AccountPage() {
   const [profile, setProfile] = useState(null);
   const [kycStatus, setKycStatus] = useState(isGuest ? 'none' : 'loading');
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // 1. Validate token
   useEffect(() => {
@@ -156,7 +158,7 @@ export default function AccountPage() {
             <button
               type="button"
               className="account-card__signout-button"
-              onClick={() => navigate('/login')}
+              onClick={() => setShowLoginModal(true)}
             >
               Sign in
             </button>
@@ -199,6 +201,13 @@ export default function AccountPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {showLoginModal && (
+        <LoginModal
+          onClose={() => setShowLoginModal(false)}
+          onSuccess={() => setShowLoginModal(false)}
+        />
       )}
     </div>
   );

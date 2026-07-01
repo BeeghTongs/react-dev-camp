@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MdFingerprint } from 'react-icons/md';
-import { guestLogin, getProfileId, mergeGuestWishlist } from '../services/authService.js';
-import { auth } from '../services/firebase.js';
-import LoginForm from '../components/LoginForm.jsx';
+import { guestLogin } from '../services/authService.js';
+import LoginModal from '../components/LoginModal.jsx';
 import './css/LoginPage.css';
 
 function LoginPage() {
@@ -17,35 +16,6 @@ function LoginPage() {
   const handleSignupClick = () => {
     navigate('/sign-up');
   };
-
-  const handleLoginSuccess = async (jwt, email) => {
-  const guestUser = auth.currentUser;
-  const guestUserId = guestUser?.isAnonymous ? guestUser.uid : null;
-
-  localStorage.setItem('jwt', jwt);
-  localStorage.removeItem('auth-mode');
-  localStorage.removeItem('user');
-
-  const res = await fetch(`/v1/customer?emailAddress=${email}`, {
-    headers: {
-      Authorization: `Bearer ${jwt}`,
-    },
-  });
-
-  const user = await res.json();
-
-  delete user.idNumber;
-  delete user.customerAccounts;
-
-  if (guestUserId) {
-    const accountUserId = await getProfileId();
-    if (accountUserId) {
-      await mergeGuestWishlist(guestUserId, accountUserId);
-    }
-  }
-
-  navigate('/list');
-};
 
   const handleCloseModal = () => {
     setShowLoginModal(false);
@@ -97,21 +67,8 @@ function LoginPage() {
         </div>
       </section>
 
-      {/* Login Modal */}
       {showLoginModal && (
-        <div
-          className="login-modal__overlay"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Login form"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) handleCloseModal();
-          }}
-        >
-          <div className="login-modal__content">
-            <LoginForm onSuccess={handleLoginSuccess} onClose={handleCloseModal} />
-          </div>
-        </div>
+        <LoginModal onClose={handleCloseModal} onSuccess={() => navigate('/list')} />
       )}
 
     </main>
