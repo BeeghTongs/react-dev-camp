@@ -4,8 +4,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { MdArrowBack, MdCheckCircle, MdLocalShipping, MdVerifiedUser } from 'react-icons/md';
 import { BsFillCameraVideoFill } from 'react-icons/bs';
 import { FaSimCard } from 'react-icons/fa';
+import { GoRepoLocked } from 'react-icons/go';
 import Header from '../components/Header';
 import BottomNav from '../components/BottomNav';
+import LoginModal from '../components/LoginModal';
 
 const PROVIDERS = [
   { id: 'vodacom', name: 'Vodacom', colour: '#e60000', available: true },
@@ -105,6 +107,16 @@ export default function DeviceContractPage() {
   );
   const [colour, setColour] = useState(MOCK.device.colours[0].name);
   const [durationMonths, setDurationMonths] = useState(selectedDevice ? 36 : durations[0].months);
+  const [showGuestModal, setShowGuestModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const isGuest = localStorage.getItem('auth-mode') === 'guest';
+
+  function handleGetDeal() {
+    if (isGuest) {
+      setShowGuestModal(true);
+    }
+  }
 
   const selectedColour = MOCK.device.colours.find((c) => c.name === colour);
   const { delivery } = MOCK;
@@ -326,10 +338,46 @@ export default function DeviceContractPage() {
       </div>
 
       <div className="dcp__sticky-cta">
-        <button className="dcp__get-deal-btn">Get this deal</button>
+        <button className="dcp__get-deal-btn" onClick={handleGetDeal}>Get this deal</button>
       </div>
 
       <BottomNav />
+
+      {showGuestModal && (
+        <div className="guest-modal-overlay" onClick={() => setShowGuestModal(false)}>
+          <div className="guest-modal" onClick={(e) => e.stopPropagation()}>
+            <GoRepoLocked className="guest-modal__icon" />
+            <h2 className="guest-modal__title">Sign in required</h2>
+            <p className="guest-modal__body">
+              You need to be logged in to get this deal.
+            </p>
+            <button
+              type="button"
+              className="guest-modal__signin"
+              onClick={() => {
+                setShowGuestModal(false);
+                setShowLoginModal(true);
+              }}
+            >
+              Sign in
+            </button>
+            <button
+              type="button"
+              className="guest-modal__dismiss"
+              onClick={() => setShowGuestModal(false)}
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showLoginModal && (
+        <LoginModal
+          onClose={() => setShowLoginModal(false)}
+          onSuccess={() => setShowLoginModal(false)}
+        />
+      )}
     </div>
   );
 }

@@ -5,6 +5,7 @@ import ProductListCard from '../components/ProductListCard';
 import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
 import DiscountBadge from '../components/DiscountBadge';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const categoryFilters = ['All', 'Insurance', 'Investments', 'Accounts'];
 
@@ -12,6 +13,7 @@ function GuestListPage() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [activeFilter, setActiveFilter] = useState('All');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
@@ -34,6 +36,10 @@ function GuestListPage() {
         console.error('Failed to load products:', error);
         if (active) {
           setProducts([]);
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
         }
       }
     }
@@ -105,7 +111,9 @@ function GuestListPage() {
                 </div>
             </section>
 
-          {filteredProducts.length === 0 ? (
+          {loading ? (
+            <LoadingSpinner label="Loading products…" />
+          ) : filteredProducts.length === 0 ? (
             <div className="empty-state">
               No products found for “{activeFilter}”. Please choose another category.
             </div>
