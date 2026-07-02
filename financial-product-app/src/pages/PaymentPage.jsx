@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import BottomNav from '../components/BottomNav';
 import OrderSummary from '../components/OrderSummary';
 import PaymentMethod from '../components/Payment Method';
+import LoadingSpinner from '../components/LoadingSpinner';
 import { sendOrderConfirmation } from '../services/emailService';
 import { functions } from '../services/firebase';
 import { httpsCallable } from 'firebase/functions';
@@ -15,6 +16,7 @@ function PaymentPage() {
   const location = useLocation();
   const deal = location.state;
   const [paid, setPaid] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [contractUrl, setContractUrl] = useState(null);
   const [customerEmail, setCustomerEmail] = useState(null);
   const [customerId, setCustomerId] = useState(null);
@@ -87,6 +89,8 @@ async function handleCheckout() {
   };
 
   try {
+    setIsProcessing(true);
+
     // 1. Generate contract PDF
     const generateContract = httpsCallable(functions, 'generateContract');
     const result = await generateContract({ order });
@@ -103,6 +107,8 @@ async function handleCheckout() {
 
   } catch (error) {
     console.error('Error during checkout:', error);
+  } finally {
+    setIsProcessing(false);
   }
 }
 
@@ -117,7 +123,11 @@ async function handleCheckout() {
           <h1 className="payment-page__title">Pay Upfront</h1>
         </div>
 
-        {paid ? (
+        {isProcessing ? (
+          <div className="payment-page__processing">
+            <LoadingSpinner label="Processing your payment…" />
+          </div>
+        ) : paid ? (
           <div className="payment-page__success">
             <MdCheckCircle className="payment-page__success-icon" />
             <h2>Payment successful</h2>
