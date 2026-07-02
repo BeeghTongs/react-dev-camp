@@ -19,6 +19,7 @@ import CustomerTypePage from './pages/CustomerTypePage';
 import CartPage from './pages/CartPage';
 import DeviceContractPage from './pages/DeviceContractPage';
 import DeviceList from './pages/DeviceList';
+import PaymentPage from './pages/PaymentPage';
 
 function App() {
   return (
@@ -92,6 +93,11 @@ function App() {
         <Route path="/devices" element={
           <RequireAuth>
             <DeviceList />
+          </RequireAuth>
+        } />
+        <Route path="/payment" element={
+          <RequireAuth allowGuest={false}>
+            <PaymentPage />
           </RequireAuth>
         } />
       </Routes>

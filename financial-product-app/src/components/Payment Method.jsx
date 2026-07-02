@@ -1,7 +1,7 @@
 import './css/PaymentMethod.css';
 import { FaPaypal, FaBitcoin, FaCcMastercard } from 'react-icons/fa';
 
-function PaymentMethod({ hasItems }) {
+function PaymentMethod({ hasItems, onCheckout }) {
   return (
     <section className="cart-panel">
       <h3 className="cart-panel__title">Payment Method</h3>
@@ -19,7 +19,7 @@ function PaymentMethod({ hasItems }) {
           <FaBitcoin />
         </div>
       </div>
-      <button className="cart-panel__checkout-btn" disabled={!hasItems}>
+      <button className="cart-panel__checkout-btn" disabled={!hasItems} onClick={onCheckout}>
         Check Out
       </button>
     </section>

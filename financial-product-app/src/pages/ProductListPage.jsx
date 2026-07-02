@@ -5,6 +5,7 @@ import ProductListCard from '../components/ProductListCard';
 import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
 import DiscountBadge from '../components/DiscountBadge';
+import LoadingSpinner from '../components/LoadingSpinner';
 import { validateToken } from '../services/authService';
 
 const recommendedProducts = [
@@ -41,6 +42,7 @@ function ProductListPage() {
   const navigate = useNavigate();
   const [sessionChecked, setSessionChecked] = useState(false);
   const [newArrivals, setNewArrivals] = useState([]);
+  const [newArrivalsLoading, setNewArrivalsLoading] = useState(true);
 
   useEffect(() => {
     validateToken().then((valid) => {
@@ -82,6 +84,10 @@ function ProductListPage() {
         if (active) {
           setNewArrivals([]);
         }
+      } finally {
+        if (active) {
+          setNewArrivalsLoading(false);
+        }
       }
     }
 
@@ -92,7 +98,13 @@ function ProductListPage() {
     };
   }, [sessionChecked]);
 
-  if (!sessionChecked) return null;
+  if (!sessionChecked) {
+    return (
+      <div className="product-list-page">
+        <LoadingSpinner label="Loading…" />
+      </div>
+    );
+  }
 
   const formatPrice = (price) => {
     if (typeof price === 'number') {
@@ -148,18 +160,22 @@ function ProductListPage() {
               View All
             </button>
           </div>
-          <div className="new-arrivals">
-            {newArrivals.map((product) => (
-              <ProductListCard
-                id={product.id}
-                key={product.id}
-                title={product.name}
-                price={formatPrice(product.price)}
-                onClick={() => navigate(`/products/${product.id}`)}
-                className="product-card"
-              />
-            ))}
-          </div>
+          {newArrivalsLoading ? (
+            <LoadingSpinner label="Loading new arrivals…" />
+          ) : (
+            <div className="new-arrivals">
+              {newArrivals.map((product) => (
+                <ProductListCard
+                  id={product.id}
+                  key={product.id}
+                  title={product.name}
+                  price={formatPrice(product.price)}
+                  onClick={() => navigate(`/products/${product.id}`)}
+                  className="product-card"
+                />
+              ))}
+            </div>
+          )}
         </section>
       </main>
         <BottomNav />

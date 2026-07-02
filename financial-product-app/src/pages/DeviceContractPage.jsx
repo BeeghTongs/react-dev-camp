@@ -112,17 +112,30 @@ export default function DeviceContractPage() {
 
   const isGuest = localStorage.getItem('auth-mode') === 'guest';
 
-  function handleGetDeal() {
-    if (isGuest) {
-      setShowGuestModal(true);
-    }
-  }
-
   const selectedColour = MOCK.device.colours.find((c) => c.name === colour);
   const { delivery } = MOCK;
   const duration = durations.find((d) => d.months === durationMonths);
   const monthlyTotal = duration.pricePerMonth;
   const { plan, includes } = PROVIDER_PLANS[provider] ?? PROVIDER_PLANS.vodacom;
+
+  function handleGetDeal() {
+    if (isGuest) {
+      setShowGuestModal(true);
+      return;
+    }
+
+    navigate('/payment', {
+      state: {
+        deviceName,
+        colour,
+        providerName: PROVIDERS.find((p) => p.id === provider)?.name,
+        planName: plan.name,
+        durationMonths: duration.months,
+        monthlyTotal,
+        deliveryFee: delivery.fee,
+      },
+    });
+  }
 
   return (
     <div className="dcp">

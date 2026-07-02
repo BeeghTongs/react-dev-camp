@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
 import DiscountBadge from '../components/DiscountBadge';
+import LoadingSpinner from '../components/LoadingSpinner';
 import { getProductImage } from '../services/ImageService';
 import { useNavigate } from 'react-router-dom';
 import productCatalogue from '../assets/Products.json';
@@ -146,11 +147,7 @@ function ProductPage() {
             <MdArrowBack />
           </button>
         </div>
-        <div className="skeleton skeleton--hero" />
-        <div className="skeleton skeleton--title" />
-        <div className="skeleton skeleton--line" />
-        <div className="skeleton skeleton--line" />
-        <div className="skeleton skeleton--line-short" />
+        <LoadingSpinner label="Loading product…" />
       </div>
     );
   }

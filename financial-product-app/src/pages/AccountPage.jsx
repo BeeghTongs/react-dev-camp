@@ -9,6 +9,7 @@ import { validateToken, clearGuestWishlist } from '../services/authService';
 import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
 import LoginModal from '../components/LoginModal';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -74,7 +75,13 @@ export default function AccountPage() {
       .catch(() => setKycStatus('pending'));
   }, [profile?.id]);
 
-  if (!sessionChecked || (!isGuest && !profile)) return null;
+  if (!sessionChecked || (!isGuest && !profile)) {
+    return (
+      <div className="account-page">
+        <LoadingSpinner label="Loading account…" />
+      </div>
+    );
+  }
 
   const displayName = profile ? `${profile.firstName} ${profile.lastName}` : null;
   const initials = profile

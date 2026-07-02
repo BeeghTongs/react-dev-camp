@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Subscription from '../components/Subscription';
 import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
+import LoadingSpinner from '../components/LoadingSpinner';
 import { validateToken } from '../services/authService';
 
 const mockSubscriptions = [
@@ -84,7 +85,13 @@ function SubscriptionsPage() {
     return () => controller.abort();
   }, [sessionChecked]);
 
-  if (!sessionChecked) return null;
+  if (!sessionChecked) {
+    return (
+      <div className="subscriptions-page">
+        <LoadingSpinner label="Loading subscriptions…" />
+      </div>
+    );
+  }
 
   const totalMonthly = subscriptions.reduce((sum, s) => sum + (s.product?.[0]?.price ?? 0), 0);
 
