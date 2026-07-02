@@ -20,8 +20,6 @@ function PaymentPage() {
   const [customerId, setCustomerId] = useState(null);
   const [customerName, setCustomerName] = useState(null);
 
-  // Order confirmation needs the account holder's email — the app has no shared
-  // profile hook, so fetch it the same way AccountPage does.
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
     if (!jwt) return;
