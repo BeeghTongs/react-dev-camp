@@ -112,6 +112,27 @@
   filter: brightness(1.08);
 }
 
+.payment-page__contract-btn {
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  color: #1768d6;
+  border: 1.5px solid #1768d6;
+  border-radius: 999px;
+  padding: 12px 32px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.payment-page__contract-btn:hover {
+  background: #eff6ff;
+}
+
 @media (min-width: 768px) {
   .payment-page__inner {
     padding: 32px 40px 48px;

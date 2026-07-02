@@ -24,7 +24,7 @@ function OrderSummary({ subtotal }) {
         </div> */}
         <div className="cart-panel__row cart-panel__row--total">
           <span>Total</span>
-          <span>R{total.toFixed(2)}/mo</span>
+          <span>R{total.toFixed(2)}</span>
         </div>
       </div>
     </section>

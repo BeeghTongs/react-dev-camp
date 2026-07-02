@@ -1,7 +1,7 @@
 import './css/PaymentPage.css';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MdArrowBack, MdCheckCircle } from 'react-icons/md';
+import { MdArrowBack, MdCheckCircle, MdDownload } from 'react-icons/md';
 import Header from '../components/Header';
 import BottomNav from '../components/BottomNav';
 import OrderSummary from '../components/OrderSummary';
@@ -15,8 +15,10 @@ function PaymentPage() {
   const location = useLocation();
   const deal = location.state;
   const [paid, setPaid] = useState(false);
+  const [contractUrl, setContractUrl] = useState(null);
   const [customerEmail, setCustomerEmail] = useState(null);
   const [customerId, setCustomerId] = useState(null);
+  const [customerName, setCustomerName] = useState(null);
 
   // Order confirmation needs the account holder's email — the app has no shared
   // profile hook, so fetch it the same way AccountPage does.
@@ -34,12 +36,14 @@ function PaymentPage() {
         if (active) {
           setCustomerEmail(data?.email ?? null);
           setCustomerId(data?.id ?? null);
+          setCustomerName(data ? `${data.firstName ?? ''} ${data.lastName ?? ''}`.trim() || null : null);
         }
       })
       .catch(() => {
         if (active) {
           setCustomerEmail(null);
           setCustomerId(null);
+          setCustomerName(null);
         }
       });
 
@@ -66,8 +70,6 @@ function PaymentPage() {
   const { deviceName, colour, providerName, planName, durationMonths, monthlyTotal, deliveryFee } = deal;
 
 async function handleCheckout() {
-  setPaid(true);
-
   const orderId = `ORD-${customerId}${Date.now()}`;
 
   // Build the order object once, use everywhere
@@ -75,6 +77,7 @@ async function handleCheckout() {
     id: orderId,
     customerEmail,
     customerId,
+    customerName,
     deviceName,
     colour,
     providerName,
@@ -89,7 +92,6 @@ async function handleCheckout() {
     // 1. Generate contract PDF
     const generateContract = httpsCallable(functions, 'generateContract');
     const result = await generateContract({ order });
-    console.log('Contract URL:', result.data.contractUrl);
 
   /*
     sendOrderConfirmation({
@@ -98,12 +100,11 @@ async function handleCheckout() {
       contractUrl: result.data.contractUrl, // pass to email if needed
     });
 */
-    // 3. Open PDF
-    window.open(result.data.contractUrl, '_blank');
+    setContractUrl(result.data.contractUrl);
+    setPaid(true);
 
   } catch (error) {
     console.error('Error during checkout:', error);
-    setPaid(false); // revert if something fails
   }
 }
 
@@ -123,6 +124,14 @@ async function handleCheckout() {
             <MdCheckCircle className="payment-page__success-icon" />
             <h2>Payment successful</h2>
             <p>Your {deviceName} deal is confirmed. We'll be in touch about delivery.</p>
+            <a
+              className="payment-page__contract-btn"
+              href={contractUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MdDownload /> View / Download Contract
+            </a>
             <button className="payment-page__done-btn" onClick={() => navigate('/list')}>
               Done
             </button>
