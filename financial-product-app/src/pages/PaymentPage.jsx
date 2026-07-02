@@ -1,17 +1,50 @@
 import './css/PaymentPage.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MdArrowBack, MdCheckCircle } from 'react-icons/md';
 import Header from '../components/Header';
 import BottomNav from '../components/BottomNav';
 import OrderSummary from '../components/OrderSummary';
 import PaymentMethod from '../components/Payment Method';
+import { sendOrderConfirmation } from '../services/emailService';
 
 function PaymentPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const deal = location.state;
   const [paid, setPaid] = useState(false);
+  const [customerEmail, setCustomerEmail] = useState(null);
+  const [customerId, setCustomerId] = useState(null);
+
+  // Order confirmation needs the account holder's email — the app has no shared
+  // profile hook, so fetch it the same way AccountPage does.
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) return;
+
+    let active = true;
+
+    fetch('/client/v1/profile', {
+      headers: { accept: 'application/json', Authorization: `Bearer ${jwt}` },
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (active) {
+          setCustomerEmail(data?.email ?? null);
+          setCustomerId(data?.id ?? null);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setCustomerEmail(null);
+          setCustomerId(null);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   if (!deal) {
     return (
@@ -32,6 +65,16 @@ function PaymentPage() {
 
   function handleCheckout() {
     setPaid(true);
+
+    sendOrderConfirmation({
+      id: `ORD-${customerId}${Date.now()}`,
+      customerEmail,
+      deviceName,
+      monthlyPrice: monthlyTotal,
+      tax: 0,
+      deliveryFee,
+      total: monthlyTotal + deliveryFee,
+    });
   }
 
   return (
