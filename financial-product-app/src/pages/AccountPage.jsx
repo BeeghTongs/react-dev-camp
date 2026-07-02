@@ -1,15 +1,16 @@
 import './css/AccountPage.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MdFingerprint } from 'react-icons/md';
+import { MdFingerprint, MdCheckCircle } from 'react-icons/md';
 import { signOut, deleteUser } from 'firebase/auth';
-import { ref, listAll } from 'firebase/storage';
+import { ref, listAll, getDownloadURL } from 'firebase/storage';
 import { auth, storage } from '../services/firebase';
 import { validateToken, clearGuestWishlist } from '../services/authService';
 import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
 import LoginModal from '../components/LoginModal';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ReuploadModal from '../components/ReuploadModal';
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -19,8 +20,18 @@ export default function AccountPage() {
   const [sessionChecked, setSessionChecked] = useState(isGuest);
   const [profile, setProfile] = useState(null);
   const [kycStatus, setKycStatus] = useState(isGuest ? 'none' : 'loading');
+  const [kycDocuments, setKycDocuments] = useState([]);
+  const [kycDocsLoading, setKycDocsLoading] = useState(false);
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [reuploadFolder, setReuploadFolder] = useState(null);
+  const [showReuploadToast, setShowReuploadToast] = useState(false);
+
+  useEffect(() => {
+    if (!showReuploadToast) return;
+    const timer = setTimeout(() => setShowReuploadToast(false), 2500);
+    return () => clearTimeout(timer);
+  }, [showReuploadToast]);
 
   // 1. Validate token
   useEffect(() => {
@@ -63,17 +74,56 @@ export default function AccountPage() {
       });
   }, [sessionChecked, isGuest, navigate]);
 
-  // 3. Check KYC storage once we have the profile id
+  // 3. Check KYC storage once we have the profile id, and load the uploaded
+  // documents themselves so the user can view what was submitted.
   useEffect(() => {
     if (!profile?.id) return;
 
-    listAll(ref(storage, `kyc/${profile.id}`))
-      .then((result) => {
+    const kycRef = ref(storage, `kyc/${profile.id}`);
+
+    listAll(kycRef)
+      .then(async (result) => {
         const hasDocuments = result.prefixes.length > 0 || result.items.length > 0;
         setKycStatus(hasDocuments ? 'uploaded' : 'pending');
+        if (!hasDocuments) return;
+
+        setKycDocsLoading(true);
+        try {
+          const folderRefs = result.prefixes.length > 0 ? result.prefixes : [kycRef];
+          const folderResults = await Promise.all(folderRefs.map((folderRef) => listAll(folderRef)));
+          const itemRefs = result.prefixes.length > 0
+            ? folderResults.flatMap((folderResult) => folderResult.items)
+            : result.items;
+
+          const docs = await Promise.all(
+            itemRefs.map(async (itemRef) => ({
+              path: itemRef.fullPath,
+              name: itemRef.name,
+              folder: itemRef.parent?.name,
+              url: await getDownloadURL(itemRef),
+            }))
+          );
+          setKycDocuments(docs);
+        } catch (error) {
+          console.error('[AccountPage] Failed to load KYC documents:', error);
+        } finally {
+          setKycDocsLoading(false);
+        }
       })
       .catch(() => setKycStatus('pending'));
   }, [profile?.id]);
+
+  const kycFolderLabel = (folder) => {
+    if (folder === 'proof-of-residence') return 'Proof of residence';
+    if (folder === 'selfie') return 'Selfie';
+    return folder;
+  };
+
+  const handleDocumentReuploaded = (doc) => {
+    setKycDocuments((current) => [...current.filter((entry) => entry.folder !== doc.folder), doc]);
+    setReuploadFolder(null);
+    setShowReuploadToast(true);
+  };
 
   if (!sessionChecked || (!isGuest && !profile)) {
     return (
@@ -152,8 +202,39 @@ export default function AccountPage() {
             </button>
           )}
           {kycStatus === 'uploaded' && (
-            <div className="account-card__kyc-badge">
-              Documents submitted — verification in progress
+            <div className="account-card__kyc-section">
+              <div className="account-card__kyc-badge">
+                Documents submitted — verification in progress
+              </div>
+
+              {kycDocsLoading ? (
+                <p className="account-card__kyc-docs-loading">Loading your documents…</p>
+              ) : kycDocuments.length > 0 ? (
+                <ul className="account-card__kyc-doc-list">
+                  {kycDocuments.map((doc) => (
+                    <li key={doc.folder} className="account-card__kyc-doc-item">
+                      <span className="account-card__kyc-doc-name">{kycFolderLabel(doc.folder)}</span>
+                      <span className="account-card__kyc-doc-item-actions">
+                        <a
+                          className="account-card__kyc-doc-view"
+                          href={doc.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          View
+                        </a>
+                        <button
+                          type="button"
+                          className="account-card__kyc-doc-reupload"
+                          onClick={() => setReuploadFolder(doc.folder)}
+                        >
+                          Reupload
+                        </button>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           )}
           {kycStatus === 'loading' && (
@@ -224,6 +305,23 @@ export default function AccountPage() {
           onClose={() => setShowLoginModal(false)}
           onSuccess={() => setShowLoginModal(false)}
         />
+      )}
+
+      {reuploadFolder && (
+        <ReuploadModal
+          userId={profile.id}
+          documentType={reuploadFolder}
+          documentLabel={kycFolderLabel(reuploadFolder)}
+          onClose={() => setReuploadFolder(null)}
+          onUploaded={handleDocumentReuploaded}
+        />
+      )}
+
+      {showReuploadToast && (
+        <div className="account-page-toast" role="status">
+          <MdCheckCircle className="account-page-toast__icon" />
+          Document reuploaded successfully
+        </div>
       )}
     </div>
   );
