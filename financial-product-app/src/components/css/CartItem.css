@@ -54,18 +54,12 @@
   border-color: #9ca3af;
 }
 
-.cart-item__price {
-  font-size: 15px;
-  font-weight: 700;
-  color: #0f172a;
+.cart-item__date-added {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
   text-align: right;
   white-space: nowrap;
-}
-
-.cart-item__price-period {
-  font-size: 11px;
-  font-weight: 400;
-  color: #94a3b8;
 }
 
 .cart-item__remove {
@@ -103,7 +97,7 @@
     font-size: 12px;
   }
 
-  .cart-item__price {
-    font-size: 13px;
+  .cart-item__date-added {
+    font-size: 11px;
   }
 }

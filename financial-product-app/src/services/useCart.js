@@ -26,10 +26,13 @@ export function useCart() {
         const data = d.data();
         const pid = data.productId;
         if (!grouped[pid]) {
-          grouped[pid] = { productId: pid, name: data.name, unitPrice: data.price, quantity: 0, docIds: [] };
+          grouped[pid] = { productId: pid, name: data.name, unitPrice: data.price, quantity: 0, docIds: [], addedAt: null };
         }
         grouped[pid].quantity += 1;
         grouped[pid].docIds.push(d.id);
+        if (data.addedAt && (!grouped[pid].addedAt || data.addedAt.toMillis() < grouped[pid].addedAt.toMillis())) {
+          grouped[pid].addedAt = data.addedAt;
+        }
       });
       setItems(Object.values(grouped));
       setLoading(false);

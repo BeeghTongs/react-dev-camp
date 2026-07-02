@@ -46,11 +46,7 @@
   grid-column: span 2;
 }
 
-.cart-page__th--qty {
-  text-align: center;
-}
-
-.cart-page__th--price {
+.cart-page__th--date {
   text-align: right;
 }
 
@@ -177,6 +173,7 @@
   }
 
   .cart-page__table-header {
-    display: none;
+    grid-template-columns: 56px 1fr 96px 72px 28px;
+    gap: 8px;
   }
 }

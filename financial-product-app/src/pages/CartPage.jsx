@@ -1,5 +1,6 @@
 import './css/CartPage.css';
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import Header from '../components/Header';
 import BottomNav from '../components/BottomNav';
@@ -10,6 +11,7 @@ import { getProductImage } from '../services/ImageService';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 function CartPage() {
+  const navigate = useNavigate();
   const { items, loading, remove, clearCart } = useCart();
   const [showConfirm, setShowConfirm] = useState(false);
   const [images, setImages] = useState({});
@@ -44,7 +46,12 @@ function CartPage() {
             <LoadingSpinner label="Loading your wishlist…" />
           ) : items.length > 0 ? (
             <>
-              <div className="cart-page__table-header"/>
+              <div className="cart-page__table-header">
+                <span className="cart-page__th--product">Product</span>
+                <span aria-hidden="true" />
+                <span className="cart-page__th--date">Date Added</span>
+                <span aria-hidden="true" />
+              </div>
 
               <div className="cart-page__items">
                 {items.map((item) => (
@@ -52,8 +59,10 @@ function CartPage() {
                     key={item.productId}
                     image={images[item.productId]}
                     name={item.name}
-                    price={item.unitPrice}
-                    onEnquire={() => {}}
+                    dateAdded={item.addedAt}
+                    onEnquire={() => {
+                      if (item.name?.toLowerCase() === 'device contract') navigate('/devices');
+                    }}
                     onRemove={() => remove(item.productId)}
                   />
                 ))}
@@ -73,8 +82,8 @@ function CartPage() {
         </div>
 
         <div className="cart-page__right">
-          <OrderSummary subtotal={subtotal} />
-          <PaymentMethod hasItems={items.length > 0} />
+          {/* <OrderSummary subtotal={subtotal} /> */}
+          {/* <PaymentMethod hasItems={items.length > 0} /> */}
         </div>
 
       </div>
