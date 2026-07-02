@@ -29,18 +29,13 @@ exports.generateContract = onCall(async (request) => {
     doc.fontSize(12).text(`Reference: ${order.id}`);
     doc.text(`Date: ${new Date().toLocaleDateString()}`);
     doc.moveDown();
-    doc.text(`Customer: ${order.customerName}`);
+    doc.text(`Customer: ${order.customerName || order.customerEmail || "N/A"}`);
     doc.text(`Email: ${order.customerEmail}`);
     doc.moveDown();
     doc.text(`Device: ${order.deviceName}`);
     doc.text(`Contract Duration: ${order.contractMonths} months`);
     doc.text(`Monthly Instalment: R${order.monthlyPrice}`);
     doc.text(`Deposit Paid: R${order.deposit}`);
-    doc.moveDown();
-    doc.fontSize(10).fillColor("grey").text(
-        "By proceeding with this order, the customer agrees to the terms and conditions.",
-    );
-
     doc.end();
   });
 
@@ -55,11 +50,11 @@ exports.generateContract = onCall(async (request) => {
   await file.makePublic();
   const downloadUrl = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
 
-  // Save contract URL back to Firestore
+  // Save the order and contract URL to Firestore (doc may not exist yet)
   await admin.firestore()
       .collection("orders")
       .doc(order.id)
-      .update({contractUrl: downloadUrl});
+      .set({...order, contractUrl: downloadUrl}, {merge: true});
 
   return {success: true, contractUrl: downloadUrl};
 });
