@@ -163,7 +163,7 @@ async function handleCheckout() {
             </div>
 
             <div className="payment-page__right">
-              <OrderSummary subtotal={monthlyTotal + deliveryFee} />
+              <OrderSummary subtotal={monthlyTotal} />
               <PaymentMethod hasItems onCheckout={handleCheckout} />
             </div>
           </div>

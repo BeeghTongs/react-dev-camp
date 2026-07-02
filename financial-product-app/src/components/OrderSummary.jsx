@@ -1,6 +1,6 @@
 import './css/OrderSummary.css';
 
-const DELIVERY = 0;
+const DELIVERY = 79;
 const TAX = 0;
 
 function OrderSummary({ subtotal }) {
@@ -12,12 +12,13 @@ function OrderSummary({ subtotal }) {
       <div className="cart-panel__summary">
         <div className="cart-panel__row">
           <span>Subtotal</span>
-          <span>R{subtotal.toFixed(2)}/mo</span>
+          <span>R{subtotal.toFixed(2)}</span>
         </div>
-        {/* <div className="cart-panel__row">
+         <div className="cart-panel__row">
           <span>Delivery</span>
           <span>R{DELIVERY.toFixed(2)}</span>
         </div>
+        {/*
         <div className="cart-panel__row">
           <span>Tax</span>
           <span>R{TAX.toFixed(2)}</span>
