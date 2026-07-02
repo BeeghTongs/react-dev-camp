@@ -1,15 +1,15 @@
-const { setGlobalOptions } = require("firebase-functions");
-const { onCall } = require("firebase-functions/v2/https");
-const { onDocumentCreated } = require("firebase-functions/v2/firestore");
+/* eslint-disable max-len */
+const {setGlobalOptions} = require("firebase-functions");
+const {onCall} = require("firebase-functions/v2/https");
+const {onDocumentCreated} = require("firebase-functions/v2/firestore");
 const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
 const PDFDocument = require("pdfkit");
 
 admin.initializeApp();
 
-setGlobalOptions({ maxInstances: 10 });
+setGlobalOptions({maxInstances: 10});
 
-// Callable function — triggered from your React app
 exports.generateContract = onCall(async (request) => {
   const order = request.data.order;
 
@@ -24,7 +24,7 @@ exports.generateContract = onCall(async (request) => {
   await new Promise((resolve) => {
     doc.on("end", resolve);
 
-    doc.fontSize(20).text("Device Contract Agreement", { align: "center" });
+    doc.fontSize(20).text("Device Contract Agreement", {align: "center"});
     doc.moveDown();
     doc.fontSize(12).text(`Reference: ${order.id}`);
     doc.text(`Date: ${new Date().toLocaleDateString()}`);
@@ -38,7 +38,7 @@ exports.generateContract = onCall(async (request) => {
     doc.text(`Deposit Paid: R${order.deposit}`);
     doc.moveDown();
     doc.fontSize(10).fillColor("grey").text(
-      "By proceeding with this order, the customer agrees to the terms and conditions."
+        "By proceeding with this order, the customer agrees to the terms and conditions.",
     );
 
     doc.end();
@@ -50,25 +50,22 @@ exports.generateContract = onCall(async (request) => {
   const bucket = admin.storage().bucket();
   const file = bucket.file(`contracts/${order.id}.pdf`);
 
-  await file.save(pdfBuffer, { contentType: "application/pdf" });
+  await file.save(pdfBuffer, {contentType: "application/pdf"});
 
-  const [downloadUrl] = await file.getSignedUrl({
-    action: "read",
-    expires: "2099-01-01",
-  });
+  await file.makePublic();
+  const downloadUrl = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
 
   // Save contract URL back to Firestore
   await admin.firestore()
-    .collection("orders")
-    .doc(order.id)
-    .update({ contractUrl: downloadUrl });
+      .collection("orders")
+      .doc(order.id)
+      .update({contractUrl: downloadUrl});
 
-  return { success: true, contractUrl: downloadUrl };
+  return {success: true, contractUrl: downloadUrl};
 });
 
 // Optional: auto-trigger when order is written to Firestore
 exports.onOrderCreated = onDocumentCreated("orders/{orderId}", async (event) => {
-  const order = event.data.data();
   const orderId = event.params.orderId;
 
   logger.info("New order created:", orderId);

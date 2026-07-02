@@ -3,6 +3,7 @@ import { getStorage } from 'firebase/storage';
 import { getAuth } from 'firebase/auth';
 import {getAnalytics, isSupported} from 'firebase/analytics';
 import { getFirestore } from "firebase/firestore";
+import { getFunctions } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -25,3 +26,4 @@ export const analyticsPromise = isSupported().then((yes) =>
 );
 
 export const db = getFirestore(app);
+export const functions = getFunctions(app);

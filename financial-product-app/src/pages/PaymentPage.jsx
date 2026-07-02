@@ -7,6 +7,8 @@ import BottomNav from '../components/BottomNav';
 import OrderSummary from '../components/OrderSummary';
 import PaymentMethod from '../components/Payment Method';
 import { sendOrderConfirmation } from '../services/emailService';
+import { functions } from '../services/firebase';
+import { httpsCallable } from 'firebase/functions';
 
 function PaymentPage() {
   const navigate = useNavigate();
@@ -63,19 +65,47 @@ function PaymentPage() {
 
   const { deviceName, colour, providerName, planName, durationMonths, monthlyTotal, deliveryFee } = deal;
 
-  function handleCheckout() {
-    setPaid(true);
+async function handleCheckout() {
+  setPaid(true);
 
+  const orderId = `ORD-${customerId}${Date.now()}`;
+
+  // Build the order object once, use everywhere
+  const order = {
+    id: orderId,
+    customerEmail,
+    customerId,
+    deviceName,
+    colour,
+    providerName,
+    planName,
+    contractMonths: durationMonths,
+    monthlyPrice: monthlyTotal,
+    deposit: deliveryFee,
+    total: monthlyTotal + deliveryFee,
+  };
+
+  try {
+    // 1. Generate contract PDF
+    const generateContract = httpsCallable(functions, 'generateContract');
+    const result = await generateContract({ order });
+    console.log('Contract URL:', result.data.contractUrl);
+
+  /*
     sendOrderConfirmation({
-      id: `ORD-${customerId}${Date.now()}`,
-      customerEmail,
-      deviceName,
-      monthlyPrice: monthlyTotal,
+      ...order,
       tax: 0,
-      deliveryFee,
-      total: monthlyTotal + deliveryFee,
+      contractUrl: result.data.contractUrl, // pass to email if needed
     });
+*/
+    // 3. Open PDF
+    window.open(result.data.contractUrl, '_blank');
+
+  } catch (error) {
+    console.error('Error during checkout:', error);
+    setPaid(false); // revert if something fails
   }
+}
 
   return (
     <div className="payment-page">
