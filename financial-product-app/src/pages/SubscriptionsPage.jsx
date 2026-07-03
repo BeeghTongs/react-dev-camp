@@ -35,7 +35,7 @@ function iconTextFromName(name) {
 }
 
 function SubscriptionsPage() {
-  const [subscriptions, setSubscriptions] = useState(mockSubscriptions);
+  const [subscriptions, setSubscriptions] = useState([]);
   const [sessionChecked, setSessionChecked] = useState(false);
   const navigate = useNavigate();
 
@@ -71,8 +71,8 @@ function SubscriptionsPage() {
         }
 
         const data = await response.json();
-         //setSubscriptions(data?.subscriptions ?? []);
-        setSubscriptions(mockSubscriptions)
+         setSubscriptions(data?.subscriptions ?? []);
+        //setSubscriptions(mockSubscriptions)
       } catch (error) {
         if (error.name !== 'AbortError') {
           console.error('Error fetching subscriptions:', error);

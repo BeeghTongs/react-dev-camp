@@ -40,6 +40,10 @@
   flex-shrink: 0;
 }
 
+.add-to-cart-toast__icon--warning {
+  color: #facc15;
+}
+
 @keyframes add-to-cart-toast-in {
   from {
     opacity: 0;

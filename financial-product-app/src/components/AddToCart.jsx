@@ -1,18 +1,25 @@
 import './css/AddToCart.css';
 import { useEffect, useState } from 'react';
-import { MdCheckCircle } from 'react-icons/md';
+import { MdCheckCircle, MdInfo } from 'react-icons/md';
 import { validateToken, getProfileId } from '../services/authService';
 import { db } from '../services/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, serverTimestamp } from 'firebase/firestore';
 
 function AddToCart({ productId, name, price }) {
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showAlreadyAdded, setShowAlreadyAdded] = useState(false);
 
   useEffect(() => {
     if (!showSuccess) return;
     const timer = setTimeout(() => setShowSuccess(false), 2500);
     return () => clearTimeout(timer);
   }, [showSuccess]);
+
+  useEffect(() => {
+    if (!showAlreadyAdded) return;
+    const timer = setTimeout(() => setShowAlreadyAdded(false), 2500);
+    return () => clearTimeout(timer);
+  }, [showAlreadyAdded]);
 
   async function handleAddToCart() {
     // Guests have no JWT to validate — they're identified by their anonymous uid instead.
@@ -31,6 +38,14 @@ function AddToCart({ productId, name, price }) {
     }
 
     try {
+      const existing = await getDocs(
+        query(collection(db, 'cart'), where('userId', '==', userId), where('productId', '==', productId))
+      );
+      if (!existing.empty) {
+        setShowAlreadyAdded(true);
+        return;
+      }
+
       await addDoc(collection(db, 'cart'), {
         productId,
         name,
@@ -54,6 +69,13 @@ function AddToCart({ productId, name, price }) {
         <div className="add-to-cart-toast" role="status">
           <MdCheckCircle className="add-to-cart-toast__icon" />
           Successfully added to wishlist
+        </div>
+      )}
+
+      {showAlreadyAdded && (
+        <div className="add-to-cart-toast" role="status">
+          <MdInfo className="add-to-cart-toast__icon add-to-cart-toast__icon--warning" />
+          Already added to wishlist
         </div>
       )}
     </>

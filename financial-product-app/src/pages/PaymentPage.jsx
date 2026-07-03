@@ -10,6 +10,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { sendOrderConfirmation } from '../services/emailService';
 import { functions } from '../services/firebase';
 import { httpsCallable } from 'firebase/functions';
+import { useCart } from '../services/useCart';
 
 function PaymentPage() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ function PaymentPage() {
   const [customerEmail, setCustomerEmail] = useState(null);
   const [customerId, setCustomerId] = useState(null);
   const [customerName, setCustomerName] = useState(null);
+  const { items: wishlistItems, remove: removeFromWishlist } = useCart();
 
   useEffect(() => {
     const jwt = localStorage.getItem('jwt');
@@ -95,15 +97,23 @@ async function handleCheckout() {
     const generateContract = httpsCallable(functions, 'generateContract');
     const result = await generateContract({ order });
 
-  /*
+  
     sendOrderConfirmation({
       ...order,
       tax: 0,
       contractUrl: result.data.contractUrl, // pass to email if needed
     });
-*/
+
     setContractUrl(result.data.contractUrl);
     setPaid(true);
+
+    // Purchase complete — drop the matching "Device Contract" entry from the wishlist.
+    const purchasedWishlistItem = wishlistItems.find(
+      (item) => item.name?.toLowerCase() === 'device contract'
+    );
+    if (purchasedWishlistItem) {
+      removeFromWishlist(purchasedWishlistItem.productId);
+    }
 
   } catch (error) {
     console.error('Error during checkout:', error);
