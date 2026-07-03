@@ -9,12 +9,15 @@ import {
 import { GoRepoLocked } from "react-icons/go";
 import { useLocation, useNavigate } from 'react-router-dom';
 import LoginModal from './LoginModal';
+import { useCart } from '../services/useCart';
 
 function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
   const [showGuestModal, setShowGuestModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const { items: wishlistItems } = useCart();
+  const wishlistCount = wishlistItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const isGuest = localStorage.getItem('auth-mode') === 'guest';
 
@@ -68,7 +71,12 @@ function BottomNav() {
         className={`bottom-nav__item${location.pathname === '/cart' ? ' bottom-nav__item--active' : ''}`}
         onClick={() => navigate('/cart')}
       >
-        <MdFavoriteBorder />
+        <span className="bottom-nav__icon-wrap">
+          <MdFavoriteBorder />
+          {wishlistCount > 0 && (
+            <span className="bottom-nav__badge">{wishlistCount > 99 ? '99+' : wishlistCount}</span>
+          )}
+        </span>
         Wishlist
       </button>
       <button
