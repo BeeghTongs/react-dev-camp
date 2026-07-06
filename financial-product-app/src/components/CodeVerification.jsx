@@ -6,6 +6,7 @@ import { trackEvent } from '../services/analyticsService.js'
 function CodeVerification({ email, onBack, onVerified, onResend, isLoading }) {
   const [codeDigits, setCodeDigits] = useState(Array(6).fill(''))
   const [verificationError, setVerificationError] = useState('')
+  const [isVerifying, setIsVerifying] = useState(false)
   const codeInputsRef = useRef([])
 
   const handleDigitChange = (index) => (event) => {
@@ -46,7 +47,7 @@ function CodeVerification({ email, onBack, onVerified, onResend, isLoading }) {
     if (nextInput) nextInput.focus()
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const code = codeDigits.join('');
@@ -61,17 +62,22 @@ function CodeVerification({ email, onBack, onVerified, onResend, isLoading }) {
       return;
     }
 
-   const isValid = verifyCode(code, email);
+    setIsVerifying(true)
+    try {
+      const isValid = await verifyCode(code, email);
 
-    if (!isValid) {
-      setVerificationError('Invalid or expired verification code. Please request a new code.');
-      trackEvent('sign_up_otp_failed', { reason: 'invalid_code' })
-      return;
+      if (!isValid) {
+        setVerificationError('Invalid or expired verification code. Please request a new code.');
+        trackEvent('sign_up_otp_failed', { reason: 'invalid_code' })
+        return;
+      }
+
+      trackEvent('sign_up_otp_verified')
+
+      onVerified?.(code);
+    } finally {
+      setIsVerifying(false)
     }
-
-     trackEvent('sign_up_otp_verified')
-
-    onVerified?.(code);
   };
 
   
@@ -126,7 +132,7 @@ const handleResend = async () => {
               onChange={handleDigitChange(index)}
               onKeyDown={handleKeyDown(index)}
               className="code-verification__code-input"
-              disabled={isLoading}
+              disabled={isLoading || isVerifying}
             />
           ))}
         </div>
@@ -144,8 +150,8 @@ const handleResend = async () => {
           </button>
         </p>
 
-        <button type="submit" className="code-verification__submit" disabled={isLoading}>
-          {isLoading ? 'Verifying…' : 'Verify code'}
+        <button type="submit" className="code-verification__submit" disabled={isLoading || isVerifying}>
+          {isLoading || isVerifying ? 'Verifying…' : 'Verify code'}
         </button>
       </form>
     </div>
