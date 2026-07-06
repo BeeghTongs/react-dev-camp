@@ -8,6 +8,7 @@ import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
 import mockInsuranceImage from '../assets/mockInsurance.jpg';
 import productCatalogue from '../assets/Products.json';
+import { useKycGate } from '../services/useKycGate';
 
 // Individual mock covers are quoted as the product's base premium plus an
 // add-on, so no mock price can ever fall below the actual listed product price.
@@ -38,6 +39,7 @@ export default function ShortTermInsuranceList() {
   const navigate = useNavigate();
   const location = useLocation();
   const [search, setSearch] = useState('');
+  const { requireVerification, modal } = useKycGate('You need to be logged in to enquire about this product.');
 
   const segment = location.state?.segment ?? null;
   const showRetail = segment !== 'Commercial';
@@ -77,6 +79,7 @@ export default function ShortTermInsuranceList() {
                   imageUrl={mockInsuranceImage}
                   title={item.name}
                   price={`R${item.pricePerMonth} PM`}
+                  onClick={() => requireVerification()}
                 />
               ))}
             </div>
@@ -93,6 +96,7 @@ export default function ShortTermInsuranceList() {
                   imageUrl={mockInsuranceImage}
                   title={item.name}
                   price={`R${item.pricePerMonth} PM`}
+                  onClick={() => requireVerification()}
                 />
               ))}
             </div>
@@ -105,6 +109,7 @@ export default function ShortTermInsuranceList() {
       </div>
 
       <BottomNav />
+      {modal}
     </div>
   );
 }

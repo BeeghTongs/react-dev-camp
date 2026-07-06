@@ -8,6 +8,7 @@ import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
 import mockInvestmentImage from '../assets/mockInvestment.jpg';
 import productCatalogue from '../assets/Products.json';
+import { useGuestGate } from '../services/useGuestGate';
 
 // Individual mock investments are quoted as the product's base amount plus an
 // add-on, so no mock price can ever fall below the actual listed product price.
@@ -29,6 +30,7 @@ const INVESTMENTS = [
 export default function VIPInvestmentList() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
+  const { requireAuth, modal } = useGuestGate('You need to be logged in to enquire about this product.');
 
   const query = search.trim().toLowerCase();
   const investments = INVESTMENTS.filter((d) => d.name.toLowerCase().includes(query));
@@ -58,6 +60,7 @@ export default function VIPInvestmentList() {
                 imageUrl={mockInvestmentImage}
                 title={item.name}
                 price={`R${item.price}`}
+                onClick={() => requireAuth()}
               />
             ))}
           </div>
@@ -67,6 +70,7 @@ export default function VIPInvestmentList() {
       </div>
 
       <BottomNav />
+      {modal}
     </div>
   );
 }
