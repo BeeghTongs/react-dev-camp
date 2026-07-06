@@ -21,6 +21,8 @@ import DeviceContractPage from './pages/DeviceContractPage';
 import DeviceList from './pages/DeviceList';
 import PaymentPage from './pages/PaymentPage';
 import OrdersPage from './pages/OrdersPage';
+import ShortTermInsuranceList from './pages/ShortTermInsuranceList';
+import LongTermInsuranceList from './pages/LongTermInsuranceList';
 
 function App() {
   return (
@@ -94,6 +96,16 @@ function App() {
         <Route path="/devices" element={
           <RequireAuth>
             <DeviceList />
+          </RequireAuth>
+        } />
+        <Route path="/short-term-insurance" element={
+          <RequireAuth>
+            <ShortTermInsuranceList />
+          </RequireAuth>
+        } />
+        <Route path="/long-term-insurance" element={
+          <RequireAuth>
+            <LongTermInsuranceList />
           </RequireAuth>
         } />
         <Route path="/payment" element={

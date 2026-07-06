@@ -61,7 +61,18 @@ function CartPage() {
                     name={item.name}
                     dateAdded={item.addedAt}
                     onEnquire={() => {
-                      if (item.name?.toLowerCase() === 'device contract') navigate('/devices');
+                      const name = item.name?.toLowerCase() ?? '';
+                      if (name === 'device contract') {
+                        navigate('/devices');
+                      } else if (name === 'retail short term insurance') {
+                        navigate('/short-term-insurance', { state: { segment: 'Retail' } });
+                      } else if (name === 'commercial short term insurance') {
+                        navigate('/short-term-insurance', { state: { segment: 'Commercial' } });
+                      } else if (name === 'retail long-term insurance') {
+                        navigate('/long-term-insurance', { state: { segment: 'Retail' } });
+                      } else if (name === 'commercial long-term insurance') {
+                        navigate('/long-term-insurance', { state: { segment: 'Commercial' } });
+                      }
                     }}
                     onRemove={() => remove(item.productId)}
                   />

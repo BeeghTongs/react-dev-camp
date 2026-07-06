@@ -143,7 +143,7 @@ function ProductPage() {
     return (
       <div className="product-page">
         <div className="page-header">
-          <button className="back-btn" onClick={() => navigate('/list')} aria-label="Back">
+          <button className="back-btn" onClick={() => navigate(-1)} aria-label="Back">
             <MdArrowBack />
           </button>
         </div>
@@ -156,7 +156,7 @@ function ProductPage() {
     return (
       <div className="product-page product-page--error">
         <p>Product not found</p>
-        <button className="back-btn" onClick={() => navigate('/list')} aria-label="Back">
+        <button className="back-btn" onClick={() => navigate(-1)} aria-label="Back">
           <MdArrowBack />
         </button>
       </div>
@@ -180,7 +180,7 @@ function ProductPage() {
   return (
     <div className="product-page">
       <div className="page-header">
-      <button className="back-btn" onClick={() => navigate(`/list`)}>
+      <button className="back-btn" onClick={() => navigate(-1)}>
         <MdArrowBack />
       </button>
         <div className="page-title">{product.name}</div>
