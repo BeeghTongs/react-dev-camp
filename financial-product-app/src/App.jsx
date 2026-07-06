@@ -23,6 +23,10 @@ import PaymentPage from './pages/PaymentPage';
 import OrdersPage from './pages/OrdersPage';
 import ShortTermInsuranceList from './pages/ShortTermInsuranceList';
 import LongTermInsuranceList from './pages/LongTermInsuranceList';
+import ShortTermInvestmentList from './pages/ShortTermInvestmentList';
+import LongTermInvestmentList from './pages/LongTermInvestmentList';
+import IslamicInvestmentList from './pages/IslamicInvestmentList';
+import VIPInvestmentList from './pages/VIPInvestmentList';
 
 function App() {
   return (
@@ -106,6 +110,26 @@ function App() {
         <Route path="/long-term-insurance" element={
           <RequireAuth>
             <LongTermInsuranceList />
+          </RequireAuth>
+        } />
+        <Route path="/short-term-investment" element={
+          <RequireAuth>
+            <ShortTermInvestmentList />
+          </RequireAuth>
+        } />
+        <Route path="/long-term-investment" element={
+          <RequireAuth>
+            <LongTermInvestmentList />
+          </RequireAuth>
+        } />
+        <Route path="/islamic-investment" element={
+          <RequireAuth>
+            <IslamicInvestmentList />
+          </RequireAuth>
+        } />
+        <Route path="/vip-investment" element={
+          <RequireAuth>
+            <VIPInvestmentList />
           </RequireAuth>
         } />
         <Route path="/payment" element={

@@ -1,0 +1,54 @@
+.investment-list {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding-bottom: 120px; /* space for BottomNav */
+}
+
+.investment-list__inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px 16px 40px;
+}
+
+.investment-list__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.investment-list__section-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin: 4px 0 16px;
+}
+
+.investment-list__empty {
+  font-size: 14px;
+  color: #64748b;
+  text-align: center;
+  margin: 32px 0;
+}
+
+.investment-list__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.investment-list__grid .product-card {
+  width: 100%;
+  min-width: 0;
+}
+
+@media (min-width: 700px) {
+  .investment-list__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1000px) {
+  .investment-list__grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}

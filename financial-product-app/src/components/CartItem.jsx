@@ -1,18 +1,24 @@
 import './css/CartItem.css';
 import { MdDeleteOutline } from 'react-icons/md';
 
-function CartItem({ image, name, dateAdded, onEnquire, onRemove }) {
+function CartItem({ image, name, dateAdded, onEnquire, onRemove, onImageClick }) {
   const formattedDate = dateAdded?.toDate
     ? dateAdded.toDate().toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })
     : '—';
 
   return (
     <div className="cart-item">
-      <div className="cart-item__image-wrap">
+      <button
+        type="button"
+        className="cart-item__image-wrap"
+        onClick={onImageClick}
+        disabled={!onImageClick}
+        aria-label={`View ${name}`}
+      >
         {image
           ? <img className="cart-item__image" src={image} alt={name} />
           : <div className="cart-item__placeholder" />}
-      </div>
+      </button>
       <div className="cart-item__info">
         <p className="cart-item__name">{name}</p>
       </div>

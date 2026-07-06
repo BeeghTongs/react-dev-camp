@@ -10,6 +10,18 @@ import { useCart } from '../services/useCart';
 import { getProductImage } from '../services/ImageService';
 import LoadingSpinner from '../components/LoadingSpinner';
 
+const ENQUIRY_ROUTES = {
+  'device contract': ['/devices'],
+  'retail short term insurance': ['/short-term-insurance', { state: { segment: 'Retail' } }],
+  'commercial short term insurance': ['/short-term-insurance', { state: { segment: 'Commercial' } }],
+  'retail long-term insurance': ['/long-term-insurance', { state: { segment: 'Retail' } }],
+  'commercial long-term insurance': ['/long-term-insurance', { state: { segment: 'Commercial' } }],
+  'short-term investment product': ['/short-term-investment'],
+  'long-term investment product': ['/long-term-investment'],
+  'islamic investment product': ['/islamic-investment'],
+  'vip investment product': ['/vip-investment'],
+};
+
 function CartPage() {
   const navigate = useNavigate();
   const { items, loading, remove, clearCart } = useCart();
@@ -60,19 +72,10 @@ function CartPage() {
                     image={images[item.productId]}
                     name={item.name}
                     dateAdded={item.addedAt}
+                    onImageClick={() => navigate(`/products/${item.productId}`)}
                     onEnquire={() => {
-                      const name = item.name?.toLowerCase() ?? '';
-                      if (name === 'device contract') {
-                        navigate('/devices');
-                      } else if (name === 'retail short term insurance') {
-                        navigate('/short-term-insurance', { state: { segment: 'Retail' } });
-                      } else if (name === 'commercial short term insurance') {
-                        navigate('/short-term-insurance', { state: { segment: 'Commercial' } });
-                      } else if (name === 'retail long-term insurance') {
-                        navigate('/long-term-insurance', { state: { segment: 'Retail' } });
-                      } else if (name === 'commercial long-term insurance') {
-                        navigate('/long-term-insurance', { state: { segment: 'Commercial' } });
-                      }
+                      const route = ENQUIRY_ROUTES[item.name?.toLowerCase() ?? ''];
+                      if (route) navigate(...route);
                     }}
                     onRemove={() => remove(item.productId)}
                   />
