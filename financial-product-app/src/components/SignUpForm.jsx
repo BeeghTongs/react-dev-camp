@@ -114,18 +114,6 @@ function SignUpForm({ onSwitchToLogin }) {
 
       localStorage.setItem('jwt', signupResult.token)
 
-      const res = await fetch(`/v1/customer?emailAddress=${formData.email}`, {
-        headers: {
-          Authorization: `Bearer ${signupResult.token}`,
-        },
-      })
-
-      const user = await res.json()
-
-      delete user.idNumber
-      delete user.customerAccounts
-
-      localStorage.setItem('user', JSON.stringify(user))
       sessionStorage.removeItem(SIGNUP_SESSION_KEY)
       sessionStorage.setItem('signup_awaiting_customer_type', '1')
       navigate('/customer-type', { replace: true })

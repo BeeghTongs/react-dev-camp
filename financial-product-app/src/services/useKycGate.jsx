@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useGuestGate } from './useGuestGate';
 import { getProfileId } from './authService';
 import { hasKycDocuments } from './uploadService';
@@ -8,6 +8,7 @@ import { hasKycDocuments } from './uploadService';
 // submitted KYC documents are sent to identity verification instead.
 export function useKycGate(message) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { requireAuth, modal } = useGuestGate(message);
 
   function requireVerification(action) {
@@ -18,7 +19,11 @@ export function useKycGate(message) {
       if (verified) {
         action?.();
       } else {
-        navigate('/identity-verification');
+        navigate('/identity-verification', {
+          state: {
+            returnTo: { pathname: location.pathname, search: location.search, state: location.state },
+          },
+        });
       }
     });
   }

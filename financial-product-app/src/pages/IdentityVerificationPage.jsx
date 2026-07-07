@@ -1,10 +1,11 @@
 import { useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { MdChevronRight,MdErrorOutline, MdRefresh } from 'react-icons/md'
 import './css/IdentityVerificationPage.css'
 import securityInfographic from '../assets/kyc.png'
 import kycSuccess from '../assets/kyc-success.png'
 import { uploadService } from '../services/uploadService'
+import { getProfileId } from '../services/authService'
 import { GoCheckCircle } from "react-icons/go";
 
 const uploadItems = [
@@ -24,6 +25,8 @@ const uploadItems = [
 
 export default function IdentityVerificationPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const returnTo = location.state?.returnTo
   const fileInputs = useRef({})
   const [files, setFiles] = useState({ residence: null, selfie: null })
   const [uploadStatus, setUploadStatus] = useState('')
@@ -45,17 +48,23 @@ export default function IdentityVerificationPage() {
     [files]
   )
 
+  // Signing up lands here without a returnTo, so completion falls through to
+  // home; arriving from an existing page (account, an insurance enquiry) sends
+  // the user back to where they were instead of always to home.
+  const goBackOrHome = () => {
+    if (returnTo?.pathname) {
+      navigate({ pathname: returnTo.pathname, search: returnTo.search }, { state: returnTo.state })
+    } else {
+      navigate('/list')
+    }
+  }
+
   const handleFileChange = (id) => (event) => {
     const file = event.target.files?.[0] ?? null
     setFiles((current) => ({ ...current, [id]: file }))
     setUploadStatus('')
     setItemStatus((current) => ({ ...current, [id]: file ? 'success' : 'idle' }))
     setUploadErrors((current) => ({ ...current, [id]: '' }))
-  }
-
-  const userIdFromLocalStorage = () => {
-    const user = JSON.parse(localStorage.getItem('user'))
-    return user?.id || null
   }
 
   const handleOpenUploadSheet = (id) => {
@@ -158,10 +167,12 @@ export default function IdentityVerificationPage() {
     setItemStatus({ residence: 'idle', selfie: 'idle' })
     setUploadErrors({ residence: '', selfie: '' })
 
-    const userId = userIdFromLocalStorage();
+    const userId = await getProfileId();
     if(!userId) {
-      setUploadStatus('User ID not found. Please log in again.');
-      setIsUploading(false);
+      localStorage.removeItem('jwt');
+      localStorage.removeItem('auth-mode');
+      localStorage.removeItem('user');
+      navigate('/login', { replace: true });
       return;
     }
     const resultStatus = {}
@@ -193,7 +204,7 @@ export default function IdentityVerificationPage() {
 
     if (allSuccess) {
       setUploadStatus('Your documents are uploaded. Verification is in progress...')
-      window.setTimeout(() => navigate('/list'), 800)
+      window.setTimeout(() => goBackOrHome(), 800)
     } else {
       setUploadStatus('One or more uploads failed. Please try again.')
     }
@@ -274,13 +285,13 @@ export default function IdentityVerificationPage() {
             className="identity-card__submit"
             disabled={!hasAllFiles || isUploading}
           >
-            {isUploading ? 'Uploading…' : 'Continue to Home'}
+            {isUploading ? 'Uploading…' : returnTo ? 'Continue' : 'Continue to Home'}
           </button>
           <button
             type="button"
             className="identity-card__secondary"
             disabled={isUploading}
-            onClick={() => navigate('/list')}
+            onClick={goBackOrHome}
           >
             Not now
           </button>

@@ -196,7 +196,7 @@ export default function AccountPage() {
             <button
               type="button"
               className="account-card__signout-button"
-              onClick={() => navigate('/identity-verification')}
+              onClick={() => navigate('/identity-verification', { state: { returnTo: { pathname: '/account' } } })}
             >
               Complete identity verification
             </button>
