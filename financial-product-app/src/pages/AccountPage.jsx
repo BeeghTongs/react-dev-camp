@@ -260,6 +260,15 @@ export default function AccountPage() {
               My Orders
             </button>
           )}
+          {!isGuest && (
+            <button
+              type="button"
+              className="account-card__signout-button account-card__signout-button--ghost"
+              onClick={() => navigate('/quotes')}
+            >
+              My Quotes
+            </button>
+          )}
           <button
             type="button"
             className="account-card__signout-button account-card__signout-button--ghost"

@@ -21,6 +21,7 @@ import DeviceContractPage from './pages/DeviceContractPage';
 import DeviceList from './pages/DeviceList';
 import PaymentPage from './pages/PaymentPage';
 import OrdersPage from './pages/OrdersPage';
+import QuotesPage from './pages/QuotesPage';
 import ShortTermInsuranceList from './pages/ShortTermInsuranceList';
 import LongTermInsuranceList from './pages/LongTermInsuranceList';
 import ShortTermInvestmentList from './pages/ShortTermInvestmentList';
@@ -146,6 +147,11 @@ function App() {
         <Route path="/orders" element={
           <RequireAuth allowGuest={false}>
             <OrdersPage />
+          </RequireAuth>
+        } />
+        <Route path="/quotes" element={
+          <RequireAuth allowGuest={false}>
+            <QuotesPage />
           </RequireAuth>
         } />
       </Routes>

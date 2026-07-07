@@ -2,6 +2,9 @@ import './css/InsuranceQuestionnaire.css';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MdArrowBack } from 'react-icons/md';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '../services/firebase';
+import { getProfileId } from '../services/authService';
 
 const CATEGORIES = [
   {
@@ -196,6 +199,8 @@ export default function InsuranceQuestionnaire() {
   const [categoryAnswers, setCategoryAnswers] = useState({});
   const [commonAnswers, setCommonAnswers] = useState({});
   const [consent, setConsent] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   useEffect(() => {
     if (!category) navigate('/list', { replace: true });
@@ -226,10 +231,33 @@ export default function InsuranceQuestionnaire() {
     setStage('common');
   }
 
-  function handleCommonSubmit(event) {
+  async function handleCommonSubmit(event) {
     event.preventDefault();
-    if (!consent) return;
-    setStage('results');
+    if (!consent || isSubmitting) return;
+
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      const customerId = await getProfileId();
+      await addDoc(collection(db, 'quotes'), {
+        customerId,
+        category,
+        categoryLabel: selectedCategory?.label ?? category,
+        subtype,
+        subtypeLabel: selectedSubtype?.label ?? null,
+        categoryAnswers,
+        commonAnswers,
+        status: 'Pending',
+        submittedAt: serverTimestamp(),
+      });
+      setStage('results');
+    } catch (error) {
+      console.error('Failed to submit insurance quote:', error);
+      setSubmitError('Something went wrong submitting your application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function handleBack() {
@@ -317,8 +345,11 @@ export default function InsuranceQuestionnaire() {
                 />
                 I consent to credit and fraud checks being performed as part of this application.
               </label>
+              {submitError && <p className="insurance-card__error">{submitError}</p>}
             </div>
-            <button type="submit" className="insurance-card__cta" disabled={!consent}>Submit</button>
+            <button type="submit" className="insurance-card__cta" disabled={!consent || isSubmitting}>
+              {isSubmitting ? 'Submitting…' : 'Submit'}
+            </button>
           </form>
         )}
 
