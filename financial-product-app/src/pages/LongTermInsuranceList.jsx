@@ -79,7 +79,9 @@ export default function LongTermInsuranceList() {
                   imageUrl={mockInsuranceImage}
                   title={item.name}
                   price={`R${item.pricePerMonth} PM`}
-                  onClick={() => requireVerification()}
+                  onClick={() => requireVerification(() => navigate('/insurance-questionnaire', {
+                    state: { category: 'retail-long-term' },
+                  }))}
                 />
               ))}
             </div>
@@ -96,7 +98,9 @@ export default function LongTermInsuranceList() {
                   imageUrl={mockInsuranceImage}
                   title={item.name}
                   price={`R${item.pricePerMonth} PM`}
-                  onClick={() => requireVerification()}
+                  onClick={() => requireVerification(() => navigate('/insurance-questionnaire', {
+                    state: { category: 'commercial-long-term' },
+                  }))}
                 />
               ))}
             </div>

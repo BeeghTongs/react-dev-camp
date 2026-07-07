@@ -22,10 +22,10 @@ const RETAIL_BASE_PRICE = getBasePrice('Retail Short Term Insurance');
 const COMMERCIAL_BASE_PRICE = getBasePrice('Commercial Short Term Insurance');
 
 const RETAIL_ITEMS = [
-  { id: 'retail-electronics', name: 'Electronics Cover', addOn: 0 },
-  { id: 'retail-household', name: 'Household Items Cover', addOn: 150 },
-  { id: 'retail-jewellery', name: 'Jewellery Cover', addOn: 80 },
-  { id: 'retail-cars', name: 'Car Insurance', addOn: 400 },
+  { id: 'retail-electronics', name: 'Electronics Cover', addOn: 0, subtype: 'gadgets' },
+  { id: 'retail-household', name: 'Household Items Cover', addOn: 150, subtype: 'home' },
+  { id: 'retail-jewellery', name: 'Jewellery Cover', addOn: 80, subtype: 'gadgets' },
+  { id: 'retail-cars', name: 'Car Insurance', addOn: 400, subtype: 'vehicle' },
 ].map((item) => ({ ...item, pricePerMonth: RETAIL_BASE_PRICE + item.addOn }));
 
 const COMMERCIAL_ITEMS = [
@@ -79,7 +79,9 @@ export default function ShortTermInsuranceList() {
                   imageUrl={mockInsuranceImage}
                   title={item.name}
                   price={`R${item.pricePerMonth} PM`}
-                  onClick={() => requireVerification()}
+                  onClick={() => requireVerification(() => navigate('/insurance-questionnaire', {
+                    state: { category: 'retail-short-term', subtype: item.subtype },
+                  }))}
                 />
               ))}
             </div>
@@ -96,7 +98,9 @@ export default function ShortTermInsuranceList() {
                   imageUrl={mockInsuranceImage}
                   title={item.name}
                   price={`R${item.pricePerMonth} PM`}
-                  onClick={() => requireVerification()}
+                  onClick={() => requireVerification(() => navigate('/insurance-questionnaire', {
+                    state: { category: 'commercial-short-term' },
+                  }))}
                 />
               ))}
             </div>

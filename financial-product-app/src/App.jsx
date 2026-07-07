@@ -27,6 +27,7 @@ import ShortTermInvestmentList from './pages/ShortTermInvestmentList';
 import LongTermInvestmentList from './pages/LongTermInvestmentList';
 import IslamicInvestmentList from './pages/IslamicInvestmentList';
 import VIPInvestmentList from './pages/VIPInvestmentList';
+import InsuranceQuestionnaire from './pages/InsuranceQuestionnaire';
 
 function App() {
   return (
@@ -130,6 +131,11 @@ function App() {
         <Route path="/vip-investment" element={
           <RequireAuth>
             <VIPInvestmentList />
+          </RequireAuth>
+        } />
+        <Route path="/insurance-questionnaire" element={
+          <RequireAuth>
+            <InsuranceQuestionnaire />
           </RequireAuth>
         } />
         <Route path="/payment" element={
