@@ -1,12 +1,16 @@
 import './css/QuoteItem.css';
+import { useNavigate } from 'react-router-dom';
 import { MdCheckCircle, MdHourglassEmpty } from 'react-icons/md';
 
-function QuoteItem({ category, categoryLabel, subtypeLabel, productName, price, submittedAt, status }) {
+function QuoteItem({ id, category, categoryLabel, subtypeLabel, productName, price, submittedAt, status, paid }) {
+  const navigate = useNavigate();
+
   const formattedDate = submittedAt?.toDate
     ? submittedAt.toDate().toLocaleDateString('en-ZA', { year: 'numeric', month: 'short', day: 'numeric' })
     : '—';
 
   const isPending = (status ?? 'Pending') === 'Pending';
+  const isApproved = status === 'Approved';
   const isInvestment = category === 'investment';
   // productName is the specific product (e.g. "Jewellery Cover"); older
   // quotes and the broad category fall back to categoryLabel.
@@ -22,15 +26,35 @@ function QuoteItem({ category, categoryLabel, subtypeLabel, productName, price, 
         )}
         <p className="quote-item__meta">Submitted {formattedDate}</p>
       </div>
-      {isPending ? (
-        <span className="quote-item__pending">
-          <MdHourglassEmpty /> Pending
-        </span>
-      ) : (
-        <span className="quote-item__complete">
-          <MdCheckCircle /> {status}
-        </span>
-      )}
+      <div className="quote-item__status">
+        {isPending ? (
+          <span className="quote-item__pending">
+            <MdHourglassEmpty /> Pending
+          </span>
+        ) : (
+          <span className="quote-item__complete">
+            <MdCheckCircle /> {status}
+          </span>
+        )}
+
+        {isApproved && (
+          paid ? (
+            <span className="quote-item__paid">
+              <MdCheckCircle /> Paid
+            </span>
+          ) : (
+            <button
+              type="button"
+              className="quote-item__pay-btn"
+              onClick={() => navigate('/quote-payment', {
+                state: { quoteId: id, title, subtypeLabel, price, category },
+              })}
+            >
+              Pay now
+            </button>
+          )
+        )}
+      </div>
     </div>
   );
 }

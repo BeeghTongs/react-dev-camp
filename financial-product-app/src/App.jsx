@@ -24,6 +24,7 @@ import OrdersPage from './pages/OrdersPage';
 import QuotesPage from './pages/QuotesPage';
 import DocumentsPage from './pages/DocumentsPage';
 import FICAPage from './pages/FICAPage';
+import QuotePaymentPage from './pages/QuotePaymentPage';
 import ShortTermInsuranceList from './pages/ShortTermInsuranceList';
 import LongTermInsuranceList from './pages/LongTermInsuranceList';
 import ShortTermInvestmentList from './pages/ShortTermInvestmentList';
@@ -164,6 +165,11 @@ function App() {
         <Route path="/fica" element={
           <RequireAuth allowGuest={false}>
             <FICAPage />
+          </RequireAuth>
+        } />
+        <Route path="/quote-payment" element={
+          <RequireAuth allowGuest={false}>
+            <QuotePaymentPage />
           </RequireAuth>
         } />
       </Routes>

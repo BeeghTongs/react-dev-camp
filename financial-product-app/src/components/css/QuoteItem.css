@@ -1,10 +1,17 @@
 .quote-item {
   display: grid;
-  grid-template-columns: 1fr 108px;
+  grid-template-columns: 1fr 128px;
   align-items: center;
   gap: 12px;
   padding: 16px 0;
   border-bottom: 1px solid #e5e7eb;
+}
+
+.quote-item__status {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
 }
 
 .quote-item:last-child {
@@ -52,6 +59,35 @@
   font-weight: 600;
 }
 
+.quote-item__paid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 34px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #16a34a;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.quote-item__pay-btn {
+  height: 34px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #1768d6 0%, #1eb8e3 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.quote-item__pay-btn:hover {
+  filter: brightness(1.06);
+}
+
 @media (max-width: 520px) {
   .quote-item {
     grid-template-columns: 1fr;
@@ -59,8 +95,17 @@
     padding: 14px 0;
   }
 
+  .quote-item__status {
+    flex-direction: row;
+  }
+
   .quote-item__pending,
-  .quote-item__complete {
-    width: 100%;
+  .quote-item__complete,
+  .quote-item__paid {
+    flex: 1;
+  }
+
+  .quote-item__pay-btn {
+    flex: 1;
   }
 }
