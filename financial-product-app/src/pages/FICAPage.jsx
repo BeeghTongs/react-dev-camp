@@ -183,7 +183,7 @@ export default function FICAPage() {
             <p className="fica-card__results-desc">
               Your FICA details are verified and we've submitted your {investmentName.toLowerCase()} quote for review.
             </p>
-            <button type="button" className="fica-card__cta" onClick={() => navigate('/quotes')}>
+            <button type="button" className="fica-card__cta" onClick={() => navigate('/quotes', { replace: true })}>
               View my quotes
             </button>
           </div>

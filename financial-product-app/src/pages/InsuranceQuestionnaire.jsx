@@ -370,7 +370,7 @@ export default function InsuranceQuestionnaire() {
             <p className="insurance-card__results-desc">
               We'll review what you've shared and be in touch with a quote shortly.
             </p>
-            <button type="button" className="insurance-card__cta" onClick={() => navigate('/list')}>
+            <button type="button" className="insurance-card__cta" onClick={() => navigate('/list', { replace: true })}>
               Done
             </button>
           </div>
