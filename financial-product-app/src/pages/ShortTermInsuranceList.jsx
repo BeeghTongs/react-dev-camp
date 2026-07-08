@@ -79,9 +79,10 @@ export default function ShortTermInsuranceList() {
                   imageUrl={mockInsuranceImage}
                   title={item.name}
                   price={`R${item.pricePerMonth} PM`}
-                  onClick={() => requireVerification(() => navigate('/insurance-questionnaire', {
-                    state: { category: 'retail-short-term', subtype: item.subtype },
-                  }))}
+                  onClick={() => requireVerification({
+                    pathname: '/insurance-questionnaire',
+                    state: { category: 'retail-short-term', subtype: item.subtype, productName: item.name, price: item.pricePerMonth },
+                  })}
                 />
               ))}
             </div>
@@ -98,9 +99,10 @@ export default function ShortTermInsuranceList() {
                   imageUrl={mockInsuranceImage}
                   title={item.name}
                   price={`R${item.pricePerMonth} PM`}
-                  onClick={() => requireVerification(() => navigate('/insurance-questionnaire', {
-                    state: { category: 'commercial-short-term' },
-                  }))}
+                  onClick={() => requireVerification({
+                    pathname: '/insurance-questionnaire',
+                    state: { category: 'commercial-short-term', productName: item.name, price: item.pricePerMonth },
+                  })}
                 />
               ))}
             </div>

@@ -27,6 +27,7 @@ export default function IdentityVerificationPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const returnTo = location.state?.returnTo
+  const continueTo = location.state?.continueTo
   const fileInputs = useRef({})
   const [files, setFiles] = useState({ residence: null, selfie: null })
   const [uploadStatus, setUploadStatus] = useState('')
@@ -54,6 +55,18 @@ export default function IdentityVerificationPage() {
   const goBackOrHome = () => {
     if (returnTo?.pathname) {
       navigate({ pathname: returnTo.pathname, search: returnTo.search }, { state: returnTo.state })
+    } else {
+      navigate('/list')
+    }
+  }
+
+  // On successful verification, continue into the flow the user was
+  // actually trying to reach (e.g. the insurance questionnaire or FICA
+  // page) rather than dropping them back on the product list.
+  const goToContinueOrHome = () => {
+    const target = continueTo ?? returnTo
+    if (target?.pathname) {
+      navigate({ pathname: target.pathname, search: target.search }, { state: target.state })
     } else {
       navigate('/list')
     }
@@ -204,7 +217,7 @@ export default function IdentityVerificationPage() {
 
     if (allSuccess) {
       setUploadStatus('Your documents are uploaded. Verification is in progress...')
-      window.setTimeout(() => goBackOrHome(), 800)
+      window.setTimeout(() => goToContinueOrHome(), 800)
     } else {
       setUploadStatus('One or more uploads failed. Please try again.')
     }

@@ -193,6 +193,12 @@ export default function InsuranceQuestionnaire() {
   const category = location.state?.category ?? null;
   const initialSubtype = location.state?.subtype ?? null;
   const needsSubtype = category === 'retail-short-term' && !initialSubtype;
+  // The specific product the user enquired about (e.g. "Jewellery Cover") —
+  // several products can share the same subtype questionnaire (jewellery and
+  // electronics both use 'gadgets'), so this is what actually identifies the
+  // quote afterwards instead of the shared, generic subtype label.
+  const productName = location.state?.productName ?? null;
+  const price = location.state?.price ?? null;
 
   const [stage, setStage] = useState(needsSubtype ? 'subtype' : 'details'); // 'intro' | 'subtype' | 'details' | 'common' | 'results'
   const [subtype, setSubtype] = useState(initialSubtype);
@@ -246,6 +252,8 @@ export default function InsuranceQuestionnaire() {
         categoryLabel: selectedCategory?.label ?? category,
         subtype,
         subtypeLabel: selectedSubtype?.label ?? null,
+        productName,
+        price,
         categoryAnswers,
         commonAnswers,
         status: 'Pending',
@@ -309,7 +317,7 @@ export default function InsuranceQuestionnaire() {
         {stage === 'details' && (
           <form className="insurance-card__form" onSubmit={handleDetailsSubmit}>
             <h2 className="insurance-card__question-title">
-              {selectedSubtype ? selectedSubtype.label : selectedCategory?.label} details
+              {productName ?? (selectedSubtype ? selectedSubtype.label : selectedCategory?.label)} details
             </h2>
             <div className="insurance-card__fields">
               {categoryFields.map((field) => (
@@ -357,7 +365,7 @@ export default function InsuranceQuestionnaire() {
           <div className="insurance-card__results">
             <span className="insurance-card__results-badge">Application received</span>
             <h2 className="insurance-card__results-title">
-              Thanks — we've got your {selectedSubtype ? selectedSubtype.label.toLowerCase() : selectedCategory?.label.toLowerCase()} details
+              Thanks — we've got your {(productName ?? (selectedSubtype ? selectedSubtype.label : selectedCategory?.label)).toLowerCase()} details
             </h2>
             <p className="insurance-card__results-desc">
               We'll review what you've shared and be in touch with a quote shortly.
