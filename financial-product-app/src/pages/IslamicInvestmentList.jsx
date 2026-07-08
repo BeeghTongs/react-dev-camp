@@ -61,7 +61,14 @@ export default function IslamicInvestmentList() {
                 imageUrl={mockInvestmentImage}
                 title={item.name}
                 price={`R${item.price}`}
-                onClick={() => requireVerification()}
+                onClick={() => requireVerification(() => navigate('/fica', {
+                  state: {
+                    investmentId: item.id,
+                    investmentName: item.name,
+                    investmentType: 'Islamic Investments',
+                    price: item.price,
+                  },
+                }))}
               />
             ))}
           </div>

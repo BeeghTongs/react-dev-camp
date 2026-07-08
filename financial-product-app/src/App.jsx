@@ -23,6 +23,7 @@ import PaymentPage from './pages/PaymentPage';
 import OrdersPage from './pages/OrdersPage';
 import QuotesPage from './pages/QuotesPage';
 import DocumentsPage from './pages/DocumentsPage';
+import FICAPage from './pages/FICAPage';
 import ShortTermInsuranceList from './pages/ShortTermInsuranceList';
 import LongTermInsuranceList from './pages/LongTermInsuranceList';
 import ShortTermInvestmentList from './pages/ShortTermInvestmentList';
@@ -158,6 +159,11 @@ function App() {
         <Route path="/documents" element={
           <RequireAuth allowGuest={false}>
             <DocumentsPage />
+          </RequireAuth>
+        } />
+        <Route path="/fica" element={
+          <RequireAuth allowGuest={false}>
+            <FICAPage />
           </RequireAuth>
         } />
       </Routes>

@@ -1,0 +1,197 @@
+.fica-card * {
+  box-sizing: border-box;
+}
+
+.fica-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(180deg, #f8fafc 0%, #e5ebf5 100%);
+}
+
+.fica-card {
+  position: relative;
+  width: min(520px, 100%);
+  background: #fafafa;
+  border-radius: 32px;
+  padding: 34px 28px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+  display: grid;
+  gap: 24px;
+}
+
+.fica-card__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  color: #0f172a;
+  transition: background 0.15s ease;
+}
+
+.fica-card__back:hover {
+  background: #e2e8f0;
+}
+
+.fica-card__form {
+  display: grid;
+  gap: 20px;
+}
+
+.fica-card__title {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #111827;
+}
+
+.fica-card__subtitle {
+  margin: 0;
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.fica-card__fields {
+  display: grid;
+  gap: 16px;
+}
+
+.fica-card__field {
+  display: grid;
+  gap: 8px;
+}
+
+.fica-card__field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.fica-card__input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f172a;
+  font-family: inherit;
+}
+
+.fica-card__input:focus-visible {
+  outline: none;
+  border-color: #cbd5e1;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.fica-card__yesno {
+  display: flex;
+  gap: 10px;
+}
+
+.fica-card__yesno-btn {
+  flex: 1;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fica-card__yesno-btn:hover {
+  border-color: #cbd5e1;
+}
+
+.fica-card__yesno-btn--selected {
+  border-color: #2563eb;
+  background: #eff6ff;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.fica-card__error {
+  margin: 0;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+.fica-card__cta {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+  color: #ffffff;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.fica-card__cta:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fica-card__verifying {
+  display: grid;
+  justify-items: center;
+  padding: 32px 0;
+}
+
+.fica-card__results {
+  display: grid;
+  gap: 16px;
+  text-align: center;
+}
+
+.fica-card__results-badge {
+  justify-self: center;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #2563eb;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.fica-card__results-title {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.3;
+  font-weight: 700;
+  color: #111827;
+}
+
+.fica-card__results-desc {
+  margin: 0;
+  color: #475569;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+@media (max-width: 520px) {
+  .fica-card {
+    padding: 26px 18px;
+  }
+
+  .fica-card__title {
+    font-size: 24px;
+  }
+}

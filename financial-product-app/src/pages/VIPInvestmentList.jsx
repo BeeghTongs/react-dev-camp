@@ -60,7 +60,14 @@ export default function VIPInvestmentList() {
                 imageUrl={mockInvestmentImage}
                 title={item.name}
                 price={`R${item.price}`}
-                onClick={() => requireVerification()}
+                onClick={() => requireVerification(() => navigate('/fica', {
+                  state: {
+                    investmentId: item.id,
+                    investmentName: item.name,
+                    investmentType: 'VIP Investments',
+                    price: item.price,
+                  },
+                }))}
               />
             ))}
           </div>
