@@ -1,16 +1,17 @@
 import './css/QuotePaymentPage.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MdArrowBack, MdCheckCircle } from 'react-icons/md';
+import { MdArrowBack, MdCheckCircle, MdDownload } from 'react-icons/md';
 import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
-import { db } from '../services/firebase';
+import { httpsCallable } from 'firebase/functions';
+import { db, functions } from '../services/firebase';
 import Header from '../components/Header';
 import BottomNav from '../components/BottomNav';
 import PaymentMethod from '../components/Payment Method';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 // Mocked gateway processing delay — mirrors the device contract checkout
-// at PaymentPage.jsx, minus the real contract-generation call.
+// at PaymentPage.jsx.
 const PROCESSING_DELAY_MS = 1500;
 
 export default function QuotePaymentPage() {
@@ -20,7 +21,41 @@ export default function QuotePaymentPage() {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [paid, setPaid] = useState(false);
+  const [contractUrl, setContractUrl] = useState(null);
   const [error, setError] = useState('');
+  const [customerEmail, setCustomerEmail] = useState(null);
+  const [customerId, setCustomerId] = useState(null);
+  const [customerName, setCustomerName] = useState(null);
+
+  useEffect(() => {
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) return;
+
+    let active = true;
+
+    fetch('/client/v1/profile', {
+      headers: { accept: 'application/json', Authorization: `Bearer ${jwt}` },
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (active) {
+          setCustomerEmail(data?.email ?? null);
+          setCustomerId(data?.id ?? null);
+          setCustomerName(data ? `${data.firstName ?? ''} ${data.lastName ?? ''}`.trim() || null : null);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setCustomerEmail(null);
+          setCustomerId(null);
+          setCustomerName(null);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   if (!quote?.quoteId) {
     return (
@@ -49,6 +84,20 @@ export default function QuotePaymentPage() {
       await new Promise((resolve) => window.setTimeout(resolve, PROCESSING_DELAY_MS));
       await updateDoc(doc(db, 'quotes', quoteId), { paid: true, paidAt: serverTimestamp() });
       setPaid(true);
+
+      // Contract generation is best-effort — the payment itself already
+      // succeeded, so a PDF failure shouldn't undo the success screen. The
+      // function also persists contractUrl on the quote doc, so it stays
+      // viewable from "My Quotes" even if this call fails here.
+      try {
+        const generateQuoteContract = httpsCallable(functions, 'generateQuoteContract');
+        const result = await generateQuoteContract({
+          quote: { id: quoteId, customerId, customerName, customerEmail, title, category, subtypeLabel, price: amount },
+        });
+        setContractUrl(result.data.contractUrl);
+      } catch (contractError) {
+        console.error('Failed to generate quote contract:', contractError);
+      }
     } catch (err) {
       console.error('Failed to process quote payment:', err);
       setError('Something went wrong processing your payment. Please try again.');
@@ -77,6 +126,16 @@ export default function QuotePaymentPage() {
             <MdCheckCircle className="quote-payment-page__success-icon" />
             <h2>Payment successful</h2>
             <p>Your {title} {isInvestment ? 'investment' : 'policy'} is now active.</p>
+            {contractUrl && (
+              <a
+                className="quote-payment-page__contract-btn"
+                href={contractUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MdDownload /> View / Download {isInvestment ? 'Certificate' : 'Policy Document'}
+              </a>
+            )}
             <button
               className="quote-payment-page__done-btn"
               onClick={() => navigate('/quotes', { replace: true })}

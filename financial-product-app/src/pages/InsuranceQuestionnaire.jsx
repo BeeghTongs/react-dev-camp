@@ -5,6 +5,16 @@ import { MdArrowBack } from 'react-icons/md';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { getProfileId } from '../services/authService';
+import { removeFromWishlistByName } from '../services/useCart';
+
+// Maps each questionnaire category to its catalogue product name (Products.json)
+// so a submitted quote can drop the matching entry from the wishlist.
+const WISHLIST_NAME_BY_CATEGORY = {
+  'retail-short-term': 'Retail Short Term Insurance',
+  'retail-long-term': 'Retail Long-Term Insurance',
+  'commercial-short-term': 'Commercial Short Term Insurance',
+  'commercial-long-term': 'Commercial Long-Term Insurance',
+};
 
 const CATEGORIES = [
   {
@@ -260,6 +270,12 @@ export default function InsuranceQuestionnaire() {
         submittedAt: serverTimestamp(),
       });
       setStage('results');
+
+      // Best-effort cleanup — the quote already went through, so a wishlist
+      // removal failure shouldn't surface as a submission error.
+      removeFromWishlistByName(customerId, WISHLIST_NAME_BY_CATEGORY[category]).catch((error) =>
+        console.error('Failed to remove wishlist entry after quote submission:', error)
+      );
     } catch (error) {
       console.error('Failed to submit insurance quote:', error);
       setSubmitError('Something went wrong submitting your application. Please try again.');
@@ -370,8 +386,8 @@ export default function InsuranceQuestionnaire() {
             <p className="insurance-card__results-desc">
               We'll review what you've shared and be in touch with a quote shortly.
             </p>
-            <button type="button" className="insurance-card__cta" onClick={() => navigate('/list', { replace: true })}>
-              Done
+            <button type="button" className="insurance-card__cta" onClick={() => navigate('/quotes', { replace: true })}>
+              View my quotes
             </button>
           </div>
         )}

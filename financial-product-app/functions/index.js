@@ -210,6 +210,94 @@ exports.generateContract = onCall(async (request) => {
   return {success: true, contractUrl: downloadUrl};
 });
 
+exports.generateQuoteContract = onCall(async (request) => {
+  const quote = request.data.quote;
+
+  logger.info("Generating contract for quote:", quote.id);
+
+  const isInvestment = quote.category === "investment";
+  const documentTitle = isInvestment ? "Investment Certificate" : "Policy Document";
+
+  // Create PDF
+  const doc = new PDFDocument({margin: 50});
+  const chunks = [];
+
+  doc.on("data", (chunk) => chunks.push(chunk));
+
+  await new Promise((resolve) => {
+    doc.on("end", resolve);
+
+    const brandBlue = "#1768d6";
+    const brandAccent = "#1eb8e3";
+    const heading = "#0f172a";
+    const body = "#374151";
+    const muted = "#64748b";
+
+    doc.image(path.join(__dirname, "assets/logo.png"), 50, 45, {width: 40});
+    doc.fillColor(brandBlue).font("Helvetica-Bold").fontSize(22)
+        .text("Insure Tech Guard", 100, 48);
+    doc.fillColor(heading).font("Helvetica").fontSize(13)
+        .text(documentTitle, 100, 76);
+
+    doc.x = doc.page.margins.left;
+    doc.y = 105;
+
+    doc.strokeColor(brandAccent).lineWidth(2)
+        .moveTo(50, doc.y).lineTo(545, doc.y).stroke();
+    doc.moveDown();
+
+    doc.font("Helvetica").fontSize(11).fillColor(muted);
+    doc.text(`Reference: ${quote.id}`);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`);
+    doc.moveDown();
+
+    doc.font("Helvetica-Bold").fontSize(13).fillColor(heading).text("Customer Details");
+    doc.font("Helvetica").fontSize(12).fillColor(body);
+    doc.text(`Name: ${quote.customerName || quote.customerEmail || "N/A"}`);
+    doc.text(`Email: ${quote.customerEmail}`);
+    doc.moveDown();
+
+    doc.font("Helvetica-Bold").fontSize(13).fillColor(heading)
+        .text(isInvestment ? "Investment Details" : "Policy Details");
+    doc.font("Helvetica").fontSize(12).fillColor(body);
+    doc.text(`Product: ${quote.title}`);
+    if (quote.subtypeLabel) {
+      doc.text(`Category: ${quote.subtypeLabel}`);
+    }
+    doc.text(isInvestment ?
+      `Initial Investment: R${quote.price}` :
+      `Monthly Premium: R${quote.price}`);
+    doc.moveDown(2);
+
+    doc.fontSize(9).fillColor(muted).text(
+        "By proceeding with this payment, the customer agrees to the terms and conditions.",
+        {align: "center"},
+    );
+
+    doc.end();
+  });
+
+  const pdfBuffer = Buffer.concat(chunks);
+
+  // Upload to Firebase Storage
+  const bucket = admin.storage().bucket();
+  const file = bucket.file(`contracts/${quote.customerId}/${quote.id}.pdf`);
+
+  await file.save(pdfBuffer, {contentType: "application/pdf"});
+
+  await file.makePublic();
+  const downloadUrl = `https://storage.googleapis.com/${bucket.name}/${file.name}`;
+
+  // Persist the contract URL on the quote itself, so it can be viewed again
+  // any time from "My Quotes" — not just right after paying.
+  await admin.firestore()
+      .collection("quotes")
+      .doc(quote.id)
+      .set({contractUrl: downloadUrl}, {merge: true});
+
+  return {success: true, contractUrl: downloadUrl};
+});
+
 // Optional: auto-trigger when order is written to Firestore
 exports.onOrderCreated = onDocumentCreated("orders/{orderId}", async (event) => {
   const orderId = event.params.orderId;

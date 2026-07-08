@@ -5,9 +5,19 @@ import { MdArrowBack } from 'react-icons/md';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../services/firebase';
 import { getProfileId } from '../services/authService';
+import { removeFromWishlistByName } from '../services/useCart';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const SOURCE_OF_FUNDS_OPTIONS = ['Salary', 'Inheritance', 'Business income', 'Savings', 'Property sale'];
+
+// Maps each investment list's title to its catalogue product name
+// (Products.json) so a submitted quote can drop the matching wishlist entry.
+const WISHLIST_NAME_BY_INVESTMENT_TYPE = {
+  'VIP Investments': 'VIP Investment Product',
+  'Long-Term Investments': 'Long-Term Investment Product',
+  'Short-Term Investments': 'Short-Term Investment Product',
+  'Islamic Investments': 'Islamic Investment Product',
+};
 
 // Mocked verification delay before the FICA check "clears" and the
 // investment quote is submitted — stands in for a real AML/compliance check.
@@ -73,6 +83,12 @@ export default function FICAPage() {
             status: 'Pending',
             submittedAt: serverTimestamp(),
           });
+
+          // Best-effort cleanup — the quote already went through, so a
+          // wishlist removal failure shouldn't surface to the user.
+          removeFromWishlistByName(customerId, WISHLIST_NAME_BY_INVESTMENT_TYPE[investmentType]).catch((error) =>
+            console.error('Failed to remove wishlist entry after quote submission:', error)
+          );
         } catch (error) {
           console.error('Failed to submit investment quote:', error);
         } finally {

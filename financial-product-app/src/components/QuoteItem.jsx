@@ -1,8 +1,8 @@
 import './css/QuoteItem.css';
 import { useNavigate } from 'react-router-dom';
-import { MdCheckCircle, MdHourglassEmpty } from 'react-icons/md';
+import { MdCheckCircle, MdDownload, MdHourglassEmpty } from 'react-icons/md';
 
-function QuoteItem({ id, category, categoryLabel, subtypeLabel, productName, price, submittedAt, status, paid }) {
+function QuoteItem({ id, category, categoryLabel, subtypeLabel, productName, price, submittedAt, status, paid, contractUrl }) {
   const navigate = useNavigate();
 
   const formattedDate = submittedAt?.toDate
@@ -39,9 +39,21 @@ function QuoteItem({ id, category, categoryLabel, subtypeLabel, productName, pri
 
         {isApproved && (
           paid ? (
-            <span className="quote-item__paid">
-              <MdCheckCircle /> Paid
-            </span>
+            <>
+              <span className="quote-item__paid">
+                <MdCheckCircle /> Paid
+              </span>
+              {contractUrl && (
+                <a
+                  className="quote-item__contract-link"
+                  href={contractUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MdDownload /> {isInvestment ? 'Certificate' : 'Policy'}
+                </a>
+              )}
+            </>
           ) : (
             <button
               type="button"

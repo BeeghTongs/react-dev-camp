@@ -88,6 +88,24 @@
   filter: brightness(1.06);
 }
 
+.quote-item__contract-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.quote-item__contract-link:hover {
+  background: #f1f5f9;
+}
+
 @media (max-width: 520px) {
   .quote-item {
     grid-template-columns: 1fr;
@@ -101,10 +119,8 @@
 
   .quote-item__pending,
   .quote-item__complete,
-  .quote-item__paid {
-    flex: 1;
-  }
-
+  .quote-item__paid,
+  .quote-item__contract-link,
   .quote-item__pay-btn {
     flex: 1;
   }

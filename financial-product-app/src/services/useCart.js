@@ -1,7 +1,19 @@
 import { useEffect, useState } from 'react';
-import { onSnapshot, collection, query, where, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { onSnapshot, collection, query, where, addDoc, deleteDoc, doc, getDocs, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
 import { getProfileId } from './authService';
+
+// One-off cleanup for flows that don't otherwise use the live cart
+// subscription (e.g. after an insurance or investment quote is submitted):
+// drops any wishlist entry matching the given catalogue product name.
+export async function removeFromWishlistByName(userId, name) {
+  if (!userId || !name) return;
+
+  const snapshot = await getDocs(
+    query(collection(db, 'cart'), where('userId', '==', userId), where('name', '==', name))
+  );
+  await Promise.all(snapshot.docs.map((d) => deleteDoc(doc(db, 'cart', d.id))));
+}
 
 export function useCart() {
   const [items, setItems] = useState([]);
