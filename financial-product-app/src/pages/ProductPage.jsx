@@ -1,6 +1,6 @@
 import './css/ProductPage.css';
 import { useEffect, useRef, useState } from 'react';
-import { MdArrowBack, MdShare } from "react-icons/md";
+import { MdArrowBack, MdShare, MdDownload } from "react-icons/md";
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
@@ -8,6 +8,7 @@ import DiscountBadge from '../components/DiscountBadge';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ShareModal from '../components/ShareModal';
 import { getProductImage } from '../services/ImageService';
+import { downloadProductPdf } from '../services/pdfService';
 import { useNavigate } from 'react-router-dom';
 import productCatalogue from '../assets/Products.json';
 
@@ -21,6 +22,7 @@ function ProductPage() {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [relatedImages, setRelatedImages] = useState({});
   const [shareOpen, setShareOpen] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
   const fetchedRelatedImageIds = useRef(new Set());
   const navigate = useNavigate();
   const readableFulfillmentRequirements = {
@@ -177,6 +179,19 @@ function ProductPage() {
 
   const shareUrl = `${window.location.origin}/products/${id}`;
 
+  async function handleDownloadPdf() {
+    if (downloadingPdf) return;
+
+    setDownloadingPdf(true);
+    try {
+      await downloadProductPdf(product, { imageUrl, requirements: requirementItems, shareUrl });
+    } catch (error) {
+      console.error('Failed to generate product PDF:', error);
+    } finally {
+      setDownloadingPdf(false);
+    }
+  }
+
   return (
     <div className="product-page">
       <div className="page-header">
@@ -184,6 +199,15 @@ function ProductPage() {
         <MdArrowBack />
       </button>
         <div className="page-title">{product.name}</div>
+        <button
+          className="download-btn"
+          onClick={handleDownloadPdf}
+          disabled={downloadingPdf}
+          aria-label="Download product details as PDF"
+        >
+          <MdDownload />
+          <span>{downloadingPdf ? 'Preparing…' : 'PDF'}</span>
+        </button>
          <button className="share-btn" onClick={() => setShareOpen(true)} aria-label="Share product">
         <MdShare />
         <span>Share</span>
