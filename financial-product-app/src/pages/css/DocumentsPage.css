@@ -1,0 +1,152 @@
+.documents-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding-bottom: 88px;
+}
+
+.documents-page__inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+  box-sizing: border-box;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 0 14px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.back-btn:hover {
+  background: #e2e8f0;
+}
+
+.documents-page__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.documents-page__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.documents-page__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  font-size: 15px;
+}
+
+.documents-page__item + .documents-page__item {
+  border-top: 1px solid #e5e7eb;
+}
+
+.documents-page__item-name {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.documents-page__item-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.documents-page__item-view {
+  color: #1768d6;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.documents-page__item-view:hover {
+  text-decoration: underline;
+}
+
+.documents-page__item-reupload {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #374151;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.documents-page__item-reupload:hover {
+  text-decoration: underline;
+}
+
+.documents-page__empty {
+  color: #64748b;
+  font-size: 15px;
+  text-align: center;
+  padding: 40px 0;
+}
+
+@media (min-width: 768px) {
+  .documents-page__inner {
+    padding: 32px 40px 48px;
+  }
+}
+
+/* ── Reupload success toast ── */
+.documents-page-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 100px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #0f172a;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.25);
+  z-index: 110;
+  animation: documents-page-toast-in 0.2s ease-out;
+}
+
+.documents-page-toast__icon {
+  color: #4ade80;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+@keyframes documents-page-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
