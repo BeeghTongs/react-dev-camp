@@ -1,6 +1,6 @@
 import './css/ProductPage.css';
 import { useEffect, useRef, useState } from 'react';
-import { MdArrowBack } from "react-icons/md";
+import { MdArrowBack, MdShare } from "react-icons/md";
 import { useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
@@ -19,6 +19,7 @@ function ProductPage() {
   const [loading, setLoading] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [relatedImages, setRelatedImages] = useState({});
+  const [copied, setCopied] = useState(false);
   const fetchedRelatedImageIds = useRef(new Set());
   const navigate = useNavigate();
   const readableFulfillmentRequirements = {
@@ -86,8 +87,6 @@ function ProductPage() {
     };
   }, [id]);
 
-  // Related products: other live products that share this one's fulfilment
-  // type (Products.json groups insurance/investment/device-contract types).
   useEffect(() => {
     if (!product) return;
 
@@ -175,7 +174,30 @@ function ProductPage() {
   const matchedProduct = productCatalogue.find((item) => item.name.toLowerCase() === product.name.toLowerCase());
   const requirementItems = readableFulfillmentRequirements[matchedProduct?.fulfilmentType] || [];
 
+  async function handleShare(){
+    const url = `${window.location.origin}/products/${id}`;
+    const shareData = {
+      title: product.name,
+      text: `Check out ${product.name} on InsureTech Guard!`,
+      url,
+    };
 
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      }
+      catch (error) {
+        console.error('Error sharing:', error);
+      }
+    }
+
+    else{
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+
+  }
 
   return (
     <div className="product-page">
@@ -184,6 +206,10 @@ function ProductPage() {
         <MdArrowBack />
       </button>
         <div className="page-title">{product.name}</div>
+         <button className={`share-btn${copied ? ' copied' : ''}`} onClick={handleShare} aria-label="Share product">
+        <MdShare />
+        <span>{copied ? 'Copied!' : 'Share'}</span>
+      </button>
       </div>
 
       <div className="product-main">
