@@ -76,11 +76,6 @@
   background: #cbd5e1;
 }
 
-.share-btn.copied {
-  background: rgba(79, 124, 255, 0.12);
-  color: var(--blue);
-}
-
 /* ── Hero image ── */
 .product {
   position: relative;

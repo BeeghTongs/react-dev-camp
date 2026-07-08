@@ -1,0 +1,165 @@
+.share-modal__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  background: rgba(8, 15, 31, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.share-modal__content {
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+  background: #ffffff;
+  border-radius: 24px 24px 0 0;
+  padding: 20px 24px calc(24px + env(safe-area-inset-bottom));
+  box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.18);
+  animation: share-modal-rise 0.2s ease-out;
+}
+
+@keyframes share-modal-rise {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+.share-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.share-modal__header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+
+.share-modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  color: #0f172a;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.share-modal__close:hover {
+  background: #e2e8f0;
+}
+
+.share-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px 10px;
+  margin-bottom: 20px;
+}
+
+.share-modal__option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  text-decoration: none;
+  color: #0f172a;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+.share-modal__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 22px;
+  color: #fff;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.share-modal__option:hover .share-modal__icon {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+.share-modal__option--whatsapp .share-modal__icon { background: #25d366; }
+.share-modal__option--facebook .share-modal__icon { background: #1877f2; }
+.share-modal__option--twitter .share-modal__icon  { background: #0f172a; }
+.share-modal__option--linkedin .share-modal__icon { background: #0a66c2; }
+.share-modal__option--email .share-modal__icon    { background: var(--blue, #4f7cff); }
+.share-modal__option--discord .share-modal__icon  { background: #5865f2; }
+
+.share-modal__link-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f1f5f9;
+  border-radius: 14px;
+  padding: 6px 6px 6px 14px;
+}
+
+.share-modal__url {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  color: #64748b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.share-modal__copy {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  height: 34px;
+  padding: 0 14px;
+  background: #0f172a;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.share-modal__copy:hover {
+  background: #1e293b;
+}
+
+.share-modal__copy.copied {
+  background: var(--blue, #4f7cff);
+}
+
+@media (min-width: 900px) {
+  .share-modal__overlay {
+    align-items: center;
+    padding: 24px;
+  }
+
+  .share-modal__content {
+    border-radius: 24px;
+  }
+}

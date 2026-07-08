@@ -6,6 +6,7 @@ import ProductCard from '../components/ProductCard';
 import AddToCart from '../components/AddToCart';
 import DiscountBadge from '../components/DiscountBadge';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ShareModal from '../components/ShareModal';
 import { getProductImage } from '../services/ImageService';
 import { useNavigate } from 'react-router-dom';
 import productCatalogue from '../assets/Products.json';
@@ -19,7 +20,7 @@ function ProductPage() {
   const [loading, setLoading] = useState(true);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [relatedImages, setRelatedImages] = useState({});
-  const [copied, setCopied] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const fetchedRelatedImageIds = useRef(new Set());
   const navigate = useNavigate();
   const readableFulfillmentRequirements = {
@@ -174,30 +175,7 @@ function ProductPage() {
   const matchedProduct = productCatalogue.find((item) => item.name.toLowerCase() === product.name.toLowerCase());
   const requirementItems = readableFulfillmentRequirements[matchedProduct?.fulfilmentType] || [];
 
-  async function handleShare(){
-    const url = `${window.location.origin}/products/${id}`;
-    const shareData = {
-      title: product.name,
-      text: `Check out ${product.name} on InsureTech Guard!`,
-      url,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      }
-      catch (error) {
-        console.error('Error sharing:', error);
-      }
-    }
-
-    else{
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-
-  }
+  const shareUrl = `${window.location.origin}/products/${id}`;
 
   return (
     <div className="product-page">
@@ -206,11 +184,19 @@ function ProductPage() {
         <MdArrowBack />
       </button>
         <div className="page-title">{product.name}</div>
-         <button className={`share-btn${copied ? ' copied' : ''}`} onClick={handleShare} aria-label="Share product">
+         <button className="share-btn" onClick={() => setShareOpen(true)} aria-label="Share product">
         <MdShare />
-        <span>{copied ? 'Copied!' : 'Share'}</span>
+        <span>Share</span>
       </button>
       </div>
+
+      {shareOpen && (
+        <ShareModal
+          title={product.name}
+          url={shareUrl}
+          onClose={() => setShareOpen(false)}
+        />
+      )}
 
       <div className="product-main">
         <div className="product-panel">
