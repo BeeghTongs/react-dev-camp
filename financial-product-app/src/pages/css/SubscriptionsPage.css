@@ -1,3 +1,13 @@
+:root[data-env="development"]{
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
+}
+
+:root[data-env="demo"]{
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
+}
+
 .subscriptions-page {
   min-height: 100vh;
   background: #fafafa;
@@ -156,7 +166,7 @@
   appearance: none;
   border: 1px solid #e5e7eb;
   background: transparent;
-  color: #4f7cff;
+  color: var(--accent1-color);
   font-size: 15px;
   font-weight: 600;
   border-radius: 999px;

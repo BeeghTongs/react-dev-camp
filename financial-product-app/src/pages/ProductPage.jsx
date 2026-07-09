@@ -234,7 +234,6 @@ function ProductPage() {
         <div className="product-summary">
           <p className="description">{isDesktop || expanded ? fullDesc : `${product.description?.slice(0,120) || 'No description available.'}...`}</p>
 
-          {/* When collapsed show Read more under the description on mobile only */}
           {!isDesktop && !expanded && (
             <div>
               <button

@@ -1,4 +1,13 @@
-/* ── Page shell ── */
+:root[data-env="development"]{
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
+}
+
+:root[data-env="demo"]{
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
+}
+
 .product-page {
   padding: 12px 16px 100px;
   max-width: 520px;
@@ -8,7 +17,6 @@
   --blue: #4f7cff;
 }
 
-/* ── Header ── */
 .page-header {
   display: flex;
   align-items: center;
@@ -155,7 +163,7 @@
 .read-more {
   display: inline-block;
   margin-top: 4px;
-  color: var(--blue);
+  color: var(--accent1-color);
   font-size: 14px;
   font-weight: 600;
   background: none;

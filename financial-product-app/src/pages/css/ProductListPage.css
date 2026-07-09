@@ -1,3 +1,13 @@
+:root[data-env="development"]{
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
+}
+
+:root[data-env="demo"]{
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
+}
+
 .product-list-page {
   min-height: 100vh;
   background: #fafafa;
@@ -137,7 +147,7 @@
 .section-link {
   appearance: none;
   border: none;
-  background: linear-gradient(90deg, #2dafe6, #0b89d1);
+  background: linear-gradient(90deg, var(--accent2-color) 0%, var(--accent1-color) 100%);
   color: #ffffff;
   font-size: 13px;
   font-weight: 600;

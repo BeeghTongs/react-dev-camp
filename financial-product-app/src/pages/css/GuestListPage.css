@@ -1,3 +1,13 @@
+:root[data-env="development"]{
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
+}
+
+:root[data-env="demo"]{
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
+}
+
 .guest-list-page {
   min-height: 100vh;
   background: #fafafa;
@@ -109,9 +119,9 @@
 }
 
 .filter-pill--active {
-  background: #4f7cff;
+  background: var(--accent1-color);
   color: #ffffff;
-  border-color: #4f7cff;
+  border-color: var(--accent1-color);
 }
 
 .guest-list-page__products {
