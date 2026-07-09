@@ -1,11 +1,11 @@
 :root[data-env="development"]{
-  --next-btn-color: #2563eb;
-  --lgin-btn-color: #1fc3ff;
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
 }
 
 :root[data-env="demo"]{
-  --next-btn-color: #B906BC;
-  --lgin-btn-color: #B906BC;
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
 }
 
 .signup-form {
@@ -88,8 +88,8 @@
 }
 
 .signup-form__input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: var(--accent1-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent1-color) 12%, transparent);
 }
 
 .signup-form__input:disabled {
@@ -108,7 +108,7 @@
   padding: 0.95rem 1rem;
   border: none;
   border-radius: 999px;
-  background: var(--next-btn-color);
+  background: var(--accent1-color);
   color: #ffffff;
   font-size: 0.95rem;
   font-weight: 700;
@@ -134,5 +134,5 @@
   font-weight: 700;
   cursor: pointer;
   padding: 0;
-  color: var(--lgin-btn-color);
+  color: var(--accent1-color);
 }

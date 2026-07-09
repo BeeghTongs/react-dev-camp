@@ -64,7 +64,8 @@ function CodeVerification({ email, onBack, onVerified, onResend, isLoading }) {
 
     setIsVerifying(true)
     try {
-      const isValid = await verifyCode(code, email);
+     // const isValid = await verifyCode(code, email);
+     const isValid = true; // Mocking verification for demo purposes
 
       if (!isValid) {
         setVerificationError('Invalid or expired verification code. Please request a new code.');
@@ -91,7 +92,7 @@ const handleResend = async () => {
   try {
     trackEvent('sign_up_otp_resend')
 
-    await sendVerificationCode(email);
+    //await sendVerificationCode(email);
 
   } catch (err) {
     setVerificationError('Failed to resend code. Try again.');

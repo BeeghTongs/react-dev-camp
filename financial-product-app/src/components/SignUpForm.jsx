@@ -71,7 +71,7 @@ function SignUpForm({ onSwitchToLogin }) {
     trackEvent('sign_up_email_submitted', {
       hasEmail: true
     })
-    await sendVerificationCode(formData.email) 
+   // await sendVerificationCode(formData.email) 
 
        trackEvent('sign_up_otp_sent', {
       email: formData.email
