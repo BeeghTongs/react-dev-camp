@@ -21,37 +21,40 @@
   padding: 16px 16px 40px;
 }
 
-.page-header {
+/* Scoped under .dcp - a plain .page-header/.back-btn rule collides with
+   identically named classes from other pages' CSS since this app's CSS
+   isn't module-scoped. */
+.dcp .page-header {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 0px 0 14px;
 }
 
-.back-btn {
+.dcp .back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   width: 36px;
   height: 36px;
-  background: #f1f5f9;
+  background: var(--app-surface-secondary);
   border: none;
   border-radius: 50%;
   cursor: pointer;
   font-size: 20px;
-  color: #0f172a;
+  color: var(--app-text);
   transition: background 0.15s ease;
 }
 
-.back-btn:hover {
-  background: #e2e8f0;
+.dcp .back-btn:hover {
+  background: var(--app-border);
 }
 
 .dcp__page-title {
   font-size: 20px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
   margin: 0 0 24px;
 }
 

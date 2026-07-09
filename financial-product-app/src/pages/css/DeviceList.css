@@ -11,44 +11,47 @@
   padding: 16px 16px 40px;
 }
 
-.page-header {
+/* Scoped under .device-list - a plain .page-header/.back-btn rule collides
+   with identically named classes from other pages' CSS since this app's
+   CSS isn't module-scoped. */
+.device-list .page-header {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 8px 0 14px;
 }
 
-.back-btn {
+.device-list .back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   width: 36px;
   height: 36px;
-  background: #f1f5f9;
+  background: var(--app-surface-secondary);
   border: none;
   border-radius: 50%;
   cursor: pointer;
   font-size: 20px;
-  color: #0f172a;
+  color: var(--app-text);
   transition: background 0.15s ease;
 }
 
-.back-btn:hover {
-  background: #e2e8f0;
+.device-list .back-btn:hover {
+  background: var(--app-border);
 }
 
 .device-list__title {
   font-size: 20px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
   margin: 0;
 }
 
 .device-list__section-title {
   font-size: 15px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
   margin: 20px 0 12px;
 }
 

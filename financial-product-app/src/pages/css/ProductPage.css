@@ -13,104 +13,109 @@
   max-width: 520px;
   margin: 0 auto;
   box-sizing: border-box;
-  --muted: #64748b;
+  --muted: var(--app-text-secondary);
   --blue: #4f7cff;
 }
 
-.page-header {
+/* Scoped under .product-page - plain .page-header/.page-title/.back-btn
+   rules collide with identically-named classes from other pages' CSS
+   (e.g. NewArrivalsPage.css, RecommendedPage.css), and since none of this
+   app's CSS is module-scoped, a more specific selector elsewhere can
+   silently win the cascade and override these colors. */
+.product-page .page-header {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 8px 0 14px;
 }
 
-.back-btn {
+.product-page .back-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   width: 36px;
   height: 36px;
-  background: #f1f5f9;
+  background: var(--app-surface-secondary);
   border: none;
   border-radius: 50%;
   cursor: pointer;
   font-size: 20px;
-  color: #0f172a;
+  color: var(--app-text);
   transition: background 0.15s ease;
 }
 
-.back-btn:hover {
-  background: #e2e8f0;
+.product-page .back-btn:hover {
+  background: var(--app-border);
 }
 
-.page-title {
+.product-page .page-header .page-title {
   flex: 1;
   min-width: 0;
   font-size: 17px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.share-btn {
+.product-page .share-btn {
   display: flex;
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
   height: 36px;
   padding: 0 14px;
-  background: #f1f5f9;
+  background: var(--app-surface-secondary);
   border: none;
   border-radius: 999px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--app-text);
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.share-btn svg {
+.product-page .share-btn svg {
   font-size: 17px;
 }
 
-.share-btn:hover {
-  background: #e2e8f0;
+.product-page .share-btn:hover {
+  background: var(--app-border);
 }
 
-.share-btn:active {
-  background: #cbd5e1;
+.product-page .share-btn:active {
+  background: var(--app-border);
 }
 
-.download-btn {
+.product-page .download-btn {
   display: flex;
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
   height: 36px;
   padding: 0 14px;
-  background: #f1f5f9;
+  background: var(--app-surface-secondary);
   border: none;
   border-radius: 999px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--app-text);
   transition: background 0.15s ease, color 0.15s ease;
 }
 
-.download-btn svg {
+.product-page .download-btn svg {
   font-size: 17px;
 }
 
-.download-btn:hover {
-  background: #e2e8f0;
+.product-page .download-btn:hover {
+  background: var(--app-border);
 }
 
-.download-btn:active {
-  background: #cbd5e1;
+.product-page .download-btn:active {
+  background: var(--app-border);
 }
 
 .download-btn:disabled {
@@ -130,8 +135,8 @@
   object-fit: cover;
   border-radius: 20px;
   display: block;
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: var(--app-surface-secondary);
+  border: 1px solid var(--app-border);
   box-sizing: border-box;
 }
 
@@ -139,7 +144,7 @@
   width: 100%;
   height: 260px;
   border-radius: 20px;
-  background: linear-gradient(135deg, #f8fafc 0%, #eef2f7 100%);
+  background: linear-gradient(135deg, var(--app-surface-secondary) 0%, var(--app-surface) 100%);
   box-sizing: border-box;
 }
 
@@ -149,7 +154,7 @@
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.03em;
-  color: #0f172a;
+  color: var(--app-text);
   margin: 0 0 10px;
 }
 
@@ -181,14 +186,14 @@
 .section {
   margin-top: 20px;
   padding-top: 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--app-border);
 }
 
 .section h3 {
   margin: 0 0 10px;
   font-size: 15px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
   letter-spacing: -0.01em;
 }
 
@@ -204,11 +209,11 @@
 .related-header {
   margin-top: 28px;
   padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--app-border);
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #0f172a;
+  color: var(--app-text);
 }
 
 .recommended-products {
@@ -237,10 +242,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.88);
+  background: color-mix(in srgb, var(--app-surface) 88%, transparent);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--app-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -259,12 +264,12 @@
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: #0f172a;
+  color: var(--app-text);
 }
 
 .product-footer .per {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--app-text-secondary);
 }
 
 /* ── Loading skeleton ── */
@@ -275,7 +280,7 @@
 
 .skeleton {
   border-radius: 12px;
-  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background: linear-gradient(90deg, var(--app-surface-secondary) 25%, var(--app-border) 50%, var(--app-surface-secondary) 75%);
   background-size: 1200px 100%;
   animation: shimmer 1.4s infinite linear;
 }

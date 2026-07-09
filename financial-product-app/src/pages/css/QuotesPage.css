@@ -12,10 +12,39 @@
   box-sizing: border-box;
 }
 
+/* Scoped under .quotes-page - a plain .page-header/.back-btn rule collides
+   with identically named classes from other pages' CSS since this app's
+   CSS isn't module-scoped. */
+.quotes-page .page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 0 14px;
+}
+
+.quotes-page .back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: var(--app-surface-secondary);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--app-text);
+}
+
+.quotes-page .back-btn:hover {
+  background: var(--app-border);
+}
+
 .quotes-page__title {
   font-size: 20px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
   margin: 0;
 }
 

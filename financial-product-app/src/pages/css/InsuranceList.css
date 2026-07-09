@@ -11,17 +11,47 @@
   padding: 16px 16px 40px;
 }
 
+/* Scoped under .insurance-list - a plain .page-header/.back-btn rule
+   collides with identically named classes from other pages' CSS since this
+   app's CSS isn't module-scoped. */
+.insurance-list .page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0 14px;
+}
+
+.insurance-list .back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: var(--app-surface-secondary);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--app-text);
+  transition: background 0.15s ease;
+}
+
+.insurance-list .back-btn:hover {
+  background: var(--app-border);
+}
+
 .insurance-list__title {
   font-size: 20px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
   margin: 0;
 }
 
 .insurance-list__section-title {
   font-size: 15px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
   margin: 20px 0 4px;
   scroll-margin-top: 16px;
 }
@@ -32,13 +62,13 @@
 
 .insurance-list__section-desc {
   font-size: 13px;
-  color: #64748b;
+  color: var(--app-text-secondary);
   margin: 0 0 12px;
 }
 
 .insurance-list__empty {
   font-size: 14px;
-  color: #64748b;
+  color: var(--app-text-secondary);
   text-align: center;
   margin: 32px 0;
 }
