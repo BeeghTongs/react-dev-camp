@@ -5,9 +5,6 @@ import { functions } from './firebase.js';
 const sendVerificationCodeCallable = httpsCallable(functions, 'sendVerificationCode');
 const verifyVerificationCodeCallable = httpsCallable(functions, 'verifyVerificationCode');
 
-// OTP generation, storage, and verification now happen in Firebase Functions
-// (functions/index.js) so the code and its validity can never be read or
-// forged from the client.
 export const sendVerificationCode = async (email) => {
   await sendVerificationCodeCallable({ email });
 };

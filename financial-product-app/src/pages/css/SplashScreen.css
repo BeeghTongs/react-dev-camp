@@ -3,7 +3,7 @@
 }
 
 :root[data-env="demo"]{
-  --splash-bg: url('../../assets/demoSplash.jpeg');
+  --splash-bg: url('../../assets/demoSplash.png');
 }
 
 .splash-screen {

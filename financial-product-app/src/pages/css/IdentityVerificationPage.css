@@ -1,3 +1,13 @@
+:root[data-env="development"]{
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
+}
+
+:root[data-env="demo"]{
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
+}
+
 .identity-page {
   min-height: 100vh;
   display: flex;
@@ -23,16 +33,6 @@
   text-align: center;
 }
 
-.identity-card__icon {
-  width: 88px;
-  height: 88px;
-  margin: 0 auto;
-  display: grid;
-  place-items: center;
-  border-radius: 28px;
-  background: #f0f7ff;
-  color: #2563eb;
-}
 
 .identity-card__icon-image{
   width: 60%;
@@ -139,7 +139,7 @@
   width: 100%;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+  background: linear-gradient(90deg,  var(--accent1-color) 0%, var(--accent2-color) 100%);
   color: #ffffff;
   padding: 16px;
   font-size: 16px;
@@ -156,7 +156,7 @@
   width: 100%;
   border: none;
   background: transparent;
-  color: #2563eb;
+  color: var(--accent1-color);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -170,7 +170,7 @@
 .identity-card__status {
   margin: 0;
   font-size: 14px;
-  color: #2563eb;
+  color: var(--accent1-color);
   text-align: center;
 }
 
@@ -382,7 +382,7 @@
 }
 
 .selfie-prep__action {
-  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+  background: linear-gradient(90deg,  var(--accent1-color) 0%, var(--accent2-color) 100%);
   color: #ffffff;
 }
 
@@ -407,7 +407,7 @@
   max-width: 200px;
   border: none;
   border-radius: 999px;
-  background: #2563eb;
+  background: var(--accent1-color);
   color: #fff;
   padding: 14px;
   cursor: pointer;

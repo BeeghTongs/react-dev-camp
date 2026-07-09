@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { MdChevronRight,MdErrorOutline, MdRefresh } from 'react-icons/md'
 import './css/IdentityVerificationPage.css'
 import securityInfographic from '../assets/kyc.png'
+import securityInfographicDemo from '../assets/kycPurple.png'
 import kycSuccess from '../assets/kyc-success.png'
 import { uploadService } from '../services/uploadService'
 import { getProfileId } from '../services/authService'
@@ -22,6 +23,8 @@ const uploadItems = [
     accept: '.png,.jpg,.jpeg',
   },
 ]
+
+const isDemoEnv = (import.meta.env.VITE_APP_ENV || 'development') === 'demo'
 
 export default function IdentityVerificationPage() {
   const navigate = useNavigate()
@@ -229,7 +232,7 @@ export default function IdentityVerificationPage() {
         <div className="identity-card__brand">
             <div className="identity-card__logo" aria-hidden="true">
             <img
-              src={hasAllFiles ? kycSuccess : securityInfographic}
+              src={hasAllFiles ? kycSuccess : (isDemoEnv ? securityInfographicDemo : securityInfographic)}
               alt="Identity verification illustration"
               className="identity-card__icon-image"
             />

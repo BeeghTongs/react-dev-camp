@@ -117,7 +117,7 @@
 }
 
 .signup-form__submit:hover:not(:disabled) {
-  background: #1d4ed8;
+  background: var(--accent1-color);
 }
 
 .signup-form__submit:disabled {
