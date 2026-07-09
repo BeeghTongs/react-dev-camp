@@ -38,7 +38,7 @@ const COMMERCIAL_ITEMS = [
 export default function ShortTermInsuranceList() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(location.state?.initialQuery ?? '');
   const { requireVerification, modal } = useKycGate('You need to be logged in to enquire about this product.');
 
   const segment = location.state?.segment ?? null;

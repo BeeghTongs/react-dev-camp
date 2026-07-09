@@ -1,6 +1,6 @@
 import './css/InvestmentList.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MdArrowBack } from 'react-icons/md';
 import Header from '../components/Header';
 import BottomNav from '../components/BottomNav';
@@ -29,7 +29,8 @@ const INVESTMENTS = [
 
 export default function VIPInvestmentList() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState('');
+  const location = useLocation();
+  const [search, setSearch] = useState(location.state?.initialQuery ?? '');
   const { requireVerification, modal } = useKycGate('You need to be logged in to enquire about this product.');
 
   const query = search.trim().toLowerCase();

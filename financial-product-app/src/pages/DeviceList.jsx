@@ -1,6 +1,6 @@
 import './css/DeviceList.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { MdArrowBack } from 'react-icons/md';
 import Header from '../components/Header';
 import BottomNav from '../components/BottomNav';
@@ -34,7 +34,8 @@ const LAPTOPS = [
 
 export default function DeviceList() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState('');
+  const location = useLocation();
+  const [search, setSearch] = useState(location.state?.initialQuery ?? '');
 
   const query = search.trim().toLowerCase();
   const phones = PHONES.filter((d) => d.name.toLowerCase().includes(query));
