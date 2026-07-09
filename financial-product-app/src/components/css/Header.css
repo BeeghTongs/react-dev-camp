@@ -16,8 +16,8 @@
   position: sticky;
   top: 0;
   z-index: 10;
-  background: #fafafa;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--app-bg);
+  border-bottom: 1px solid var(--app-border);
   padding: 18px 16px 14px;
 }
 

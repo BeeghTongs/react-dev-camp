@@ -1,6 +1,29 @@
+:root {
+  --app-bg: #fafafa;
+  --app-surface: #ffffff;
+  --app-surface-secondary: #f1f5f9;
+  --app-text: #0f172a;
+  --app-text-secondary: #64748b;
+  --app-border: #e5e7eb;
+  --app-track-off: #cbd5e1;
+}
+
+:root[data-theme="dark"] {
+  --app-bg: #0f172a;
+  --app-surface: #1e293b;
+  --app-surface-secondary: #273449;
+  --app-text: #f1f5f9;
+  --app-text-secondary: #94a3b8;
+  --app-border: #334155;
+  --app-track-off: #475569;
+}
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
+  background: var(--app-bg);
+  color: var(--app-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
 }

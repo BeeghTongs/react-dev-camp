@@ -1,7 +1,7 @@
 import './css/AccountPage.css';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MdFingerprint } from 'react-icons/md';
+import { MdFingerprint, MdDarkMode, MdLightMode } from 'react-icons/md';
 import { signOut, deleteUser } from 'firebase/auth';
 import { ref, listAll } from 'firebase/storage';
 import { auth, storage } from '../services/firebase';
@@ -10,9 +10,11 @@ import BottomNav from '../components/BottomNav';
 import Header from '../components/Header';
 import LoginModal from '../components/LoginModal';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { useTheme } from '../context/useTheme';
 
 export default function AccountPage() {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
 
   const isGuest = localStorage.getItem('auth-mode') === 'guest';
 
@@ -142,6 +144,23 @@ export default function AccountPage() {
               {profile.customerType.name.charAt(0) + profile.customerType.name.slice(1).toLowerCase()}
             </span>
           )}
+        </div>
+
+        <div className="account-card__settings">
+          <span className="account-card__settings-label">
+            {theme === 'dark' ? <MdDarkMode /> : <MdLightMode />}
+            Dark Mode
+          </span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={theme === 'dark'}
+            aria-label="Toggle dark mode"
+            className={`theme-toggle${theme === 'dark' ? ' theme-toggle--on' : ''}`}
+            onClick={toggleTheme}
+          >
+            <span className="theme-toggle__thumb" />
+          </button>
         </div>
 
         <div className="account-card__actions">

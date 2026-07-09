@@ -10,8 +10,8 @@
 
 .account-page {
   min-height: 100vh;
-  background: #f8fafc;
-  color: #0f172a;
+  background: var(--app-bg);
+  color: var(--app-text);
   padding-bottom: 88px;
   overflow-x: hidden;
 }
@@ -32,7 +32,7 @@
   align-items: center;
   gap: 12px;
   padding: 36px 0 28px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--app-border);
 }
 
 .account-card__logo {
@@ -66,20 +66,20 @@
   font-size: 26px;
   font-weight: 700;
   text-align: center;
-  color: #0f172a;
+  color: var(--app-text);
 }
 
 .account-card__email {
   margin: 0;
   font-size: 16px;
-  color: #64748b;
+  color: var(--app-text-secondary);
   text-align: center;
 }
 
 .account-card__subtitle {
   margin: 0;
   text-align: center;
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 15px;
 }
 
@@ -95,6 +95,58 @@
   background: #eff6ff;
   color: var(--accent1-color);
   border: 1px solid #bfdbfe;
+}
+
+.account-card__settings {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+}
+
+.account-card__settings-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.account-card__settings-label svg {
+  font-size: 20px;
+  color: var(--accent1-color);
+}
+
+.theme-toggle {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--app-track-off);
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  transition: background 0.2s ease;
+}
+
+.theme-toggle--on {
+  background: linear-gradient(90deg, var(--accent1-color) 0%, var(--accent2-color) 100%);
+  justify-content: flex-end;
+}
+
+.theme-toggle__thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .account-card__actions {
@@ -118,9 +170,9 @@
 }
 
 .account-card__kyc-badge--loading {
-  background: #f1f5f9;
-  color: #64748b;
-  border-color: #e2e8f0;
+  background: var(--app-surface-secondary);
+  color: var(--app-text-secondary);
+  border-color: var(--app-border);
 }
 
 .account-card__signout-button {
@@ -148,15 +200,15 @@
 .account-card__signout-button--ghost {
   background: transparent;
   box-shadow: none;
-  border: 1px solid #d1d5db;
-  color: #374151;
+  border: 1px solid var(--app-border);
+  color: var(--app-text);
 }
 
 .account-card__signout-button--ghost:hover,
 .account-card__signout-button--ghost:focus-visible {
-  background: #f1f5f9;
+  background: var(--app-surface-secondary);
   filter: none;
-  outline: 2px solid #cbd5e1;
+  outline: 2px solid var(--app-border);
 }
 
 @media (max-width: 520px) {
@@ -184,7 +236,7 @@
 }
 
 .confirm-dialog {
-  background: #ffffff;
+  background: var(--app-surface);
   border-radius: 16px;
   padding: 28px 28px 24px;
   max-width: 360px;
@@ -196,13 +248,13 @@
   margin: 0 0 10px;
   font-size: 18px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
 }
 
 .confirm-dialog__message {
   margin: 0 0 24px;
   font-size: 14px;
-  color: #64748b;
+  color: var(--app-text-secondary);
   line-height: 1.5;
 }
 
@@ -223,8 +275,8 @@
 }
 
 .confirm-dialog__btn--ghost {
-  background: #f1f5f9;
-  color: #374151;
+  background: var(--app-surface-secondary);
+  color: var(--app-text);
 }
 
 .confirm-dialog__btn--ghost:hover {
