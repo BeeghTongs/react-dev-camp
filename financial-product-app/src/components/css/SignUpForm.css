@@ -1,3 +1,13 @@
+:root[data-env="development"]{
+  --next-btn-color: #2563eb;
+  --lgin-btn-color: #1fc3ff;
+}
+
+:root[data-env="demo"]{
+  --next-btn-color: #B906BC;
+  --lgin-btn-color: #B906BC;
+}
+
 .signup-form {
   display: flex;
   flex-direction: column;
@@ -98,7 +108,7 @@
   padding: 0.95rem 1rem;
   border: none;
   border-radius: 999px;
-  background: #2563eb;
+  background: var(--next-btn-color);
   color: #ffffff;
   font-size: 0.95rem;
   font-weight: 700;
@@ -124,5 +134,5 @@
   font-weight: 700;
   cursor: pointer;
   padding: 0;
-  color: #3fb0c7;
+  color: var(--lgin-btn-color);
 }

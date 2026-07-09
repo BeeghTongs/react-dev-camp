@@ -6,6 +6,10 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 
+
+const env = import.meta.env.VITE_APP_ENV || 'development';
+document.documentElement.setAttribute('data-env', env);
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />

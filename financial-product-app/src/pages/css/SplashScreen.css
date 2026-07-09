@@ -1,8 +1,15 @@
+:root[data-env="development"]{
+  --splash-bg: url('../../assets/splash.webp');
+}
+
+:root[data-env="demo"]{
+  --splash-bg: url('../../assets/demoSplash.jpeg');
+}
 
 .splash-screen {
   height: 100vh;
   width: 100vw;
-  background-image: url('../../assets/splash.webp'); /* your blue water/bokeh image */
+  background-image: var(--splash-bg);
   background-size: cover;
   background-position: center;
   display: flex;

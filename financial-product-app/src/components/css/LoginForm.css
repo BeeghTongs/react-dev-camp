@@ -1,3 +1,11 @@
+:root[data-env="development"]{
+  --accent-color: #2563eb;
+}
+
+:root[data-env="demo"]{
+  --accent-color: #B906BC;
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -16,7 +24,7 @@
 
 .login-form__logo {
   font-size: 2rem;
-  color: #2563eb;
+  color: var(--accent-color);
   flex-shrink: 0;
   line-height: 1;
 }
@@ -94,7 +102,7 @@
   background: none;
   border: none;
   font-size: 0.8125rem;
-  color: #2563eb;
+  color: var(--accent-color);
   cursor: pointer;
   padding: 0;
   text-decoration: none;
@@ -102,7 +110,7 @@
 }
 
 .login-form__forgot:hover {
-  color: #1d4ed8;
+  color: var(--accent-color);
   text-decoration: underline;
 }
 
@@ -179,7 +187,7 @@
   margin-top: 0.25rem;
   width: 100%;
   padding: 0.6875rem;
-  background: #2563eb;
+  background: var(--accent-color);
   color: #fff;
   font-size: 0.9375rem;
   font-weight: 600;
@@ -230,11 +238,11 @@
   padding: 0;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #2563eb;
+  color: var(--accent-color);
   cursor: pointer;
   text-decoration: underline;
 }
 
 .login-form__signup-link:hover {
-  color: #1d4ed8;
+  color: var(--accent-color);
 }
