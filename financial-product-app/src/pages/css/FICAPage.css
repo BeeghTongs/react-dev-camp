@@ -1,3 +1,13 @@
+:root[data-env="development"]{
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
+}
+
+:root[data-env="demo"]{
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
+}
+
 .fica-card * {
   box-sizing: border-box;
 }
@@ -119,9 +129,9 @@
 }
 
 .fica-card__yesno-btn--selected {
-  border-color: #2563eb;
-  background: #eff6ff;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+  border-color: var(--accent1-color);
+  background: var(--accent1-color);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent1-color) 22%, transparent);
 }
 
 .fica-card__error {
@@ -134,7 +144,7 @@
   width: 100%;
   border: none;
   border-radius: 999px;
-  background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+  background: linear-gradient(90deg, var(--accent1-color) 0%, var(--accent2-color) 100%);
   color: #ffffff;
   padding: 16px;
   font-size: 16px;
@@ -164,7 +174,7 @@
   padding: 6px 16px;
   border-radius: 999px;
   background: #eff6ff;
-  color: #2563eb;
+  color: var(--accent1-color);
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;

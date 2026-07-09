@@ -1,3 +1,12 @@
+:root[data-env="development"]{
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
+}
+
+:root[data-env="demo"]{
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
+}
 .documents-page {
   min-height: 100vh;
   background: #f8fafc;
@@ -78,7 +87,7 @@
 }
 
 .documents-page__item-view {
-  color: #1768d6;
+  color: var(--accent1-color);
   font-weight: 700;
   text-decoration: none;
 }

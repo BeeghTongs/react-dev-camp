@@ -1,3 +1,13 @@
+:root[data-env="development"]{
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
+}
+
+:root[data-env="demo"]{
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
+}
+
 .quote-payment-page {
   min-height: 100vh;
   background: #f8fafc;
@@ -141,7 +151,7 @@
 
 .quote-payment-page__done-btn {
   margin-top: 10px;
-  background: linear-gradient(90deg, #1768d6 0%, #1eb8e3 100%);
+  background: linear-gradient(90deg, var(--accent1-color) 0%, var(--accent2-color) 100%);
   color: #ffffff;
   border: none;
   border-radius: 999px;
@@ -162,8 +172,8 @@
   align-items: center;
   gap: 6px;
   background: #ffffff;
-  color: #1768d6;
-  border: 1.5px solid #1768d6;
+  color: var(--accent1-color);
+  border: 1.5px solid var(--accent1-color);
   border-radius: 999px;
   padding: 12px 32px;
   font-size: 14px;

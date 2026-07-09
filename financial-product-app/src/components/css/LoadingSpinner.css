@@ -1,3 +1,15 @@
+:root[data-env="development"]{
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
+  --accent3-color: #4f7cff;
+}
+
+:root[data-env="demo"]{
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
+  --accent3-color : #bf1bfb;
+}
+
 .spinner-wrap {
   display: flex;
   flex-direction: column;
@@ -27,7 +39,7 @@
 }
 
 .spinner__dot:nth-child(1) {
-  background: #29b6f6;
+  background: var(--accent1-color);
   opacity: 1;
 }
 

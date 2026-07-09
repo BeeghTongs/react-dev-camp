@@ -1,3 +1,15 @@
+:root[data-env="development"]{
+  --accent1-color: #2563eb;
+  --accent2-color: #1fc3ff;
+  --accent3-color: #4f7cff;
+}
+
+:root[data-env="demo"]{
+  --accent1-color : #B906BC;
+  --accent2-color : #FD3E6C;
+  --accent3-color : #bf1bfb;
+}
+
 .bottom-nav {
   position: fixed;
   left: 0;
@@ -35,7 +47,7 @@
 }
 
 .bottom-nav__item--active {
-  color: #4f7cff;
+  color: var(--accent3-color);
 }
 
 .bottom-nav__icon-wrap {
@@ -113,14 +125,14 @@
   margin-top: 12px;
   width: 100%;
   padding: 14px;
-  background: linear-gradient(90deg, #1768d6 0%, #1eb8e3 100%);
+  background: linear-gradient(90deg, var(--accent1-color) 0%, var(--accent2-color) 100%);
   color: #ffffff;
   border: none;
   border-radius: 999px;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(23, 104, 214, 0.22);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent1-color) 22%, transparent);
   transition: filter 0.15s ease;
 }
 
