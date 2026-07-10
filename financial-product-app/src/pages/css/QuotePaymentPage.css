@@ -65,16 +65,16 @@
 }
 
 .quote-payment-page__left {
-  background: #fafafa;
+  background: var(--app-surface);
   border-radius: 16px;
   padding: 24px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--app-border);
 }
 
 .quote-payment-page__deal-name {
   font-size: 16px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
   margin: 0 0 16px;
 }
 
@@ -82,9 +82,9 @@
   display: flex;
   justify-content: space-between;
   font-size: 14px;
-  color: #374151;
+  color: var(--app-text-secondary);
   padding: 10px 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--app-border);
 }
 
 .quote-payment-page__deal-row:last-child {
@@ -93,7 +93,7 @@
 
 .quote-payment-page__deal-row--due {
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
 }
 
 .quote-payment-page__right {
@@ -103,34 +103,34 @@
 }
 
 .quote-payment-page__summary {
-  background: #fafafa;
+  background: var(--app-surface);
   border-radius: 16px;
   padding: 20px 24px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--app-border);
 }
 
 .quote-payment-page__summary-title {
   margin: 0 0 14px;
   font-size: 16px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
 }
 
 .quote-payment-page__summary-row {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
-  color: #374151;
+  color: var(--app-text-secondary);
   padding: 5px 0;
 }
 
 .quote-payment-page__summary-row--total {
   margin-top: 4px;
   padding-top: 12px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--app-border);
   font-size: 18px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--app-text);
 }
 
 .quote-payment-page__error {
@@ -140,7 +140,7 @@
 }
 
 .quote-payment-page__empty {
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 15px;
   text-align: center;
   padding: 40px 0;
@@ -170,12 +170,12 @@
 .quote-payment-page__success h2 {
   margin: 0;
   font-size: 20px;
-  color: #0f172a;
+  color: var(--app-text);
 }
 
 .quote-payment-page__success p {
   margin: 0;
-  color: #64748b;
+  color: var(--app-text-secondary);
   max-width: 360px;
 }
 
@@ -201,7 +201,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #ffffff;
+  background: var(--app-surface);
   color: var(--accent1-color);
   border: 1.5px solid var(--accent1-color);
   border-radius: 999px;
@@ -214,7 +214,7 @@
 }
 
 .quote-payment-page__contract-btn:hover {
-  background: #eff6ff;
+  background: color-mix(in srgb, var(--accent1-color) 12%, var(--app-surface));
 }
 
 @media (min-width: 768px) {

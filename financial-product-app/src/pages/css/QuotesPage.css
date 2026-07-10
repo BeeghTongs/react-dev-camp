@@ -49,14 +49,14 @@
 }
 
 .quotes-page__list {
-  background: #fafafa;
+  background: var(--app-surface);
   border-radius: 16px;
   padding: 8px 24px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--app-border);
 }
 
 .quotes-page__empty {
-  color: #64748b;
+  color: var(--app-text-secondary);
   font-size: 15px;
   text-align: center;
   padding: 40px 0;
